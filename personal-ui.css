@@ -1,0 +1,218 @@
+/* Patrimoine Simulator — Ma situation V2.0 */
+
+.personal-situation-choice{
+  border-color:rgba(14,165,233,.20)!important;
+  background:linear-gradient(135deg,rgba(14,165,233,.08),rgba(99,102,241,.06),#f8fbff)!important
+}
+.personal-situation-choice.selected{
+  border-color:#0ea5e9!important;
+  box-shadow:0 9px 28px rgba(14,165,233,.18)!important
+}
+
+.personal-card{
+  width:min(920px,100%)!important
+}
+.personal-intro{
+  margin-bottom:18px
+}
+.personal-section{
+  margin:15px 0;
+  padding:15px;
+  border:1px solid var(--line);
+  border-radius:17px;
+  background:rgba(248,250,255,.80)
+}
+.personal-section h3{
+  margin:0 0 12px;
+  font-size:17px
+}
+.personal-section-head{
+  display:flex;
+  justify-content:space-between;
+  gap:12px
+}
+.personal-section-head p{
+  margin:2px 0 10px;
+  color:var(--muted);
+  font-size:11px
+}
+.personal-grid{
+  display:grid;
+  gap:10px
+}
+.personal-grid.cols-2{grid-template-columns:repeat(2,minmax(0,1fr))}
+.personal-grid.cols-3{grid-template-columns:repeat(3,minmax(0,1fr))}
+.personal-field{
+  display:grid;
+  align-content:start;
+  gap:5px;
+  min-width:0
+}
+.personal-field>span{
+  color:#46556e;
+  font-size:10px;
+  font-weight:900
+}
+.personal-field small{
+  color:var(--muted);
+  font-size:9px;
+  line-height:1.35
+}
+.personal-input-wrap{
+  display:flex;
+  align-items:center;
+  gap:5px;
+  padding:0 9px;
+  border:1px solid var(--line);
+  border-radius:11px;
+  background:white
+}
+.personal-input-wrap input{
+  width:100%;
+  min-width:0;
+  padding:9px 0;
+  border:0;
+  outline:0;
+  background:transparent;
+  color:var(--text);
+  font-weight:800
+}
+.personal-input-wrap b{
+  color:var(--muted);
+  font-size:10px
+}
+.personal-asset-block{
+  margin-top:9px;
+  padding:12px;
+  border:1px solid rgba(169,187,219,.34);
+  border-radius:13px;
+  background:white
+}
+.personal-asset-block h4{
+  margin:0 0 9px;
+  font-size:13px
+}
+.property-block{
+  background:linear-gradient(135deg,rgba(139,92,246,.045),#fff)
+}
+.personal-summary{
+  display:grid;
+  grid-template-columns:repeat(4,minmax(0,1fr));
+  gap:8px;
+  margin:16px 0;
+  padding:12px;
+  border:1px solid rgba(16,185,129,.22);
+  border-radius:16px;
+  background:rgba(16,185,129,.055)
+}
+.personal-summary>div{
+  padding:8px;
+  border-radius:10px;
+  background:rgba(255,255,255,.72)
+}
+.personal-summary span{
+  display:block;
+  color:var(--muted);
+  font-size:9px;
+  font-weight:850
+}
+.personal-summary strong{
+  display:block;
+  margin-top:4px;
+  font-size:14px
+}
+.personal-disclaimer{
+  color:var(--muted);
+  font-size:9px;
+  line-height:1.4
+}
+.personal-annual-actions{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:9px;
+  margin-top:15px
+}
+
+@media(max-width:720px){
+  #startModal .career-choice-grid{
+    grid-template-columns:1fr!important
+  }
+
+  .personal-modal{
+    align-items:end!important;
+    padding:6px!important
+  }
+  .personal-card{
+    width:100%!important;
+    max-width:none!important;
+    max-height:94dvh!important;
+    padding:18px 12px calc(16px + env(safe-area-inset-bottom))!important;
+    border-radius:20px 20px 12px 12px!important;
+    background:linear-gradient(180deg,#172033,#0e1728)!important;
+    color:#f8fafc!important;
+    border-color:rgba(148,163,184,.26)!important
+  }
+  .personal-card .eyebrow{color:#a5b4fc!important}
+  .personal-card .muted{color:#aebbd0!important}
+  .personal-section{
+    padding:11px;
+    border-color:rgba(148,163,184,.20);
+    background:#0d1525
+  }
+  .personal-section h3,
+  .personal-asset-block h4{
+    color:#f8fafc
+  }
+  .personal-section-head p,
+  .personal-field small{
+    color:#94a3b8
+  }
+  .personal-grid.cols-2,
+  .personal-grid.cols-3{
+    grid-template-columns:1fr 1fr
+  }
+  .personal-field>span{color:#cbd5e1}
+  .personal-input-wrap{
+    background:#111c2e;
+    border-color:rgba(148,163,184,.22)
+  }
+  .personal-input-wrap input{color:#f8fafc}
+  .personal-input-wrap b{color:#94a3b8}
+  .personal-asset-block{
+    padding:10px;
+    border-color:rgba(148,163,184,.18);
+    background:#101a2a
+  }
+  .property-block{
+    background:linear-gradient(135deg,rgba(124,58,237,.11),#101a2a)
+  }
+  .personal-summary{
+    grid-template-columns:1fr 1fr;
+    border-color:rgba(16,185,129,.22);
+    background:rgba(16,185,129,.07)
+  }
+  .personal-summary>div{background:#0d1525}
+  .personal-summary span{color:#94a3b8}
+  .personal-summary strong{color:#f8fafc}
+  .personal-disclaimer{color:#94a3b8}
+  .personal-annual-actions{
+    position:sticky;
+    bottom:-16px;
+    margin:15px -12px -16px;
+    padding:10px 12px calc(10px + env(safe-area-inset-bottom));
+    background:linear-gradient(180deg,rgba(14,23,40,.65),#0e1728 35%)
+  }
+}
+
+@media(max-width:420px){
+  .personal-grid.cols-2,
+  .personal-grid.cols-3{
+    grid-template-columns:1fr
+  }
+  .personal-summary{
+    grid-template-columns:1fr 1fr
+  }
+  .personal-annual-actions{
+    grid-template-columns:1fr
+  }
+}

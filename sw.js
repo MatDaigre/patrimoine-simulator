@@ -1,22 +1,25 @@
-const CACHE='patrimoine-simulator-v191-mobile-market-fees';
+const CACHE='patrimoine-simulator-v200-ma-situation';
 const ASSETS=[
   './','./index.html',
   './tax-ui.css','./tax-engine.js',
   './market-ui.css','./market-engine.js',
+  './personal-ui.css','./personal-situation.js',
   './mobile.css','./mobile-v2.css','./mobile-v21.css','./mobile-nav-v21.js',
   './manifest.webmanifest','./icon-192.png','./icon-512.png'
 ];
 
 const MOBILE_LAYER=[
-  '<link rel="stylesheet" href="./tax-ui.css?v=191">',
-  '<link rel="stylesheet" href="./market-ui.css?v=191">',
-  '<link rel="stylesheet" href="./mobile.css?v=191" media="(max-width: 720px)">',
-  '<link rel="stylesheet" href="./mobile-v2.css?v=191" media="(max-width: 720px)">',
-  '<link rel="stylesheet" href="./mobile-v21.css?v=191" media="(max-width: 720px)">',
+  '<link rel="stylesheet" href="./tax-ui.css?v=200">',
+  '<link rel="stylesheet" href="./market-ui.css?v=200">',
+  '<link rel="stylesheet" href="./personal-ui.css?v=200">',
+  '<link rel="stylesheet" href="./mobile.css?v=200" media="(max-width: 720px)">',
+  '<link rel="stylesheet" href="./mobile-v2.css?v=200" media="(max-width: 720px)">',
+  '<link rel="stylesheet" href="./mobile-v21.css?v=200" media="(max-width: 720px)">',
   '<meta name="theme-color" media="(max-width: 720px)" content="#070b14">',
-  '<script defer src="./tax-engine.js?v=191"></script>',
-  '<script defer src="./market-engine.js?v=191"></script>',
-  '<script defer src="./mobile-nav-v21.js?v=191"></script>'
+  '<script defer src="./tax-engine.js?v=200"></script>',
+  '<script defer src="./market-engine.js?v=200"></script>',
+  '<script defer src="./personal-situation.js?v=200"></script>',
+  '<script defer src="./mobile-nav-v21.js?v=200"></script>'
 ].join('');
 
 self.addEventListener('install',event=>{
@@ -40,7 +43,7 @@ async function injectLayer(response){
   if(!type.includes('text/html'))return response;
 
   const html=await response.text();
-  if(html.includes('market-engine.js?v=191')&&html.includes('tax-engine.js?v=191')){
+  if(html.includes('personal-situation.js?v=200')&&html.includes('market-engine.js?v=200')){
     return new Response(html,{status:response.status,statusText:response.statusText,headers:response.headers});
   }
 
