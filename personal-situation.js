@@ -67,9 +67,15 @@
 
   monthlyTax = function () {
     if (!isPersonal()) return CORE.monthlyTax();
-    // Le joueur saisit son prélèvement mensuel réel. La fiscalité des ventes
-    // de placements reste gérée séparément par tax-engine.js.
-    return Math.max(0, Number(state.personalProfile.taxMonthly) || 0);
+    // Le joueur saisit son impôt/prélèvement à la source réel.
+    // Les prélèvements sociaux sur le revenu locatif restent calculés séparément,
+    // comme dans le moteur fiscal standard.
+    const manualTax = Math.max(0, Number(state.personalProfile.taxMonthly) || 0);
+    const rentalNet = Math.max(
+      0,
+      (Number(state.rentIncome) || 0) - (Number(state.rentalCosts) || 0)
+    );
+    return manualTax + rentalNet * 0.172;
   };
 
   monthlyExpenses = function () {
@@ -139,7 +145,7 @@
 
       if (remaining > 0) remaining--;
 
-      if (balance < 10 || (Number(meta.months) > 0 && remaining <= 0)) {
+      if (balance < 10) {
         balance = 0;
         payment = 0;
         remaining = 0;
@@ -153,7 +159,8 @@
         rate,
         months: remaining,
         payment,
-        remainingBalance: balance
+        remainingBalance: balance,
+        overdue: remaining <= 0 && balance >= 10
       });
 
       if (monthsKey) state[monthsKey] = remaining;
@@ -239,7 +246,7 @@
               <div class="personal-grid cols-3">
                 ${numberInput('psAge', 'Âge', 30, 'ans')}
                 ${euroInput('psCash', 'Compte courant / trésorerie', 2500)}
-                ${euroInput('psTax', 'Impôts / prélèvements mensuels', 0, 'Hors fiscalité déclenchée par les ventes de placements.')}
+                ${euroInput('psTax', 'Impôt / prélèvement à la source mensuel', 0, 'Hors fiscalité des placements et hors prélèvements sociaux sur les revenus locatifs, calculés séparément.')}
                 ${numberInput('psInflation', 'Inflation annuelle connue', 2.4, '%', 'Si tu ne connais pas le taux, laisse la valeur proposée par défaut.', '0.1')}
               </div>
             </section>
@@ -409,7 +416,7 @@
               <div class="personal-grid cols-2">
                 ${euroInput('paSalary', 'Salaire net mensuel', 0)}
                 ${euroInput('paOtherIncome', 'Autres revenus réguliers', 0)}
-                ${euroInput('paTax', 'Impôts / prélèvements mensuels', 0)}
+                ${euroInput('paTax', 'Impôt / prélèvement à la source mensuel', 0, 'Hors fiscalité des placements et prélèvements sociaux locatifs.')}
                 ${numberInput('paInflation', 'Inflation annuelle retenue', 2.4, '%', 'Si tu ne connais pas le nouveau taux, conserve la valeur proposée.', '0.1')}
               </div>
             </section>
