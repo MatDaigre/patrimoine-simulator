@@ -1,0 +1,174 @@
+/* Patrimoine Simulator V2.1 — contraste PC
+   Couleurs inspirées de la version mobile.
+   Aucun changement de structure, largeur, grille ou responsive. */
+
+@media (min-width: 721px) {
+  :root {
+    --text: #f8fafc;
+    --muted: #aebbd0;
+    --line: rgba(148, 163, 184, .26);
+    --primary: #6366f1;
+    --primary2: #7c3aed;
+    --blue: #38bdf8;
+    --green: #34d399;
+    --amber: #fbbf24;
+    --red: #fb7185;
+    --panel: rgba(20, 29, 47, .96);
+    --shadow: 0 18px 46px rgba(0, 0, 0, .28);
+    color-scheme: dark;
+  }
+
+  html { background: #0b1120; }
+
+  body {
+    color: var(--text);
+    background:
+      radial-gradient(circle at 7% 0%, rgba(56,189,248,.10), transparent 31%),
+      radial-gradient(circle at 95% 4%, rgba(129,140,248,.12), transparent 34%),
+      linear-gradient(180deg, #0b1120 0%, #101827 48%, #0b1120 100%);
+  }
+
+  h1, h2, h3, h4, strong,
+  .stat strong, .budget-summary strong, .career-stats strong,
+  .asset-performance strong, .event-balance strong,
+  .recap-grid strong, .annual-grid strong, .annual-comparison strong,
+  .sim-summary-grid strong, .health-score strong {
+    color: #f8fafc;
+  }
+
+  .eyebrow { color: #a5b4fc; }
+
+  .brand-note, .muted, .history-list,
+  .action-card p, .realestate-grid p, .mission-desc,
+  .career-choice small, .decision-choice small,
+  .budget-grid label span, .budget-summary span,
+  .career-stats span, .stat span, .stat small,
+  .badge-copy small, .budget-help, .budget-auto-grid span,
+  .event-balance span, .rules-box ul,
+  .recap-grid span, .annual-grid span, .annual-comparison span,
+  .sim-summary-grid span, .health-lines span,
+  .auto-row label, .asset-performance small,
+  .debt-list small, .return-line {
+    color: var(--muted) !important;
+  }
+
+  .card, .section-card, .side-card,
+  .action-card, .realestate-grid article,
+  .budget-summary, .budget-auto-grid > div,
+  .career-stats > div, .event-balance > div,
+  .recap-grid > div, .annual-grid > div,
+  .annual-comparison > div, .sim-summary-grid > div,
+  .health-lines > div, .mission-card, .badge-item,
+  .asset-row, .debt-list li, .rules-box,
+  .purchase-details, .decision-choice, .start-save-box {
+    background: rgba(20,29,47,.96);
+    border-color: var(--line);
+    box-shadow: 0 10px 26px rgba(0,0,0,.16);
+  }
+
+  .hero {
+    background:
+      radial-gradient(circle at 92% 8%, rgba(56,189,248,.22), transparent 42%),
+      linear-gradient(135deg, #312e81 0%, #3730a3 47%, #075985 100%);
+    border-color: rgba(165,180,252,.20);
+    box-shadow: 0 20px 48px rgba(0,0,0,.32);
+  }
+
+  .hero p, .hero-meta { color: rgba(248,250,252,.87); }
+
+  .hero-tags span, .turn-panel {
+    color: #e2e8f0;
+    background: rgba(15,23,42,.38);
+    border-color: rgba(226,232,240,.18);
+  }
+
+  .version-chip, .pill {
+    color: #c7d2fe;
+    background: rgba(99,102,241,.14);
+    border-color: rgba(165,180,252,.22);
+  }
+
+  .inflation-pill {
+    color: #fde68a;
+    background: rgba(180,83,9,.22);
+    border-color: rgba(251,191,36,.30);
+  }
+
+  .stat {
+    border-color: var(--line);
+    box-shadow: 0 12px 30px rgba(0,0,0,.19);
+  }
+  .stat.blue {
+    background: linear-gradient(145deg, rgba(14,116,144,.42), rgba(20,29,47,.98));
+  }
+  .stat.violet {
+    background: linear-gradient(145deg, rgba(91,33,182,.38), rgba(20,29,47,.98));
+  }
+  .stat.green {
+    background: linear-gradient(145deg, rgba(5,150,105,.31), rgba(20,29,47,.98));
+  }
+  .stat.amber {
+    background: linear-gradient(145deg, rgba(180,83,9,.31), rgba(20,29,47,.98));
+  }
+
+  input, select, textarea {
+    color: #f8fafc;
+    background: #111a2b;
+    border-color: rgba(148,163,184,.34);
+  }
+  input::placeholder, textarea::placeholder { color: #7f8da3; }
+  select option { color: #f8fafc; background: #111827; }
+
+  .btn.ghost, button.ghost {
+    color: #e2e8f0;
+    background: rgba(30,41,59,.72);
+    border-color: rgba(148,163,184,.30);
+  }
+  .btn.ghost:hover, button.ghost:hover {
+    background: rgba(51,65,85,.88);
+    border-color: rgba(165,180,252,.38);
+  }
+
+  .btn.primary, button.primary {
+    color: #fff;
+    background: linear-gradient(135deg, #4f46e5, #6d28d9);
+    border-color: rgba(165,180,252,.24);
+    box-shadow: 0 10px 22px rgba(79,70,229,.22);
+  }
+
+  .action-card.safety { background: linear-gradient(145deg, rgba(14,116,144,.18), rgba(20,29,47,.98)); }
+  .action-card.pea { background: linear-gradient(145deg, rgba(79,70,229,.17), rgba(20,29,47,.98)); }
+  .action-card.assurance { background: linear-gradient(145deg, rgba(5,150,105,.13), rgba(20,29,47,.98)); }
+  .action-card.cto { background: linear-gradient(145deg, rgba(124,58,237,.14), rgba(20,29,47,.98)); }
+  .action-card.crypto { background: linear-gradient(145deg, rgba(180,83,9,.17), rgba(20,29,47,.98)); }
+
+  .positive, .return-positive { color: #34d399 !important; }
+  .negative, .return-negative { color: #fb7185 !important; }
+  .return-neutral { color: #cbd5e1 !important; }
+
+  .modal, .tax-overlay {
+    background: rgba(2,6,23,.78);
+    backdrop-filter: blur(8px);
+  }
+  .modal-card, .tax-modal-card {
+    color: #f8fafc;
+    background: #111a2b !important;
+    border-color: rgba(148,163,184,.30) !important;
+    box-shadow: 0 28px 80px rgba(0,0,0,.48) !important;
+  }
+
+  .personal-section, .personal-asset-block,
+  .tax-dynamic-box, .tax-operation-list > div,
+  .market-info-box, .market-fee-box {
+    background: rgba(15,23,42,.64) !important;
+    border-color: rgba(148,163,184,.24) !important;
+  }
+
+  progress {
+    background: #111827;
+  }
+
+  hr { border-color: rgba(148,163,184,.20); }
+
+  ::selection { background: rgba(99,102,241,.42); color: #fff; }
+}
