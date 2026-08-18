@@ -1,22 +1,24 @@
-const CACHE='patrimoine-simulator-v210-stable-dark-pc';
+const CACHE='patrimoine-simulator-v211-pc-tabs';
 const ASSETS=[
   './','./index.html',
   './tax-ui.css','./tax-engine.js',
   './market-ui.css','./market-engine.js',
   './personal-ui.css','./personal-situation.js',
-  './pc-theme.css','./crypto-calibration.js',
+  './pc-theme.css','./crypto-calibration.js','./pc-tabs-v211.css','./pc-tabs-v211.js',
   './manifest.webmanifest','./icon-192.png','./icon-512.png'
 ];
 
 const PC_LAYER=[
-  '<link rel="stylesheet" href="./tax-ui.css?v=210pc">',
-  '<link rel="stylesheet" href="./market-ui.css?v=210pc">',
-  '<link rel="stylesheet" href="./personal-ui.css?v=210pc">',
-  '<link rel="stylesheet" href="./pc-theme.css?v=210pc">',
-  '<script defer src="./tax-engine.js?v=210pc"></script>',
-  '<script defer src="./market-engine.js?v=210pc"></script>',
-  '<script defer src="./crypto-calibration.js?v=210pc"></script>',
-  '<script defer src="./personal-situation.js?v=210pc"></script>'
+  '<link rel="stylesheet" href="./tax-ui.css?v=211pc">',
+  '<link rel="stylesheet" href="./market-ui.css?v=211pc">',
+  '<link rel="stylesheet" href="./personal-ui.css?v=211pc">',
+  '<link rel="stylesheet" href="./pc-theme.css?v=211pc">',
+  '<link rel="stylesheet" href="./pc-tabs-v211.css?v=211pc">',
+  '<script defer src="./tax-engine.js?v=211pc"></script>',
+  '<script defer src="./market-engine.js?v=211pc"></script>',
+  '<script defer src="./crypto-calibration.js?v=211pc"></script>',
+  '<script defer src="./personal-situation.js?v=211pc"></script>',
+  '<script defer src="./pc-tabs-v211.js?v=211pc"></script>'
 ].join('');
 
 self.addEventListener('install',event=>{
@@ -40,7 +42,7 @@ async function injectLayer(response){
   if(!type.includes('text/html'))return response;
 
   const html=await response.text();
-  if(html.includes('personal-situation.js?v=210pc')&&html.includes('market-engine.js?v=210pc')){
+  if(html.includes('personal-situation.js?v=211pc')&&html.includes('market-engine.js?v=211pc')){
     return new Response(html,{status:response.status,statusText:response.statusText,headers:response.headers});
   }
 

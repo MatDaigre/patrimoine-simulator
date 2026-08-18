@@ -1,0 +1,55 @@
+/* Patrimoine Simulator V2.1.1 — navigation PC à deux onglets
+   Organisation visuelle uniquement. Le moteur et le DOM métier restent intacts. */
+@media (min-width:721px){
+  .pc-tabs-v211{
+    display:grid;
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    gap:12px;
+    margin:0 0 15px;
+    padding:7px;
+    border:1px solid rgba(148,163,184,.24);
+    border-radius:19px;
+    background:rgba(11,17,32,.78);
+    box-shadow:0 14px 36px rgba(0,0,0,.20);
+    backdrop-filter:blur(16px);
+    position:sticky;
+    top:10px;
+    z-index:12;
+  }
+  .pc-tab-v211{
+    min-width:0;
+    display:grid;
+    grid-template-columns:auto 1fr;
+    grid-template-rows:auto auto;
+    column-gap:11px;
+    align-items:center;
+    text-align:left;
+    padding:12px 16px;
+    border:1px solid transparent;
+    border-radius:14px;
+    color:#aebbd0;
+    background:transparent;
+    box-shadow:none;
+    transition:background .16s,border-color .16s,transform .16s;
+  }
+  .pc-tab-v211>span{grid-row:1/3;font-size:23px}
+  .pc-tab-v211 strong{font-size:14px;color:#e2e8f0}
+  .pc-tab-v211 small{margin-top:2px;color:#8493aa;font-size:11px;font-weight:700}
+  .pc-tab-v211:hover{background:rgba(51,65,85,.52);transform:translateY(-1px)}
+  .pc-tab-v211.active{
+    background:linear-gradient(135deg,rgba(79,70,229,.34),rgba(14,116,144,.26));
+    border-color:rgba(165,180,252,.28);
+    box-shadow:0 8px 22px rgba(0,0,0,.18);
+  }
+  .pc-tab-v211.active strong{color:#fff}
+  .pc-tab-v211.active small{color:#cbd5e1}
+  .pc-tab-hidden-v211{display:none!important}
+
+  /* Les repères essentiels restent visibles au-dessus des onglets. */
+  .hero,.stats-grid{display:flex}
+  .stats-grid{display:grid}
+
+  /* Quand un onglet contient moins de cartes, on garde la grille PC d'origine. */
+  .layout{align-items:start}
+  .main-column,.side-column{min-width:0}
+}
