@@ -1,4 +1,4 @@
-const CACHE='patrimoine-simulator-v200-ma-situation';
+const CACHE='patrimoine-simulator-v202-ma-situation-inflation-manual';
 const ASSETS=[
   './','./index.html',
   './tax-ui.css','./tax-engine.js',
@@ -9,17 +9,17 @@ const ASSETS=[
 ];
 
 const MOBILE_LAYER=[
-  '<link rel="stylesheet" href="./tax-ui.css?v=200">',
-  '<link rel="stylesheet" href="./market-ui.css?v=200">',
-  '<link rel="stylesheet" href="./personal-ui.css?v=200">',
-  '<link rel="stylesheet" href="./mobile.css?v=200" media="(max-width: 720px)">',
-  '<link rel="stylesheet" href="./mobile-v2.css?v=200" media="(max-width: 720px)">',
-  '<link rel="stylesheet" href="./mobile-v21.css?v=200" media="(max-width: 720px)">',
+  '<link rel="stylesheet" href="./tax-ui.css?v=202">',
+  '<link rel="stylesheet" href="./market-ui.css?v=202">',
+  '<link rel="stylesheet" href="./personal-ui.css?v=202">',
+  '<link rel="stylesheet" href="./mobile.css?v=202" media="(max-width: 720px)">',
+  '<link rel="stylesheet" href="./mobile-v2.css?v=202" media="(max-width: 720px)">',
+  '<link rel="stylesheet" href="./mobile-v21.css?v=202" media="(max-width: 720px)">',
   '<meta name="theme-color" media="(max-width: 720px)" content="#070b14">',
-  '<script defer src="./tax-engine.js?v=200"></script>',
-  '<script defer src="./market-engine.js?v=200"></script>',
-  '<script defer src="./personal-situation.js?v=200"></script>',
-  '<script defer src="./mobile-nav-v21.js?v=200"></script>'
+  '<script defer src="./tax-engine.js?v=202"></script>',
+  '<script defer src="./market-engine.js?v=202"></script>',
+  '<script defer src="./personal-situation.js?v=202"></script>',
+  '<script defer src="./mobile-nav-v21.js?v=202"></script>'
 ].join('');
 
 self.addEventListener('install',event=>{
@@ -43,7 +43,7 @@ async function injectLayer(response){
   if(!type.includes('text/html'))return response;
 
   const html=await response.text();
-  if(html.includes('personal-situation.js?v=200')&&html.includes('market-engine.js?v=200')){
+  if(html.includes('personal-situation.js?v=202')&&html.includes('market-engine.js?v=202')){
     return new Response(html,{status:response.status,statusText:response.statusText,headers:response.headers});
   }
 

@@ -13,6 +13,7 @@
     otherFixedCosts,
     debtRatio,
     annualUpdate,
+    inflateMonthlyCosts,
     simulateMonths
   };
 
@@ -48,6 +49,13 @@
   const n = id => Math.max(0, Number(document.getElementById(id)?.value || 0));
   const signed = id => Number(document.getElementById(id)?.value || 0);
   const monthsAgo = years => Math.max(0, Math.round(Number(years || 0) * 12));
+  const inflationFromInput = (id, fallback = 0.024) => {
+    const raw = document.getElementById(id)?.value;
+    if (raw === '' || raw == null) return fallback;
+    const pct = Number(raw);
+    if (!Number.isFinite(pct)) return fallback;
+    return Math.max(-0.05, Math.min(0.20, pct / 100));
+  };
 
   monthlyIncome = function () {
     if (!isPersonal()) return CORE.monthlyIncome();
@@ -84,11 +92,25 @@
   annualUpdate = function () {
     if (!isPersonal()) return CORE.annualUpdate();
 
-    state.annualInflation = rand(.012, .040);
     state.personalProfile.annualReviewDue = true;
     state.lastEvent =
-      `Nouvelle année : vérifie tes revenus et dépenses. Inflation de référence pour ${state.year} : ` +
-      `${(state.annualInflation * 100).toFixed(1).replace('.', ',')} %.`;
+      `Nouvelle année : vérifie tes revenus, tes dépenses et le taux d’inflation. ` +
+      `Taux actuellement retenu : ${(state.annualInflation * 100).toFixed(1).replace('.', ',')} %.`;
+  };
+
+  // Dans « Ma situation », les dépenses de consommation suivent l'inflation.
+  // Salaire, impôts saisis manuellement et mensualités de crédit restent inchangés.
+  inflateMonthlyCosts = function () {
+    const beforeOther = isPersonal()
+      ? Math.max(0, Number(state.personalProfile.otherExpenses) || 0)
+      : 0;
+
+    CORE.inflateMonthlyCosts();
+
+    if (isPersonal() && beforeOther > 0) {
+      const factor = Math.pow(1 + state.annualInflation, 1 / 12);
+      state.personalProfile.otherExpenses = beforeOther * factor;
+    }
   };
 
   function euroInput(id, label, value = 0, hint = '') {
@@ -162,6 +184,7 @@
                 ${numberInput('psAge', 'Âge', 30, 'ans')}
                 ${euroInput('psCash', 'Compte courant / trésorerie', 2500)}
                 ${euroInput('psTax', 'Impôts / prélèvements mensuels', 0, 'Hors fiscalité déclenchée par les ventes de placements.')}
+                ${numberInput('psInflation', 'Inflation annuelle connue', 2.4, '%', 'Si tu ne connais pas le taux, laisse la valeur proposée par défaut.', '0.1')}
               </div>
             </section>
 
@@ -331,6 +354,7 @@
                 ${euroInput('paSalary', 'Salaire net mensuel', 0)}
                 ${euroInput('paOtherIncome', 'Autres revenus réguliers', 0)}
                 ${euroInput('paTax', 'Impôts / prélèvements mensuels', 0)}
+                ${numberInput('paInflation', 'Inflation annuelle retenue', 2.4, '%', 'Si tu ne connais pas le nouveau taux, conserve la valeur proposée.', '0.1')}
               </div>
             </section>
 
@@ -423,6 +447,7 @@
 
     state.cash = n('psCash');
     state.salary = n('psSalary');
+    state.annualInflation = inflationFromInput('psInflation', 0.024);
     state.housing = n('psHousing');
     state.living = n('psLiving');
     state.transport = n('psTransport');
@@ -553,6 +578,7 @@
     el('paSalary').value = Math.round(state.salary || 0);
     el('paOtherIncome').value = Math.round(state.personalProfile.otherIncome || 0);
     el('paTax').value = Math.round(state.personalProfile.taxMonthly || 0);
+    el('paInflation').value = ((Number(state.annualInflation) || 0.024) * 100).toFixed(1);
     el('paHousing').value = Math.round(state.housing || 0);
     el('paLiving').value = Math.round(state.living || 0);
     el('paTransport').value = Math.round(state.transport || 0);
@@ -567,6 +593,7 @@
       state.salary = n('paSalary');
       state.personalProfile.otherIncome = n('paOtherIncome');
       state.personalProfile.taxMonthly = n('paTax');
+      state.annualInflation = inflationFromInput('paInflation', Number(state.annualInflation) || 0.024);
       state.housing = n('paHousing');
       state.living = n('paLiving');
       state.transport = n('paTransport');
@@ -575,9 +602,11 @@
 
       state.lastEvent =
         `Ma situation mise à jour pour ${state.year} : revenus ${fmtEUR(monthlyIncome())}/mois, ` +
-        `dépenses ${fmtEUR(monthlyExpenses())}/mois.`;
+        `dépenses ${fmtEUR(monthlyExpenses())}/mois, inflation ${(state.annualInflation * 100).toFixed(1).replace('.', ',')} %.`;
     } else {
-      state.lastEvent = `Ma situation confirmée sans changement pour ${state.year}.`;
+      state.lastEvent =
+        `Ma situation confirmée sans changement pour ${state.year}. ` +
+        `Inflation conservée à ${(state.annualInflation * 100).toFixed(1).replace('.', ',')} %.`;
     }
 
     state.personalProfile.lastAnnualReviewYear = state.year;
