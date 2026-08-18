@@ -1,4 +1,4 @@
-const CACHE='patrimoine-simulator-v190-mobile-market-fees';
+const CACHE='patrimoine-simulator-v191-mobile-market-fees';
 const ASSETS=[
   './','./index.html',
   './tax-ui.css','./tax-engine.js',
@@ -8,15 +8,15 @@ const ASSETS=[
 ];
 
 const MOBILE_LAYER=[
-  '<link rel="stylesheet" href="./tax-ui.css?v=190">',
-  '<link rel="stylesheet" href="./market-ui.css?v=190">',
-  '<link rel="stylesheet" href="./mobile.css?v=190" media="(max-width: 720px)">',
-  '<link rel="stylesheet" href="./mobile-v2.css?v=190" media="(max-width: 720px)">',
-  '<link rel="stylesheet" href="./mobile-v21.css?v=190" media="(max-width: 720px)">',
+  '<link rel="stylesheet" href="./tax-ui.css?v=191">',
+  '<link rel="stylesheet" href="./market-ui.css?v=191">',
+  '<link rel="stylesheet" href="./mobile.css?v=191" media="(max-width: 720px)">',
+  '<link rel="stylesheet" href="./mobile-v2.css?v=191" media="(max-width: 720px)">',
+  '<link rel="stylesheet" href="./mobile-v21.css?v=191" media="(max-width: 720px)">',
   '<meta name="theme-color" media="(max-width: 720px)" content="#070b14">',
-  '<script defer src="./tax-engine.js?v=190"></script>',
-  '<script defer src="./market-engine.js?v=190"></script>',
-  '<script defer src="./mobile-nav-v21.js?v=190"></script>'
+  '<script defer src="./tax-engine.js?v=191"></script>',
+  '<script defer src="./market-engine.js?v=191"></script>',
+  '<script defer src="./mobile-nav-v21.js?v=191"></script>'
 ].join('');
 
 self.addEventListener('install',event=>{
@@ -40,7 +40,7 @@ async function injectLayer(response){
   if(!type.includes('text/html'))return response;
 
   const html=await response.text();
-  if(html.includes('market-engine.js?v=190')&&html.includes('tax-engine.js?v=190')){
+  if(html.includes('market-engine.js?v=191')&&html.includes('tax-engine.js?v=191')){
     return new Response(html,{status:response.status,statusText:response.statusText,headers:response.headers});
   }
 

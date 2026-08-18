@@ -692,6 +692,14 @@
     };
   }
 
+  // Rebranche explicitement les contrôles créés par index.html sur les fonctions enveloppées V1.9.
+  // Sans cela, onclick peut conserver la référence de la fonction pré-V1.9.
+  const nextMonthControl = el('nextMonthBtn');
+  if (nextMonthControl) nextMonthControl.onclick = () => nextMonth();
+
+  const simulateControl = el('simulateMonthsBtn');
+  if (simulateControl) simulateControl.onclick = () => simulateMonths(el('simulateMonthsSelect').value);
+
   // ----- UI -----
   function ensureMarketUi() {
     bindSaleFinalizer();
