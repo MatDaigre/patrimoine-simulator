@@ -1,4 +1,4 @@
-const CACHE='patrimoine-simulator-v202-pc-complete';
+const CACHE='patrimoine-simulator-v203-pc-debt-fix';
 const ASSETS=[
   './','./index.html',
   './tax-ui.css','./tax-engine.js',
@@ -8,12 +8,12 @@ const ASSETS=[
 ];
 
 const PC_LAYER=[
-  '<link rel="stylesheet" href="./tax-ui.css?v=202pc">',
-  '<link rel="stylesheet" href="./market-ui.css?v=202pc">',
-  '<link rel="stylesheet" href="./personal-ui.css?v=202pc">',
-  '<script defer src="./tax-engine.js?v=202pc"></script>',
-  '<script defer src="./market-engine.js?v=202pc"></script>',
-  '<script defer src="./personal-situation.js?v=202pc"></script>'
+  '<link rel="stylesheet" href="./tax-ui.css?v=203pc">',
+  '<link rel="stylesheet" href="./market-ui.css?v=203pc">',
+  '<link rel="stylesheet" href="./personal-ui.css?v=203pc">',
+  '<script defer src="./tax-engine.js?v=203pc"></script>',
+  '<script defer src="./market-engine.js?v=203pc"></script>',
+  '<script defer src="./personal-situation.js?v=203pc"></script>'
 ].join('');
 
 self.addEventListener('install',event=>{
@@ -37,7 +37,7 @@ async function injectLayer(response){
   if(!type.includes('text/html'))return response;
 
   const html=await response.text();
-  if(html.includes('personal-situation.js?v=202pc')&&html.includes('market-engine.js?v=202pc')){
+  if(html.includes('personal-situation.js?v=203pc')&&html.includes('market-engine.js?v=203pc')){
     return new Response(html,{status:response.status,statusText:response.statusText,headers:response.headers});
   }
 
