@@ -1,34 +1,42 @@
-/* Patrimoine Simulator V2.1.2 — PC, colorimétrie adoucie
-   Conserve le design V2.1/V2.1.1 et ses deux onglets.
-   Modification visuelle uniquement : moins sombre, moins agressive. */
+/* Patrimoine Simulator V2.1.2 — PC / lisibilité corrigée
+   Conserve V2.1.1 et les deux onglets.
+   Correction visuelle ciblée Safari + anciens fonds clairs. */
 
 @media (min-width:721px){
   :root{
     --text:#eef4fb;
-    --muted:#bac7d8;
-    --line:rgba(170,190,215,.30);
-    --panel:rgba(35,52,76,.94);
-    --shadow:0 16px 38px rgba(5,14,28,.22);
+    --muted:#b7c5d8;
+    --line:rgba(170,190,215,.32);
+    --primary:#6875e8;
+    --primary2:#8060dc;
+    --blue:#4fc3ee;
+    --green:#45d6a0;
+    --amber:#ffc657;
+    --red:#ff7e91;
+    --panel:rgba(36,54,79,.96);
+    --shadow:0 15px 36px rgba(5,14,28,.21);
     color-scheme:dark;
   }
 
-  html{background:#18283b}
+  html{background:#192a3f}
 
   body{
     color:var(--text);
     background:
-      radial-gradient(circle at 8% 0%,rgba(56,189,248,.13),transparent 32%),
-      radial-gradient(circle at 94% 5%,rgba(129,140,248,.14),transparent 36%),
-      linear-gradient(180deg,#203751 0%,#263d57 44%,#1b2d43 100%);
+      radial-gradient(circle at 8% 0%,rgba(56,189,248,.14),transparent 32%),
+      radial-gradient(circle at 94% 5%,rgba(129,140,248,.15),transparent 36%),
+      linear-gradient(180deg,#213a56 0%,#273f5a 45%,#1c2f46 100%);
   }
 
   h1,h2,h3,h4,strong,
   .stat strong,.budget-summary strong,.career-stats strong,
   .asset-performance strong,.event-balance strong,
   .recap-grid strong,.annual-grid strong,.annual-comparison strong,
-  .sim-summary-grid strong,.health-score strong{color:#f7fbff}
+  .sim-summary-grid strong,.health-score strong{
+    color:#f8fbff;
+  }
 
-  .eyebrow{color:#c2ceff}
+  .eyebrow{color:#c4ceff}
 
   .brand-note,.muted,.history-list,
   .action-card p,.realestate-grid p,.mission-desc,
@@ -40,119 +48,248 @@
   .recap-grid span,.annual-grid span,.annual-comparison span,
   .sim-summary-grid span,.health-lines span,
   .auto-row label,.asset-performance small,
-  .debt-list small,.return-line{color:var(--muted)!important}
+  .debt-list small,.return-line{
+    color:var(--muted)!important;
+  }
 
+  /* Cartes générales */
   .card,.section-card,.side-card,
   .action-card,.realestate-grid article,
-  .budget-summary,.budget-auto-grid>div,
+  .budget-auto-grid>div,.budget-summary>div,
   .career-stats>div,.event-balance>div,
   .recap-grid>div,.annual-grid>div,
   .annual-comparison>div,.sim-summary-grid>div,
-  .health-lines>div,.mission-card,.badge-item,
-  .asset-row,.debt-list li,.rules-box,
-  .purchase-details,.decision-choice,.start-save-box{
-    background:linear-gradient(145deg,rgba(42,61,87,.96),rgba(32,49,72,.96));
-    border-color:var(--line);
-    box-shadow:0 9px 24px rgba(5,14,28,.15);
+  .health-lines>div,.mission-card,.mission-box,
+  .badge-item,.asset-row,.debt-list li,.rules-box,
+  .purchase-details,.purchase-details>div,
+  .decision-choice,.start-save-box{
+    color:#eef4fb!important;
+    background:linear-gradient(145deg,#2b4260,#233952)!important;
+    border-color:var(--line)!important;
+    box-shadow:0 8px 22px rgba(5,14,28,.14);
+  }
+
+  /* Empêche les anciennes cartes blanches de réapparaître. */
+  .budget-summary>div,
+  .budget-auto-grid>div,
+  .career-stats>div,
+  .mission-box,
+  .badge-item{
+    background:#2a405d!important;
+  }
+
+  .journey-card{
+    background:linear-gradient(145deg,#293f5d,#233851)!important;
   }
 
   .hero{
     background:
       radial-gradient(circle at 92% 8%,rgba(70,190,230,.25),transparent 43%),
-      linear-gradient(135deg,#3c4e91 0%,#3e55a0 45%,#176b8c 100%);
-    border-color:rgba(190,205,255,.26);
+      linear-gradient(135deg,#40539a 0%,#435aa6 45%,#19718f 100%);
+    border-color:rgba(190,205,255,.27);
     box-shadow:0 18px 40px rgba(5,14,28,.24);
   }
-
-  .hero p,.hero-meta{color:rgba(247,251,255,.90)}
+  .hero p,.hero-meta{color:rgba(248,251,255,.91)}
   .hero-tags span,.turn-panel{
     color:#edf4fb;
-    background:rgba(31,50,74,.48);
-    border-color:rgba(225,235,248,.23)
+    background:rgba(31,50,74,.50);
+    border-color:rgba(225,235,248,.24);
   }
 
   .version-chip,.pill{
-    color:#dbe3ff;
-    background:rgba(105,112,220,.23);
-    border-color:rgba(190,200,255,.30)
+    color:#e1e7ff;
+    background:rgba(105,112,220,.25);
+    border-color:rgba(190,200,255,.31);
   }
-
   .inflation-pill{
-    color:#ffe49a;
-    background:rgba(180,108,24,.28);
-    border-color:rgba(251,191,36,.36)
+    color:#ffe59b;
+    background:rgba(180,108,24,.29);
+    border-color:rgba(251,191,36,.37);
   }
 
-  .stat{border-color:var(--line);box-shadow:0 10px 26px rgba(5,14,28,.16)}
-  .stat.blue{background:linear-gradient(145deg,rgba(21,126,158,.54),rgba(35,54,78,.98))}
-  .stat.violet{background:linear-gradient(145deg,rgba(100,66,174,.49),rgba(35,54,78,.98))}
-  .stat.green{background:linear-gradient(145deg,rgba(20,133,105,.44),rgba(35,54,78,.98))}
-  .stat.amber{background:linear-gradient(145deg,rgba(169,106,34,.44),rgba(35,54,78,.98))}
+  .stat{border-color:var(--line);box-shadow:0 10px 25px rgba(5,14,28,.16)}
+  .stat.blue{background:linear-gradient(145deg,rgba(20,131,164,.56),#283f5c)}
+  .stat.violet{background:linear-gradient(145deg,rgba(103,69,181,.51),#283f5c)}
+  .stat.green{background:linear-gradient(145deg,rgba(20,140,110,.46),#283f5c)}
+  .stat.amber{background:linear-gradient(145deg,rgba(174,111,37,.46),#283f5c)}
 
-  input,select,textarea{
-    color:#f5f9ff;
-    background:#2b405d;
-    border-color:rgba(185,202,224,.38)
+  /* Niveaux de vie : aucune option blanche / texte blanc. */
+  .lifestyle-btn{
+    color:#eaf1fa!important;
+    background:#2b4260!important;
+    border-color:rgba(180,199,224,.34)!important;
   }
-  input::placeholder,textarea::placeholder{color:#9eacc0}
-  select option{color:#f5f9ff;background:#2b405d}
-
-  .btn.ghost,button.ghost{
-    color:#edf4fb;
-    background:rgba(53,73,101,.84);
-    border-color:rgba(185,202,224,.34)
+  .lifestyle-btn strong{color:#f8fbff!important}
+  .lifestyle-btn small{color:#b7c5d8!important}
+  .lifestyle-btn:hover{
+    background:#365170!important;
+    border-color:rgba(190,204,255,.48)!important;
   }
-  .btn.ghost:hover,button.ghost:hover{
-    background:rgba(67,89,120,.94);
-    border-color:rgba(190,202,255,.45)
-  }
-
-  .btn.primary,button.primary{
-    color:#fff;
-    background:linear-gradient(135deg,#5967dc,#7350d7);
-    border-color:rgba(198,207,255,.30);
-    box-shadow:0 9px 20px rgba(45,55,145,.22)
+  .lifestyle-btn.active,
+  .lifestyle-btn.selected,
+  .lifestyle-btn[data-active="true"]{
+    background:linear-gradient(135deg,#344c82,#315d76)!important;
+    border-color:#7e8cff!important;
+    box-shadow:0 0 0 1px rgba(126,140,255,.24);
   }
 
-  .action-card.safety{background:linear-gradient(145deg,rgba(25,127,155,.28),rgba(37,55,79,.98))}
-  .action-card.pea{background:linear-gradient(145deg,rgba(83,86,185,.27),rgba(37,55,79,.98))}
-  .action-card.assurance{background:linear-gradient(145deg,rgba(25,137,106,.23),rgba(37,55,79,.98))}
-  .action-card.cto{background:linear-gradient(145deg,rgba(112,75,183,.25),rgba(37,55,79,.98))}
-  .action-card.crypto{background:linear-gradient(145deg,rgba(175,110,35,.25),rgba(37,55,79,.98))}
+  /* Écran de sélection du profil : contraste fort mais doux. */
+  #startModal .career-choice-grid{
+    gap:12px;
+  }
+  #startModal .career-choice,
+  #startModal .personal-situation-choice{
+    color:#edf4fb!important;
+    background:linear-gradient(145deg,#314967,#293f5b)!important;
+    border:1px solid rgba(185,202,224,.38)!important;
+    box-shadow:0 7px 18px rgba(5,14,28,.13)!important;
+  }
+  #startModal .career-choice strong,
+  #startModal .career-choice b,
+  #startModal .career-choice:not(.selected){
+    color:#edf4fb!important;
+  }
+  #startModal .career-choice small,
+  #startModal .personal-situation-choice small{
+    color:#b8c6d8!important;
+  }
+  #startModal .career-choice:hover,
+  #startModal .personal-situation-choice:hover{
+    background:linear-gradient(145deg,#3b5879,#324b6a)!important;
+    border-color:rgba(195,208,255,.54)!important;
+  }
+  #startModal .career-choice.selected,
+  #startModal .personal-situation-choice.selected{
+    color:#fff!important;
+    background:linear-gradient(135deg,#355178,#3c5578)!important;
+    border-color:#72c4ef!important;
+    box-shadow:0 0 0 2px rgba(82,190,238,.18),0 10px 25px rgba(5,14,28,.18)!important;
+  }
 
-  .positive,.return-positive{color:#52e1a7!important}
-  .negative,.return-negative{color:#ff8495!important}
-  .return-neutral{color:#d2dce9!important}
-
+  /* Modales */
   .modal,.tax-overlay{
     background:rgba(15,29,47,.67);
-    backdrop-filter:blur(8px)
+    backdrop-filter:blur(8px);
   }
   .modal-card,.tax-modal-card{
-    color:#f5f9ff;
-    background:#2b405d!important;
-    border-color:rgba(185,202,224,.36)!important;
-    box-shadow:0 26px 68px rgba(5,14,28,.38)!important
+    color:#f4f8fd!important;
+    background:#263b56!important;
+    border-color:rgba(185,202,224,.37)!important;
+    box-shadow:0 26px 68px rgba(5,14,28,.38)!important;
+  }
+  .modal-card p,.modal-card li,.modal-card label{
+    color:#c8d4e3;
   }
 
-  .personal-section,.personal-asset-block,
+  /* ===== SAFARI : champs et menus déroulants ===== */
+  input,
+  select,
+  textarea,
+  .start-options select,
+  .loan-controls select,
+  .fast-forward select{
+    color:#f7faff!important;
+    -webkit-text-fill-color:#f7faff;
+    background-color:#304a69!important;
+    border:1px solid rgba(190,207,229,.42)!important;
+    box-shadow:none!important;
+    opacity:1!important;
+  }
+
+  input:not([type="range"]),
+  select,
+  textarea{
+    min-height:39px;
+    border-radius:10px;
+  }
+
+  select,
+  .start-options select,
+  .loan-controls select,
+  .fast-forward select{
+    -webkit-appearance:none!important;
+    appearance:none!important;
+    padding:9px 36px 9px 12px!important;
+    background-image:
+      linear-gradient(45deg,transparent 50%,#d9e4f2 50%),
+      linear-gradient(135deg,#d9e4f2 50%,transparent 50%)!important;
+    background-position:
+      calc(100% - 17px) 50%,
+      calc(100% - 11px) 50%!important;
+    background-size:6px 6px,6px 6px!important;
+    background-repeat:no-repeat!important;
+  }
+
+  select option{
+    color:#f7faff!important;
+    background:#304a69!important;
+  }
+
+  input::placeholder,
+  textarea::placeholder{
+    color:#a9b8cb!important;
+    -webkit-text-fill-color:#a9b8cb!important;
+    opacity:1;
+  }
+
+  /* Wrapper Ma situation : annule le blanc de personal-ui.css. */
+  .personal-input-wrap{
+    color:#f7faff!important;
+    background:#304a69!important;
+    border-color:rgba(190,207,229,.40)!important;
+  }
+  .personal-input-wrap input{
+    color:#f7faff!important;
+    -webkit-text-fill-color:#f7faff!important;
+    background:transparent!important;
+  }
+  .personal-input-wrap b{color:#bdcadd!important}
+  .personal-field>span{color:#d6e0ec!important}
+
+  .personal-section,
+  .personal-asset-block,
+  .personal-summary>div,
   .tax-dynamic-box,.tax-operation-list>div,
   .market-info-box,.market-fee-box{
-    background:rgba(43,64,93,.76)!important;
-    border-color:rgba(185,202,224,.29)!important
+    color:#eef4fb!important;
+    background:#2a405d!important;
+    border-color:rgba(185,202,224,.30)!important;
+  }
+  .property-block{
+    background:linear-gradient(145deg,rgba(108,82,177,.26),#2a405d)!important;
   }
 
-  /* Choix du profil : lisibilité renforcée sans revenir au thème clair. */
-  .career-choice,.decision-choice{
-    background:linear-gradient(145deg,#354e70,#2b425f)!important;
-    border-color:rgba(190,207,230,.38)!important
+  /* Boutons */
+  .btn.ghost,button.ghost{
+    color:#edf4fb!important;
+    -webkit-text-fill-color:#edf4fb;
+    background:#38516f!important;
+    border-color:rgba(185,202,224,.36)!important;
   }
-  .career-choice:hover,.decision-choice:hover{
-    background:linear-gradient(145deg,#405d83,#334e70)!important;
-    border-color:rgba(198,208,255,.52)!important
+  .btn.ghost:hover,button.ghost:hover{
+    background:#45617f!important;
+    border-color:rgba(195,208,255,.48)!important;
   }
+  .btn.primary,button.primary{
+    color:#fff!important;
+    -webkit-text-fill-color:#fff;
+    background:linear-gradient(135deg,#5967dc,#7350d7)!important;
+    border-color:rgba(198,207,255,.30)!important;
+    box-shadow:0 9px 20px rgba(45,55,145,.22);
+  }
+
+  .action-card.safety{background:linear-gradient(145deg,rgba(25,127,155,.29),#293f5b)!important}
+  .action-card.pea{background:linear-gradient(145deg,rgba(83,86,185,.28),#293f5b)!important}
+  .action-card.assurance{background:linear-gradient(145deg,rgba(25,137,106,.24),#293f5b)!important}
+  .action-card.cto{background:linear-gradient(145deg,rgba(112,75,183,.26),#293f5b)!important}
+  .action-card.crypto{background:linear-gradient(145deg,rgba(175,110,35,.26),#293f5b)!important}
+
+  .positive,.return-positive{color:#57dfa8!important}
+  .negative,.return-negative{color:#ff8999!important}
+  .return-neutral{color:#d2dce9!important}
 
   progress{background:#22364f}
+  progress::-webkit-progress-bar{background:#22364f}
   hr{border-color:rgba(185,202,224,.24)}
   ::selection{background:rgba(99,102,241,.44);color:#fff}
 }

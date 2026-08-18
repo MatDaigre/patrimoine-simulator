@@ -1,4 +1,4 @@
-const CACHE='patrimoine-simulator-v212-pc-soft-theme';
+const CACHE='patrimoine-simulator-v212-pc-soft-theme-fixed';
 const ASSETS=[
   './','./index.html',
   './tax-ui.css','./tax-engine.js',
@@ -9,16 +9,16 @@ const ASSETS=[
 ];
 
 const PC_LAYER=[
-  '<link rel="stylesheet" href="./tax-ui.css?v=212pc">',
-  '<link rel="stylesheet" href="./market-ui.css?v=212pc">',
-  '<link rel="stylesheet" href="./personal-ui.css?v=212pc">',
-  '<link rel="stylesheet" href="./pc-theme.css?v=212pc">',
-  '<link rel="stylesheet" href="./pc-tabs-v211.css?v=212pc">',
-  '<script defer src="./tax-engine.js?v=212pc"></script>',
-  '<script defer src="./market-engine.js?v=212pc"></script>',
-  '<script defer src="./crypto-calibration.js?v=212pc"></script>',
-  '<script defer src="./personal-situation.js?v=212pc"></script>',
-  '<script defer src="./pc-tabs-v211.js?v=212pc"></script>'
+  '<link rel="stylesheet" href="./tax-ui.css?v=212bpc">',
+  '<link rel="stylesheet" href="./market-ui.css?v=212bpc">',
+  '<link rel="stylesheet" href="./personal-ui.css?v=212bpc">',
+  '<link rel="stylesheet" href="./pc-theme.css?v=212bpc">',
+  '<link rel="stylesheet" href="./pc-tabs-v211.css?v=212bpc">',
+  '<script defer src="./tax-engine.js?v=212bpc"></script>',
+  '<script defer src="./market-engine.js?v=212bpc"></script>',
+  '<script defer src="./crypto-calibration.js?v=212bpc"></script>',
+  '<script defer src="./personal-situation.js?v=212bpc"></script>',
+  '<script defer src="./pc-tabs-v211.js?v=212bpc"></script>'
 ].join('');
 
 self.addEventListener('install',event=>{
@@ -42,7 +42,7 @@ async function injectLayer(response){
   if(!type.includes('text/html'))return response;
 
   const html=await response.text();
-  if(html.includes('personal-situation.js?v=212pc')&&html.includes('market-engine.js?v=212pc')){
+  if(html.includes('personal-situation.js?v=212bpc')&&html.includes('market-engine.js?v=212bpc')){
     return new Response(html,{status:response.status,statusText:response.statusText,headers:response.headers});
   }
 
