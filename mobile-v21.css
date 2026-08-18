@@ -1,0 +1,204 @@
+/* Patrimoine Simulator — Mobile V2.1
+   Dashboard plus compact + 5 onglets. Mobile uniquement. */
+
+@media (max-width: 720px) {
+  html,
+  body,
+  body.mobile-app-v21,
+  body.mobile-app-v21 .app-shell {
+    background: #070b14 !important;
+  }
+
+  html,
+  body {
+    overflow-x: hidden;
+  }
+
+  body.mobile-app-v21 main {
+    isolation: isolate;
+  }
+
+  body.mobile-app-v21 {
+    padding-bottom: calc(80px + env(safe-area-inset-bottom));
+  }
+
+  /* Suppression du titre Navigation/Accueil de la V2 : redondant et source d'artefact sur capture longue. */
+  body.mobile-app-v21 .mobile-view-heading {
+    display: none !important;
+  }
+
+  body.mobile-app-v21 .topbar {
+    margin-bottom: 10px;
+    padding: 2px 0 4px;
+  }
+
+  body.mobile-app-v21 .topbar,
+  body.mobile-app-v21 .app-shell,
+  body.mobile-app-v21 main {
+    background-color: #070b14;
+  }
+
+  /* Hero beaucoup plus court : on garde l'information utile et les contrôles. */
+  body.mobile-app-v21 #statusTitle,
+  body.mobile-app-v21 .hero-tags {
+    display: none !important;
+  }
+
+  body.mobile-app-v21 .hero {
+    margin-bottom: 10px;
+    padding: 14px;
+    background:
+      radial-gradient(circle at 95% 0%, rgba(56,189,248,.10), transparent 38%),
+      linear-gradient(145deg, #0f172a 0%, #171a35 58%, #0b2d3f 100%) !important;
+    border-color: rgba(148,163,184,.24);
+  }
+
+  body.mobile-app-v21 .hero-meta {
+    font-size: 11px;
+  }
+
+  body.mobile-app-v21 #eventText {
+    margin-top: 7px;
+    font-size: 12px;
+    line-height: 1.35;
+    color: #cbd5e1;
+  }
+
+  body.mobile-app-v21 .turn-panel {
+    margin-top: 2px;
+    padding: 12px;
+    background: rgba(8,13,24,.55);
+  }
+
+  body.mobile-app-v21 .turn-panel > strong {
+    font-size: 22px;
+  }
+
+  body.mobile-app-v21 .stats-grid {
+    gap: 8px;
+    margin-bottom: 10px;
+  }
+
+  body.mobile-app-v21 .stat {
+    min-height: 94px;
+    padding: 11px;
+  }
+
+  body.mobile-app-v21 .stat strong {
+    font-size: clamp(19px, 5.6vw, 23px);
+  }
+
+  body.mobile-app-v21 .stat small,
+  body.mobile-app-v21 .stat span {
+    font-size: 10px;
+  }
+
+  /* Accueil = synthèse seulement. */
+  body[data-mobile-view="home"] .journey-card {
+    padding: 14px;
+  }
+
+  body[data-mobile-view="home"] .journey-card .badge-grid,
+  body[data-mobile-view="home"] .journey-card .score-line {
+    display: none !important;
+  }
+
+  body[data-mobile-view="home"] .journey-card .mission-box {
+    margin-top: 10px;
+    padding: 13px;
+  }
+
+  body[data-mobile-view="home"] .journey-card h3 {
+    margin-bottom: 0;
+  }
+
+  body[data-mobile-view="home"] .health-card {
+    padding: 14px;
+  }
+
+  body[data-mobile-view="home"] .health-score-row {
+    margin: 8px 0;
+  }
+
+  body[data-mobile-view="home"] .health-score-row strong {
+    font-size: 26px;
+  }
+
+  /* Le détail des objectifs revient dans Bilan. */
+  body[data-mobile-view="bilan"] .journey-card .badge-grid,
+  body[data-mobile-view="bilan"] .journey-card .score-line {
+    display: grid;
+  }
+
+  body[data-mobile-view="bilan"] .journey-card .score-line {
+    display: flex;
+  }
+
+  /* Budget devient son propre écran. */
+  body[data-mobile-view="budget"] .budget-card {
+    margin-top: 0;
+  }
+
+  body[data-mobile-view="budget"] .budget-help {
+    margin-bottom: 12px;
+    font-size: 12px;
+  }
+
+  /* Investissements : cartes toujours verticales mais plus compactes. */
+  body[data-mobile-view="invest"] .action-grid.investments {
+    gap: 10px;
+  }
+
+  body[data-mobile-view="invest"] .action-card {
+    padding: 12px;
+  }
+
+  body[data-mobile-view="invest"] .action-card p {
+    max-width: 34rem;
+  }
+
+  /* Barre 5 onglets. */
+  .mobile-bottom-nav-v21 {
+    grid-template-columns: repeat(5, minmax(0, 1fr)) !important;
+    gap: 2px !important;
+    padding-left: max(5px, env(safe-area-inset-left)) !important;
+    padding-right: max(5px, env(safe-area-inset-right)) !important;
+    background: rgba(6,10,18,.97) !important;
+  }
+
+  .mobile-bottom-nav-v21 button {
+    min-height: 52px;
+    padding: 4px 1px;
+    font-size: 9px;
+  }
+
+  .mobile-bottom-nav-v21 .mobile-nav-icon {
+    width: 22px;
+    height: 22px;
+    font-size: 16px;
+  }
+
+  .mobile-bottom-nav-v21 button.active {
+    background: rgba(79,70,229,.30);
+    box-shadow: inset 0 0 0 1px rgba(129,140,248,.12);
+  }
+
+  /* Évite toute bande/triangle lors des captures longues iOS. */
+  body.mobile-app-v21 .layout,
+  body.mobile-app-v21 .main-column,
+  body.mobile-app-v21 .side-column,
+  body.mobile-app-v21 [data-mobile-managed] {
+    transform: none !important;
+    clip-path: none !important;
+  }
+}
+
+@media (max-width: 360px) {
+  .mobile-bottom-nav-v21 button {
+    font-size: 8px;
+  }
+
+  .mobile-bottom-nav-v21 .mobile-nav-icon {
+    font-size: 15px;
+  }
+}
