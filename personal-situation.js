@@ -14,6 +14,7 @@
     debtRatio,
     annualUpdate,
     inflateMonthlyCosts,
+    payDebts,
     simulateMonths
   };
 
@@ -113,6 +114,61 @@
     }
   };
 
+  // En profil « Ma situation », les crédits utilisent réellement le taux et
+  // la durée restante saisis par le joueur au lieu des hypothèses des profils standards.
+  payDebts = function () {
+    if (!isPersonal()) return CORE.payDebts();
+
+    let interest = 0;
+    const defaults = { home: .034, rental: .036, car: .055, student: .025, consumer: .08 };
+
+    function pay(balanceKey, paymentKey, metaKey, monthsKey = null) {
+      let balance = Math.max(0, Number(state[balanceKey]) || 0);
+      let payment = Math.max(0, Number(state[paymentKey]) || 0);
+      if (!balance || !payment) return;
+
+      const meta = state.debtMeta?.[metaKey] || {};
+      const rate = Number.isFinite(Number(meta.rate)) ? Math.max(0, Number(meta.rate)) : defaults[metaKey];
+      let remaining = Number.isFinite(Number(meta.months))
+        ? Math.max(0, Math.round(Number(meta.months)))
+        : (monthsKey ? Math.max(0, Math.round(Number(state[monthsKey]) || 0)) : 0);
+
+      const monthInterest = balance * rate / 12;
+      interest += monthInterest;
+      balance = Math.max(0, balance + monthInterest - payment);
+
+      if (remaining > 0) remaining--;
+
+      if (balance < 10 || (Number(meta.months) > 0 && remaining <= 0)) {
+        balance = 0;
+        payment = 0;
+        remaining = 0;
+      }
+
+      state[balanceKey] = balance;
+      state[paymentKey] = payment;
+
+      if (!state.debtMeta) state.debtMeta = {};
+      state.debtMeta[metaKey] = Object.assign({}, meta, {
+        rate,
+        months: remaining,
+        payment,
+        remainingBalance: balance
+      });
+
+      if (monthsKey) state[monthsKey] = remaining;
+    }
+
+    pay('homeDebt', 'homePayment', 'home');
+    pay('rentalDebt', 'rentalPayment', 'rental');
+    pay('carDebt', 'carPayment', 'car', 'carMonths');
+    pay('studentDebt', 'studentPayment', 'student', 'studentMonths');
+    pay('consumerDebt', 'consumerPayment', 'consumer', 'consumerMonths');
+
+    if (state.repairSurchargeMonths > 0) state.repairSurchargeMonths--;
+    return interest;
+  };
+
   function euroInput(id, label, value = 0, hint = '') {
     return `
       <label class="personal-field">
@@ -199,7 +255,7 @@
             <section class="personal-section">
               <h3>3. Dépenses mensuelles</h3>
               <div class="personal-grid cols-3">
-                ${euroInput('psHousing', 'Logement / charges', 700)}
+                ${euroInput('psHousing', 'Logement / charges hors mensualité de crédit', 700, 'Si tu as un crédit immobilier, sa mensualité se renseigne séparément plus bas.')}
                 ${euroInput('psLiving', 'Vie courante / alimentation', 500)}
                 ${euroInput('psTransport', 'Transport', 180)}
                 ${euroInput('psLeisure', 'Loisirs / sorties', 200)}
@@ -361,7 +417,7 @@
             <section class="personal-section">
               <h3>Dépenses mensuelles</h3>
               <div class="personal-grid cols-2">
-                ${euroInput('paHousing', 'Logement / charges', 0)}
+                ${euroInput('paHousing', 'Logement / charges hors mensualité de crédit', 0)}
                 ${euroInput('paLiving', 'Vie courante / alimentation', 0)}
                 ${euroInput('paTransport', 'Transport', 0)}
                 ${euroInput('paLeisure', 'Loisirs / sorties', 0)}
