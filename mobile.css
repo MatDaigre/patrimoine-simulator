@@ -1,0 +1,656 @@
+/* Patrimoine Simulator — Mobile UI override
+   Scope: smartphones only. Desktop layout/styles remain unchanged. */
+
+@media (max-width: 720px) {
+  :root {
+    --text: #f8fafc;
+    --muted: #aebbd0;
+    --line: rgba(148, 163, 184, .28);
+    --primary: #6366f1;
+    --primary2: #7c3aed;
+    --blue: #38bdf8;
+    --green: #34d399;
+    --amber: #fbbf24;
+    --red: #fb7185;
+    --panel: rgba(22, 31, 49, .96);
+    --shadow: 0 16px 38px rgba(0, 0, 0, .28);
+    --radius: 18px;
+    color-scheme: dark;
+  }
+
+  html {
+    background: #0b1120;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    min-width: 0;
+    min-height: 100vh;
+    color: var(--text);
+    background:
+      radial-gradient(circle at 8% 0%, rgba(56,189,248,.11), transparent 29%),
+      radial-gradient(circle at 96% 5%, rgba(129,140,248,.12), transparent 31%),
+      linear-gradient(180deg, #0b1120 0%, #101827 48%, #0b1120 100%);
+    overscroll-behavior-y: none;
+  }
+
+  body, button, input, select {
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .app-shell {
+    width: 100%;
+    max-width: none;
+    padding-top: max(12px, env(safe-area-inset-top));
+    padding-right: max(12px, env(safe-area-inset-right));
+    padding-bottom: max(22px, env(safe-area-inset-bottom));
+    padding-left: max(12px, env(safe-area-inset-left));
+  }
+
+  h1 {
+    font-size: clamp(24px, 7vw, 30px);
+    line-height: 1.05;
+    letter-spacing: -.025em;
+  }
+
+  .eyebrow { color: #a5b4fc; }
+
+  .brand-note,
+  .muted,
+  .history-list,
+  .action-card p,
+  .realestate-grid p,
+  .mission-desc,
+  .career-choice small,
+  .decision-choice small,
+  .budget-grid label span,
+  .budget-summary span,
+  .career-stats span,
+  .stat span,
+  .stat small,
+  .badge-copy small,
+  .budget-help,
+  .budget-auto-grid span,
+  .event-balance span,
+  .rules-box ul,
+  .recap-grid span,
+  .annual-grid span,
+  .annual-comparison span,
+  .sim-summary-grid span,
+  .health-lines span,
+  .auto-row label,
+  .asset-performance small,
+  .debt-list small,
+  .return-line {
+    color: var(--muted) !important;
+  }
+
+  .topbar {
+    gap: 12px;
+    margin-bottom: 14px;
+  }
+
+  .brand-line { align-items: flex-start; }
+
+  .logo {
+    flex: 0 0 44px;
+    box-shadow: 0 10px 24px rgba(56,189,248,.16);
+  }
+
+  .top-actions {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    width: 100%;
+    gap: 8px;
+  }
+
+  .top-actions > * { min-width: 0; }
+
+  .top-actions .version-chip {
+    grid-column: 1 / -1;
+    justify-self: stretch;
+  }
+
+  .version-chip,
+  .pill {
+    justify-content: center;
+    min-height: 40px;
+    color: #c7d2fe;
+    background: rgba(99,102,241,.13);
+    border-color: rgba(165,180,252,.20);
+  }
+
+  .inflation-pill {
+    color: #fde68a;
+    background: rgba(180,83,9,.20);
+    border-color: rgba(251,191,36,.28);
+  }
+
+  .card {
+    background: var(--panel);
+    border-color: var(--line);
+    box-shadow: var(--shadow);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+  }
+
+  .hero {
+    padding: 18px;
+    gap: 16px;
+    background:
+      radial-gradient(circle at 92% 8%, rgba(56,189,248,.23), transparent 42%),
+      linear-gradient(135deg, #312e81 0%, #3730a3 46%, #075985 100%);
+    border-color: rgba(165,180,252,.20);
+    box-shadow: 0 18px 42px rgba(0,0,0,.30);
+  }
+
+  .hero h2 {
+    font-size: clamp(26px, 8vw, 34px);
+    line-height: 1.04;
+  }
+
+  .hero p,
+  .hero-meta { color: rgba(248,250,252,.86); }
+
+  .hero-tags span,
+  .turn-panel {
+    background: rgba(15,23,42,.34);
+    border-color: rgba(226,232,240,.18);
+  }
+
+  .turn-panel {
+    width: 100%;
+    min-width: 0;
+  }
+
+  .fast-forward {
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 8px;
+  }
+
+  .fast-forward select {
+    min-height: 46px;
+    color: #f8fafc;
+    background: #111a2b;
+    border-color: rgba(148,163,184,.34);
+  }
+
+  .fast-forward select option {
+    color: #f8fafc;
+    background: #111827;
+  }
+
+  .stats-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+  }
+
+  .stat {
+    min-width: 0;
+    padding: 15px;
+  }
+
+  .stat strong {
+    margin-top: 6px;
+    font-size: clamp(21px, 6.3vw, 27px);
+    overflow-wrap: anywhere;
+  }
+
+  .stat.blue {
+    background: linear-gradient(145deg, rgba(14,116,144,.42), rgba(22,31,49,.98));
+  }
+  .stat.violet {
+    background: linear-gradient(145deg, rgba(91,33,182,.35), rgba(22,31,49,.98));
+  }
+  .stat.green {
+    background: linear-gradient(145deg, rgba(5,150,105,.30), rgba(22,31,49,.98));
+  }
+  .stat.amber {
+    background: linear-gradient(145deg, rgba(180,83,9,.30), rgba(22,31,49,.98));
+  }
+
+  .layout,
+  .main-column,
+  .side-column { min-width: 0; }
+
+  .main-column,
+  .side-column { gap: 12px; }
+
+  .section-card,
+  .side-card { padding: 17px; }
+
+  .section-head {
+    align-items: flex-start;
+    gap: 9px;
+    margin-bottom: 14px;
+  }
+
+  .section-head h3,
+  .side-card h3 {
+    font-size: 20px;
+    line-height: 1.15;
+  }
+
+  .budget-grid,
+  .action-grid.investments,
+  .two-cards,
+  .realestate-grid,
+  .budget-summary,
+  .side-column,
+  .career-choice-grid,
+  .lifestyle-selector,
+  .loan-controls {
+    grid-template-columns: 1fr;
+  }
+
+  .budget-grid { gap: 9px; }
+
+  .budget-grid label,
+  .budget-summary div,
+  .career-stats div,
+  .budget-auto-grid > div,
+  .realestate-grid article,
+  .purchase-details div,
+  .rules-box,
+  .recap-grid > div,
+  .annual-grid > div,
+  .annual-comparison > div,
+  .sim-summary-grid > div,
+  .health-lines > div,
+  .event-balance,
+  .start-save-box {
+    color: var(--text);
+    background: #111a2b;
+    border-color: var(--line);
+  }
+
+  .budget-grid label {
+    padding: 13px;
+    border-radius: 14px;
+  }
+
+  .lifestyle-selector { gap: 9px; }
+
+  .lifestyle-btn {
+    min-height: 64px;
+    color: var(--text);
+    background: #111a2b;
+    border-color: var(--line);
+    box-shadow: none;
+  }
+
+  .lifestyle-btn.active {
+    color: #fff;
+    background: linear-gradient(145deg, rgba(79,70,229,.32), rgba(14,116,144,.20));
+    border-color: #818cf8;
+    box-shadow: 0 8px 24px rgba(79,70,229,.16);
+  }
+
+  .budget-auto-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
+  }
+
+  .budget-auto-grid > div {
+    min-width: 0;
+    align-items: flex-start;
+    flex-direction: column;
+    padding: 11px;
+  }
+
+  .budget-auto-grid strong {
+    white-space: normal;
+    font-size: 15px;
+    overflow-wrap: anywhere;
+  }
+
+  .inflation-note {
+    color: #fde68a;
+    background: rgba(180,83,9,.15);
+    border-color: rgba(251,191,36,.25);
+  }
+
+  .budget-summary {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
+  }
+
+  .budget-summary div,
+  .career-stats div { padding: 12px; }
+
+  .action-card {
+    min-width: 0;
+    padding: 14px;
+    gap: 12px;
+    background: #111a2b !important;
+    border-color: var(--line);
+  }
+
+  .action-card.safety {
+    background: linear-gradient(145deg, rgba(14,116,144,.22), #111a2b 58%) !important;
+  }
+  .action-card.pea {
+    background: linear-gradient(145deg, rgba(5,150,105,.19), #111a2b 58%) !important;
+  }
+  .action-card.assurance {
+    background: linear-gradient(145deg, rgba(79,70,229,.20), #111a2b 58%) !important;
+  }
+  .action-card.cto {
+    background: linear-gradient(145deg, rgba(225,29,72,.16), #111a2b 58%) !important;
+  }
+  .action-card.crypto {
+    background: linear-gradient(145deg, rgba(217,119,6,.18), #111a2b 58%) !important;
+  }
+
+  .action-row {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
+  }
+
+  .action-row input { grid-column: 1 / -1; }
+
+  .auto-row {
+    border-top-color: rgba(148,163,184,.22);
+  }
+
+  .auto-row label {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .auto-row input { width: 100%; }
+
+  input,
+  select,
+  .action-row input,
+  .auto-row input,
+  .loan-controls select,
+  .start-options select {
+    min-height: 46px;
+    width: 100%;
+    color: var(--text);
+    background: #0d1525;
+    border: 1px solid rgba(148,163,184,.36);
+    border-radius: 12px;
+    outline: none;
+  }
+
+  input:focus,
+  select:focus,
+  button:focus-visible {
+    border-color: #818cf8;
+    outline: 3px solid rgba(129,140,248,.25);
+    outline-offset: 2px;
+  }
+
+  input::placeholder { color: #7f8da4; }
+
+  .btn {
+    min-height: 46px;
+    padding: 11px 14px;
+    border-radius: 12px;
+    box-shadow: 0 8px 20px rgba(0,0,0,.20);
+    touch-action: manipulation;
+  }
+
+  .btn.primary {
+    background: linear-gradient(135deg, #4f46e5, #7c3aed);
+    color: #fff;
+  }
+
+  .btn.ghost {
+    color: #f1f5f9;
+    background: #172033;
+    border: 1px solid rgba(148,163,184,.32);
+  }
+
+  .btn.warning {
+    background: linear-gradient(135deg, #d97706, #ea580c);
+    color: #fff;
+  }
+
+  .btn.danger {
+    color: #fecdd3;
+    background: rgba(190,18,60,.20);
+    border-color: rgba(251,113,133,.35);
+  }
+
+  .positive,
+  .return-positive { color: #4ade80 !important; }
+
+  .negative,
+  .return-negative { color: #fb7185 !important; }
+
+  .return-neutral { color: #cbd5e1 !important; }
+
+  .realestate-grid article,
+  .debt-card,
+  .disclaimer,
+  .journey-card,
+  .event-info-card {
+    background: #111a2b !important;
+  }
+
+  .asset-list div,
+  .score-line,
+  .health-lines div,
+  .event-balance {
+    border-color: rgba(148,163,184,.20);
+  }
+
+  progress::-webkit-progress-bar { background: #263247; }
+
+  .history-list { padding-left: 16px; }
+
+  .mission-box {
+    background: #0e1728;
+    border-color: rgba(129,140,248,.22);
+  }
+
+  .badge-item {
+    background: #111a2b;
+    border-color: var(--line);
+  }
+
+  .badge-item.unlocked {
+    background: rgba(5,150,105,.13);
+    border-color: rgba(52,211,153,.34);
+  }
+
+  .badge-icon { background: rgba(129,140,248,.14); }
+  .score-line strong { color: #a5b4fc; }
+
+  .achievement-toast,
+  .recap-achievements { color: #6ee7b7; }
+
+  .recap-achievements { background: rgba(5,150,105,.14); }
+
+  .health-chip.good {
+    color: #86efac;
+    background: rgba(22,101,52,.32);
+  }
+
+  .health-chip.watch {
+    color: #fde68a;
+    background: rgba(146,64,14,.32);
+  }
+
+  .health-chip.danger {
+    color: #fecaca;
+    background: rgba(153,27,27,.32);
+  }
+
+  .danger-meter { background: #263247; }
+
+  .recap-grid,
+  .annual-grid,
+  .annual-comparison,
+  .sim-summary-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
+  }
+
+  .recap-grid > div,
+  .annual-grid > div,
+  .annual-comparison > div,
+  .sim-summary-grid > div {
+    min-width: 0;
+    padding: 11px;
+    border: 1px solid var(--line);
+    border-radius: 12px;
+  }
+
+  .recap-grid strong,
+  .annual-grid strong,
+  .annual-comparison strong,
+  .sim-summary-grid strong {
+    overflow-wrap: anywhere;
+  }
+
+  .annual-summary,
+  .sim-events {
+    color: var(--muted);
+    background: #0d1525;
+    border-color: rgba(148,163,184,.24);
+  }
+
+  .sim-warning { color: #fcd34d; }
+
+  .sim-month-list {
+    max-height: none;
+    overflow: visible;
+    border: 0;
+    border-radius: 0;
+  }
+
+  .sim-month-row {
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 8px !important;
+    margin-bottom: 9px;
+    padding: 11px !important;
+    background: #0d1525;
+    border: 1px solid rgba(148,163,184,.22) !important;
+    border-radius: 12px;
+  }
+
+  .sim-month-row.head { display: none !important; }
+
+  .sim-month-row > * { display: block !important; }
+
+  .sim-month-row > strong:first-child {
+    grid-column: 1 / -1;
+    color: #e0e7ff;
+    font-size: 13px;
+  }
+
+  .sim-month-row > span {
+    min-width: 0;
+    color: #e2e8f0;
+    overflow-wrap: anywhere;
+  }
+
+  .sim-month-row > span::before {
+    display: block;
+    margin-bottom: 2px;
+    color: var(--muted);
+    font-size: 9px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: .06em;
+  }
+
+  .sim-month-row > span:nth-child(2)::before { content: "Revenus"; }
+  .sim-month-row > span:nth-child(3)::before { content: "Dépenses"; }
+  .sim-month-row > span:nth-child(4)::before { content: "Placements"; }
+  .sim-month-row > span:nth-child(5)::before { content: "Δ patrimoine"; }
+
+  .modal {
+    align-items: end;
+    padding: 8px;
+    padding-bottom: max(8px, env(safe-area-inset-bottom));
+    background: rgba(2,6,23,.78);
+  }
+
+  .modal-card,
+  .modal-card.wide,
+  .annual-modal .modal-card,
+  .sim-modal .modal-card,
+  .end-modal .modal-card {
+    width: 100%;
+    max-width: none;
+    max-height: 92dvh;
+    padding: 20px 16px calc(18px + env(safe-area-inset-bottom));
+    color: var(--text);
+    background: linear-gradient(180deg, #172033, #0e1728);
+    border-color: rgba(148,163,184,.28);
+    border-radius: 20px 20px 14px 14px;
+    box-shadow: 0 -18px 55px rgba(0,0,0,.42);
+  }
+
+  .modal-card h2 {
+    padding-right: 32px;
+    font-size: 26px;
+    line-height: 1.08;
+  }
+
+  .modal-close {
+    min-width: 44px;
+    min-height: 44px;
+    right: 8px;
+    top: 6px;
+    color: #cbd5e1;
+  }
+
+  .career-choice,
+  .decision-choice {
+    min-height: 58px;
+    color: var(--text);
+    background: #111a2b;
+    border-color: rgba(148,163,184,.28);
+  }
+
+  .career-choice.selected {
+    background: rgba(79,70,229,.22);
+    border-color: #818cf8;
+    box-shadow: 0 8px 24px rgba(79,70,229,.18);
+  }
+
+  .purchase-details div { gap: 12px; }
+
+  .annual-grade {
+    color: #fff;
+    box-shadow: 0 10px 26px rgba(0,0,0,.28);
+  }
+
+  .save-note {
+    left: 12px;
+    right: 12px;
+    bottom: max(12px, env(safe-area-inset-bottom));
+    width: auto;
+    color: #f8fafc;
+    background: #172033;
+    border: 1px solid rgba(148,163,184,.28);
+  }
+}
+
+@media (max-width: 360px) {
+  .stats-grid,
+  .budget-auto-grid,
+  .budget-summary,
+  .recap-grid,
+  .annual-grid,
+  .annual-comparison,
+  .sim-summary-grid,
+  .top-actions,
+  .action-row,
+  .sim-month-row {
+    grid-template-columns: 1fr !important;
+  }
+
+  .top-actions .version-chip,
+  .action-row input,
+  .sim-month-row > strong:first-child {
+    grid-column: 1;
+  }
+}
