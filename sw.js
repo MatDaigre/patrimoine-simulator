@@ -1,4 +1,4 @@
-const CACHE='patrimoine-simulator-v211-pc-tabs';
+const CACHE='patrimoine-simulator-v212-pc-soft-theme';
 const ASSETS=[
   './','./index.html',
   './tax-ui.css','./tax-engine.js',
@@ -9,16 +9,16 @@ const ASSETS=[
 ];
 
 const PC_LAYER=[
-  '<link rel="stylesheet" href="./tax-ui.css?v=211pc">',
-  '<link rel="stylesheet" href="./market-ui.css?v=211pc">',
-  '<link rel="stylesheet" href="./personal-ui.css?v=211pc">',
-  '<link rel="stylesheet" href="./pc-theme.css?v=211pc">',
-  '<link rel="stylesheet" href="./pc-tabs-v211.css?v=211pc">',
-  '<script defer src="./tax-engine.js?v=211pc"></script>',
-  '<script defer src="./market-engine.js?v=211pc"></script>',
-  '<script defer src="./crypto-calibration.js?v=211pc"></script>',
-  '<script defer src="./personal-situation.js?v=211pc"></script>',
-  '<script defer src="./pc-tabs-v211.js?v=211pc"></script>'
+  '<link rel="stylesheet" href="./tax-ui.css?v=212pc">',
+  '<link rel="stylesheet" href="./market-ui.css?v=212pc">',
+  '<link rel="stylesheet" href="./personal-ui.css?v=212pc">',
+  '<link rel="stylesheet" href="./pc-theme.css?v=212pc">',
+  '<link rel="stylesheet" href="./pc-tabs-v211.css?v=212pc">',
+  '<script defer src="./tax-engine.js?v=212pc"></script>',
+  '<script defer src="./market-engine.js?v=212pc"></script>',
+  '<script defer src="./crypto-calibration.js?v=212pc"></script>',
+  '<script defer src="./personal-situation.js?v=212pc"></script>',
+  '<script defer src="./pc-tabs-v211.js?v=212pc"></script>'
 ].join('');
 
 self.addEventListener('install',event=>{
@@ -42,7 +42,7 @@ async function injectLayer(response){
   if(!type.includes('text/html'))return response;
 
   const html=await response.text();
-  if(html.includes('personal-situation.js?v=211pc')&&html.includes('market-engine.js?v=211pc')){
+  if(html.includes('personal-situation.js?v=212pc')&&html.includes('market-engine.js?v=212pc')){
     return new Response(html,{status:response.status,statusText:response.statusText,headers:response.headers});
   }
 
