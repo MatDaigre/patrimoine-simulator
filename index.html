@@ -1,0 +1,785 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <meta name="theme-color" content="#4f46e5" />
+
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <meta name="apple-mobile-web-app-title" content="Patrimoine Simulator" />
+  <link rel="manifest" href="manifest.webmanifest" />
+  <link rel="apple-touch-icon" href="icon-192.png" />
+
+  <title>Patrimoine Simulator</title>
+  <style>
+:root{--text:#172033;--muted:#687791;--line:rgba(169,187,219,.48);--primary:#4f46e5;--primary2:#7c3aed;--blue:#0ea5e9;--green:#10b981;--amber:#f59e0b;--red:#e11d48;--panel:rgba(255,255,255,.86);--shadow:0 18px 48px rgba(68,76,122,.12);--radius:22px}*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:var(--text);background:radial-gradient(circle at 8% 3%,rgba(14,165,233,.18),transparent 22%),radial-gradient(circle at 93% 4%,rgba(124,58,237,.18),transparent 24%),radial-gradient(circle at 80% 85%,rgba(16,185,129,.13),transparent 20%),linear-gradient(180deg,#edf3ff,#f8f9ff 45%,#fff)}button,input,select{font:inherit}button{cursor:pointer}.app-shell{max-width:1480px;margin:auto;padding:22px}.topbar{display:flex;align-items:center;justify-content:space-between;gap:20px;margin-bottom:18px}.brand-line{display:flex;align-items:center;gap:12px}.logo{display:grid;place-items:center;width:44px;height:44px;border-radius:14px;background:linear-gradient(135deg,var(--primary),var(--blue));color:white;font-weight:950;font-size:22px;box-shadow:0 12px 30px rgba(79,70,229,.28)}h1{margin:0;font-size:32px}.eyebrow{margin:0;text-transform:uppercase;letter-spacing:.12em;font-size:11px;font-weight:900;color:#6769df}.brand-note{margin:7px 0 0;color:var(--muted);font-weight:650}.top-actions{display:flex;align-items:center;gap:9px}.version-chip,.pill{display:inline-flex;align-items:center;border-radius:999px;padding:8px 11px;font-weight:850;font-size:12px;background:rgba(99,102,241,.09);border:1px solid rgba(99,102,241,.16);color:#595bd8}.card{background:var(--panel);backdrop-filter:blur(18px);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow)}.hero{display:flex;justify-content:space-between;gap:24px;padding:28px;color:white;background:linear-gradient(120deg,rgba(79,70,229,.96),rgba(14,165,233,.92));border-color:rgba(255,255,255,.15);box-shadow:0 24px 58px rgba(79,70,229,.25);margin-bottom:15px;overflow:hidden;position:relative}.hero::after{content:"€";position:absolute;right:250px;top:-65px;font-size:240px;font-weight:950;color:rgba(255,255,255,.055);transform:rotate(8deg)}.hero-copy{position:relative;z-index:1}.hero-meta{display:flex;flex-wrap:wrap;gap:8px 14px;font-size:13px;font-weight:800;color:rgba(255,255,255,.84)}.hero h2{margin:10px 0 8px;max-width:850px;font-size:clamp(27px,4vw,44px);line-height:1.02}.hero p{margin:0;color:rgba(255,255,255,.84)}.hero-tags{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px}.hero-tags span{padding:7px 10px;border-radius:999px;background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.16);font-size:12px;font-weight:800}.turn-panel{position:relative;z-index:1;min-width:220px;padding:17px;border-radius:18px;background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.22);align-self:center}.turn-panel>span{display:block;color:rgba(255,255,255,.76);font-size:12px;font-weight:800}.turn-panel>strong{display:block;font-size:28px;margin:5px 0 13px}.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:13px;margin-bottom:15px}.stat{padding:18px;overflow:hidden;position:relative}.stat::after{content:"";position:absolute;right:-20px;top:-22px;width:94px;height:94px;border-radius:50%;opacity:.22}.stat.blue{background:linear-gradient(135deg,rgba(14,165,233,.13),rgba(255,255,255,.92))}.stat.blue::after{background:#0ea5e9}.stat.violet{background:linear-gradient(135deg,rgba(124,58,237,.12),rgba(255,255,255,.92))}.stat.violet::after{background:#7c3aed}.stat.green{background:linear-gradient(135deg,rgba(16,185,129,.13),rgba(255,255,255,.92))}.stat.green::after{background:#10b981}.stat.amber{background:linear-gradient(135deg,rgba(245,158,11,.14),rgba(255,255,255,.92))}.stat.amber::after{background:#f59e0b}.stat span,.stat small{display:block;color:var(--muted)}.stat strong{display:block;margin:7px 0 5px;font-size:29px}.layout{display:grid;grid-template-columns:minmax(0,2.15fr) minmax(300px,.85fr);gap:15px}.main-column,.side-column{display:flex;flex-direction:column;gap:15px}.section-card,.side-card{padding:21px}.section-card{position:relative;overflow:hidden}.section-card::before{content:"";position:absolute;top:0;left:0;right:0;height:5px}.budget-card::before{background:linear-gradient(90deg,#0ea5e9,#4f46e5)}.invest-card::before{background:linear-gradient(90deg,#10b981,#22c55e)}.career-card::before{background:linear-gradient(90deg,#f59e0b,#f97316)}.mobility-card::before{background:linear-gradient(90deg,#64748b,#0ea5e9)}.realestate-card::before{background:linear-gradient(90deg,#8b5cf6,#ec4899)}.section-head{display:flex;justify-content:space-between;align-items:center;gap:14px;margin-bottom:17px}.section-head h3,.side-card h3{font-size:23px;margin:4px 0 0}.budget-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}.budget-grid label{display:grid;grid-template-columns:1fr auto;gap:9px;padding:14px;border-radius:16px;background:linear-gradient(135deg,#fbfdff,#f3f7ff);border:1px solid var(--line);font-weight:850}.budget-grid label span{color:var(--muted)}.budget-grid input{grid-column:1/-1;width:100%;appearance:none;background:transparent}.budget-grid input::-webkit-slider-runnable-track{height:8px;border-radius:999px;background:linear-gradient(90deg,#7dd3fc,#818cf8)}.budget-grid input::-webkit-slider-thumb{appearance:none;margin-top:-5px;width:18px;height:18px;border-radius:50%;background:white;border:3px solid var(--primary);box-shadow:0 2px 8px rgba(79,70,229,.25)}.budget-grid input::-moz-range-track{height:8px;border-radius:999px;background:linear-gradient(90deg,#7dd3fc,#818cf8)}.budget-grid input::-moz-range-thumb{width:18px;height:18px;border-radius:50%;background:white;border:3px solid var(--primary)}.budget-summary{display:grid;grid-template-columns:repeat(4,1fr);gap:9px;margin-top:14px}.budget-summary div,.career-stats div{padding:13px;background:#f8faff;border:1px solid var(--line);border-radius:14px}.budget-summary span,.career-stats span{display:block;color:var(--muted);font-size:11px;font-weight:800}.budget-summary strong,.career-stats strong{display:block;margin-top:4px;font-size:17px}.action-grid.investments{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}.action-card{padding:15px;border-radius:18px;border:1px solid var(--line);display:flex;justify-content:space-between;flex-direction:column;gap:13px}.action-card.safety{background:linear-gradient(135deg,rgba(14,165,233,.11),#fff)}.action-card.pea{background:linear-gradient(135deg,rgba(16,185,129,.11),#fff)}.action-card.assurance{background:linear-gradient(135deg,rgba(99,102,241,.10),#fff)}.action-card.cto{background:linear-gradient(135deg,rgba(244,63,94,.09),#fff)}.action-card.crypto{background:linear-gradient(135deg,rgba(245,158,11,.11),#fff)}.action-card .icon,.realestate-grid .icon{font-size:24px}.action-card h4,.realestate-grid h4{margin:5px 0}.action-card p,.realestate-grid p,.muted{color:var(--muted);line-height:1.45}.action-card p{font-size:13px;margin:0 0 8px}.action-card>div>strong{font-size:20px}.action-row{display:grid;grid-template-columns:minmax(70px,1fr) auto auto;gap:7px}.action-row input{min-width:0;padding:9px;border-radius:10px;border:1px solid var(--line);background:rgba(255,255,255,.9)}.two-cards{display:grid;grid-template-columns:1fr 1fr;gap:15px}.career-stats{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin:14px 0}.button-stack{display:grid;gap:9px;margin-top:14px}.realestate-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.realestate-grid article{padding:16px;border:1px solid var(--line);border-radius:17px;background:linear-gradient(135deg,#fff,#f8f6ff)}.realestate-grid p{font-size:13px;min-height:38px}.asset-list{display:grid;gap:0;margin-top:12px}.asset-list div{display:flex;justify-content:space-between;gap:12px;padding:10px 0;border-bottom:1px solid #edf0f7}.asset-list div:last-child{border-bottom:0}.asset-list .total-line{font-size:17px;font-weight:900}.debt-card{background:linear-gradient(135deg,rgba(244,63,94,.055),rgba(255,255,255,.9))}.goal{margin-top:16px}.goal>div{display:flex;justify-content:space-between;gap:10px;font-size:12px;margin-bottom:6px}progress{width:100%;height:11px;appearance:none}progress::-webkit-progress-bar{background:#e7ecf9;border-radius:999px}progress::-webkit-progress-value{background:linear-gradient(90deg,var(--primary),var(--green));border-radius:999px}progress::-moz-progress-bar{background:linear-gradient(90deg,var(--primary),var(--green));border-radius:999px}.history-list{padding-left:18px;margin:12px 0 0;display:grid;gap:9px;color:var(--muted);font-size:12px;line-height:1.45}.disclaimer{background:linear-gradient(135deg,rgba(99,102,241,.06),rgba(255,255,255,.94))}.disclaimer p{font-size:12px;margin-bottom:0}.btn{border:0;border-radius:13px;padding:11px 14px;font-weight:900;transition:.15s;box-shadow:0 9px 22px rgba(25,35,65,.08)}.btn:hover{transform:translateY(-1px)}.btn:active{transform:translateY(1px)}.btn.primary{background:linear-gradient(135deg,var(--primary),var(--primary2));color:white}.btn.ghost{background:rgba(255,255,255,.84);border:1px solid var(--line);color:var(--text)}.btn.warning{background:linear-gradient(135deg,#f59e0b,#f97316);color:white}.btn.danger{background:#fff1f2;color:#be123c;border:1px solid #fecdd3}.btn.big{padding:13px 17px}.btn.mini{padding:9px 10px;font-size:12px}.btn.full{width:100%}.positive{color:#059669!important}.negative{color:#dc2626!important}.modal{position:fixed;inset:0;z-index:30;background:rgba(20,29,50,.62);backdrop-filter:blur(9px);display:grid;place-items:center;padding:18px}.modal.hidden{display:none}.modal-card{position:relative;width:min(540px,100%);max-height:90vh;overflow:auto;padding:25px;background:linear-gradient(180deg,#fff,#f8faff);border:1px solid var(--line);border-radius:24px;box-shadow:0 30px 90px rgba(20,29,50,.30)}.modal-card.wide{width:min(820px,100%)}.modal-card h2{margin:6px 0 8px;font-size:30px}.modal-close{position:absolute;right:13px;top:10px;border:0;background:transparent;font-size:27px;color:var(--muted)}.career-choice-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin:18px 0}.career-choice{display:grid;gap:6px;text-align:left;padding:15px;border-radius:17px;border:2px solid transparent;background:#f7f9ff;color:var(--text)}.career-choice span{font-size:26px}.career-choice small{color:var(--muted)}.career-choice.selected{border-color:var(--primary);background:rgba(79,70,229,.07);box-shadow:0 9px 28px rgba(79,70,229,.14)}.start-options{margin:14px 0}.start-options label{display:grid;gap:7px;font-weight:850}.start-options select{padding:11px;border:1px solid var(--line);border-radius:12px;background:white}.decision-choices{display:grid;gap:9px;margin-top:17px}.decision-choice{width:100%;text-align:left;padding:13px;border-radius:14px;border:1px solid var(--line);background:white;color:var(--text);font-weight:800}.decision-choice small{display:block;color:var(--muted);font-weight:600;margin-top:4px}.purchase-details{display:grid;gap:8px;margin:15px 0}.purchase-details div{display:flex;justify-content:space-between;padding:10px;border-radius:12px;background:#f6f8fd}.purchase-details strong{font-weight:900}
+.journey-card{background:linear-gradient(135deg,rgba(79,70,229,.10),rgba(14,165,233,.08),rgba(255,255,255,.92))!important}.mission-box{margin-top:14px;padding:16px;border-radius:17px;background:rgba(255,255,255,.78);border:1px solid rgba(99,102,241,.15)}.mission-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px}.mission-head strong{font-size:15px}.mission-head span{font-size:24px}.mission-desc{margin:5px 0 11px;color:var(--muted);font-size:13px;line-height:1.45}.mission-progress{display:flex;align-items:center;gap:10px}.mission-progress progress{flex:1}.mission-progress strong{font-size:12px;min-width:44px;text-align:right}.badge-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin-top:14px}.badge-item{display:flex;align-items:center;gap:9px;padding:10px;border-radius:14px;border:1px solid var(--line);background:rgba(255,255,255,.72);opacity:.48}.badge-item.unlocked{opacity:1;border-color:rgba(16,185,129,.32);background:rgba(16,185,129,.07)}.badge-icon{width:30px;height:30px;border-radius:10px;display:grid;place-items:center;background:rgba(99,102,241,.09);font-size:16px}.badge-item.unlocked .badge-icon{background:rgba(16,185,129,.14)}.badge-copy{min-width:0}.badge-copy strong,.badge-copy small{display:block}.badge-copy strong{font-size:12px}.badge-copy small{font-size:10px;color:var(--muted);margin-top:2px}.score-line{display:flex;justify-content:space-between;align-items:center;margin-top:12px;padding-top:12px;border-top:1px solid var(--line);font-size:13px}.score-line strong{font-size:18px;color:#595bd8}.achievement-toast{font-weight:850;color:#047857}.recap-achievements{margin-top:8px;padding:9px 11px;border-radius:12px;background:rgba(16,185,129,.08);color:#047857;font-weight:800;font-size:12px}.recap-achievements:empty{display:none}@media(max-width:700px){.badge-grid{grid-template-columns:1fr}}
+@media(max-width:1050px){.stats-grid{grid-template-columns:repeat(2,1fr)}.layout{grid-template-columns:1fr}.side-column{display:grid;grid-template-columns:repeat(2,1fr)}.disclaimer{grid-column:1/-1}}@media(max-width:720px){.app-shell{padding:12px}.topbar,.hero{flex-direction:column;align-items:stretch}.top-actions{flex-wrap:wrap}.hero::after{display:none}.turn-panel{min-width:0}.stats-grid,.budget-grid,.action-grid.investments,.two-cards,.realestate-grid,.budget-summary,.side-column,.career-choice-grid{grid-template-columns:1fr}.section-card,.side-card,.hero{padding:16px}.action-row{grid-template-columns:1fr 1fr}.action-row input{grid-column:1/-1}.brand-note{font-size:12px}.version-chip{order:3}.stat strong{font-size:25px}}
+
+/* V3.1 — budget automatique */
+.budget-help{margin:-4px 0 15px;color:var(--muted);font-size:13px;line-height:1.5}
+.inflation-pill{background:linear-gradient(135deg,rgba(245,158,11,.12),rgba(249,115,22,.08));border-color:rgba(245,158,11,.24);color:#b45309}
+.lifestyle-selector{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:14px}
+.lifestyle-btn{display:grid;grid-template-columns:auto 1fr;grid-template-rows:auto auto;column-gap:9px;text-align:left;padding:13px;border-radius:16px;border:1px solid var(--line);background:linear-gradient(135deg,#fff,#f7f9ff);color:var(--text);transition:.16s;box-shadow:0 8px 20px rgba(42,53,91,.05)}
+.lifestyle-btn>span{grid-row:1/3;font-size:24px;align-self:center}
+.lifestyle-btn strong{font-size:14px}
+.lifestyle-btn small{font-size:11px;color:var(--muted);margin-top:2px}
+.lifestyle-btn:hover{transform:translateY(-1px);border-color:rgba(79,70,229,.34)}
+.lifestyle-btn.active{border-color:var(--primary);background:linear-gradient(135deg,rgba(79,70,229,.12),rgba(14,165,233,.07));box-shadow:0 10px 26px rgba(79,70,229,.13)}
+.budget-auto-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:9px}
+.budget-auto-grid>div{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:12px 13px;border-radius:14px;background:#f8faff;border:1px solid var(--line)}
+.budget-auto-grid span{font-size:12px;color:var(--muted);font-weight:750}
+.budget-auto-grid strong{font-size:15px;white-space:nowrap}
+.inflation-note{display:flex;justify-content:space-between;gap:12px;align-items:center;margin-top:10px;padding:10px 12px;border-radius:13px;background:rgba(245,158,11,.075);border:1px solid rgba(245,158,11,.17);font-size:12px;color:#92400e}
+.inflation-note strong{font-size:13px}
+@media(max-width:720px){.lifestyle-selector,.budget-auto-grid{grid-template-columns:1fr}.lifestyle-btn{grid-template-columns:auto 1fr}.budget-auto-grid>div{padding:11px 12px}.inflation-note{align-items:flex-start}}
+
+.compact-note{font-size:13px;line-height:1.55;margin:8px 0 14px}.event-info-card{background:linear-gradient(135deg,rgba(245,158,11,.10),rgba(255,255,255,.92))}.event-balance{display:flex;justify-content:space-between;gap:12px;padding:10px 0;border-top:1px solid rgba(180,196,228,.35);font-size:13px}.event-balance span{color:var(--muted)}.event-balance strong{font-size:13px}
+
+  
+.return-line{display:block;margin-top:5px;font-size:11px;font-weight:800;color:var(--muted)}.auto-row{margin-top:-4px;padding-top:9px;border-top:1px dashed var(--line)}.auto-row label{display:flex;align-items:center;justify-content:space-between;gap:8px;font-size:11px;font-weight:850;color:var(--muted)}.auto-row input{width:95px;padding:7px 8px;border:1px solid var(--line);border-radius:9px;background:#fff}.asset-performance span,.debt-list span{display:flex;flex-direction:column;gap:3px}.asset-performance small,.debt-list small{font-size:10px;color:var(--muted);font-weight:750}.return-positive{color:#059669!important;font-weight:900!important}.return-negative{color:#dc2626!important;font-weight:900!important}.return-neutral{color:var(--muted)!important}.history-card h3,.history-card .history-list{font-weight:900}.history-card .history-list{color:var(--text)}.recap-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:12px 0}.recap-grid div{padding:10px;border:1px solid var(--line);border-radius:12px;background:#f8faff}.recap-grid span{display:block;color:var(--muted);font-size:10px;font-weight:800}.recap-grid strong{display:block;margin-top:3px;font-size:14px}.loan-card::before{background:linear-gradient(90deg,#06b6d4,#6366f1)}.loan-controls{display:grid;grid-template-columns:1fr 1fr auto;gap:10px;align-items:end}.loan-controls label{display:grid;gap:5px;font-size:12px;font-weight:850}.loan-controls select,.start-options select{padding:10px;border:1px solid var(--line);border-radius:11px;background:#fff}.rules-box{margin:12px 0 16px;padding:14px 16px;border-radius:15px;background:linear-gradient(135deg,rgba(79,70,229,.08),rgba(14,165,233,.08));border:1px solid var(--line)}.rules-box ul{margin:9px 0 0;padding-left:20px;color:var(--muted);font-size:12px;line-height:1.5}.rules-box strong{font-size:14px}@media(max-width:700px){.loan-controls{grid-template-columns:1fr}.recap-grid{grid-template-columns:1fr 1fr}}
+
+.save-note{position:fixed;right:18px;bottom:18px;z-index:80;background:#111827;color:#fff;padding:11px 14px;border-radius:12px;font-size:12px;font-weight:850;box-shadow:0 16px 40px rgba(15,23,42,.25);opacity:0;transform:translateY(8px);pointer-events:none;transition:.2s}.save-note.show{opacity:1;transform:translateY(0)}.start-save-box{margin:12px 0 14px;padding:13px 14px;border:1px solid var(--line);border-radius:14px;background:linear-gradient(135deg,rgba(16,185,129,.08),rgba(14,165,233,.06))}.start-save-box strong{display:block;margin-bottom:4px}.start-save-box small{color:var(--muted);line-height:1.45}.start-save-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}@media(max-width:600px){.start-save-actions{grid-template-columns:1fr}}
+
+
+.health-card{overflow:hidden;position:relative}.health-card::before{content:"";position:absolute;left:0;right:0;top:0;height:4px;background:linear-gradient(90deg,#10b981,#f59e0b,#ef4444)}.health-score-row{display:flex;justify-content:space-between;align-items:center;gap:12px;margin:12px 0}.health-score-row strong{font-size:30px}.health-chip{padding:6px 9px;border-radius:999px;font-size:11px;font-weight:900}.health-chip.good{background:#dcfce7;color:#166534}.health-chip.watch{background:#fef3c7;color:#92400e}.health-chip.danger{background:#fee2e2;color:#991b1b}.health-lines{display:grid;gap:8px}.health-lines div{display:flex;justify-content:space-between;gap:12px;font-size:12px;padding-top:8px;border-top:1px solid var(--line)}.health-lines span{color:var(--muted)}.danger-meter{height:8px;border-radius:999px;background:#eef2f7;overflow:hidden;margin-top:9px}.danger-meter>span{display:block;height:100%;background:linear-gradient(90deg,#f59e0b,#ef4444);width:0;transition:.2s}.end-modal .modal-card{text-align:center;max-width:560px}.end-emoji{font-size:52px;display:block;margin-bottom:8px}.end-actions{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:18px}@media(max-width:600px){.end-actions{grid-template-columns:1fr}}
+
+
+.annual-modal .modal-card{max-width:760px}.annual-head{display:flex;justify-content:space-between;gap:16px;align-items:flex-start}.annual-grade{width:64px;height:64px;border-radius:18px;display:grid;place-items:center;font-size:30px;font-weight:950;background:linear-gradient(135deg,#4f46e5,#0ea5e9);color:white;box-shadow:0 14px 30px rgba(79,70,229,.22)}.annual-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:18px 0}.annual-grid div{padding:13px;border:1px solid var(--line);border-radius:14px;background:#fbfdff}.annual-grid span{display:block;color:var(--muted);font-size:11px;font-weight:800}.annual-grid strong{display:block;margin-top:4px;font-size:17px}.annual-summary{padding:14px;border-radius:14px;background:linear-gradient(135deg,rgba(79,70,229,.08),rgba(16,185,129,.08));border:1px solid var(--line);line-height:1.5}.annual-summary strong{font-weight:900}.annual-comparison{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}.annual-comparison div{padding:12px;border-radius:13px;background:#f8fafc;border:1px solid var(--line)}.annual-comparison span{display:block;color:var(--muted);font-size:11px}.annual-comparison strong{display:block;margin-top:3px}@media(max-width:650px){.annual-grid{grid-template-columns:1fr 1fr}.annual-comparison{grid-template-columns:1fr}}
+
+
+.fast-forward{display:grid;grid-template-columns:1fr auto;gap:8px;margin-top:10px}.fast-forward select{min-width:0;padding:10px 12px;border-radius:12px;border:1px solid rgba(255,255,255,.28);background:rgba(255,255,255,.14);color:#fff;font-weight:850}.fast-forward select option{color:#111827;background:#fff}.sim-modal .modal-card{max-width:860px}.sim-summary-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:16px 0}.sim-summary-grid div{padding:13px;border:1px solid var(--line);border-radius:14px;background:#fbfdff}.sim-summary-grid span{display:block;color:var(--muted);font-size:11px;font-weight:800}.sim-summary-grid strong{display:block;margin-top:4px;font-size:17px}.sim-month-list{max-height:320px;overflow:auto;border:1px solid var(--line);border-radius:14px}.sim-month-row{display:grid;grid-template-columns:1.1fr repeat(4,1fr);gap:8px;padding:10px 12px;border-bottom:1px solid var(--line);font-size:12px}.sim-month-row:last-child{border-bottom:none}.sim-month-row.head{position:sticky;top:0;background:#f8fafc;font-weight:900;z-index:1}.sim-month-row span{color:var(--muted)}.sim-month-row strong{font-weight:900}.sim-events{margin:14px 0 0;padding:12px 14px;border-radius:14px;background:linear-gradient(135deg,rgba(79,70,229,.07),rgba(14,165,233,.06));border:1px solid var(--line);font-size:12px;line-height:1.5}.sim-warning{margin:10px 0 0;color:#92400e;font-size:12px;font-weight:800}@media(max-width:750px){.sim-summary-grid{grid-template-columns:1fr 1fr}.sim-month-row{grid-template-columns:1.3fr 1fr 1fr}.sim-month-row>*:nth-child(4),.sim-month-row>*:nth-child(5){display:none}.fast-forward{grid-template-columns:1fr}}
+
+
+@media(max-width:720px){
+  body{padding-bottom:env(safe-area-inset-bottom)}
+  .app-shell{padding:10px max(10px,env(safe-area-inset-right)) calc(18px + env(safe-area-inset-bottom)) max(10px,env(safe-area-inset-left))}
+  .topbar{gap:12px}.top-actions{display:grid;grid-template-columns:1fr 1fr;width:100%}.top-actions .version-chip{grid-column:1/-1;justify-self:start}
+  .btn{min-height:44px}.turn-panel .btn{width:100%}.fast-forward select{min-height:44px}
+  input,select{font-size:16px}
+  .modal{padding:10px}.modal-card{max-height:92dvh;overflow:auto}
+}
+
+</style>
+</head>
+<body>
+  <div class="app-shell">
+    <header class="topbar">
+      <div>
+        <div class="brand-line"><span class="logo">P</span><div><p class="eyebrow">Simulation financière française</p><h1>Patrimoine Simulator</h1></div></div>
+        <p class="brand-note">Budget • carrière • placements • crédits • imprévus du quotidien</p>
+      </div>
+      <div class="top-actions">
+        <span class="version-chip">V1.7.1 • bêta</span>
+        <button id="saveBtn" class="btn ghost">Sauvegarder</button>
+        <button id="exportBtn" class="btn ghost">Exporter</button>
+        <button id="importBtn" class="btn ghost">Importer</button>
+        <input id="importFile" type="file" accept=".json,application/json" hidden>
+        <button id="resetBtn" class="btn danger">Nouvelle partie</button>
+      </div>
+    </header>
+
+    <main>
+      <section class="hero card">
+        <div class="hero-copy">
+          <div class="hero-meta"><span id="dateLabel">Janvier 2026 • 20 ans</span><span id="careerHero">—</span></div>
+          <h2 id="statusTitle">Fais les bons choix aujourd’hui pour construire ton patrimoine de demain.</h2>
+          <p id="eventText">Commence par organiser ton budget, puis investis progressivement.</p>
+          <div class="hero-tags"><span>🇫🇷 France</span><span id="difficultyTag">Mode normal</span><span id="housingTag">Locataire</span></div>
+        </div>
+        <div class="turn-panel">
+          <span>Tour actuel</span><strong id="turnLabel">Mois 1</strong>
+          <button id="nextMonthBtn" class="btn primary big">Mois suivant →</button>
+          <div class="fast-forward">
+            <select id="simulateMonthsSelect" aria-label="Nombre de mois à simuler">
+              <option value="3">3 mois</option>
+              <option value="6">6 mois</option>
+              <option value="12">12 mois</option>
+              <option value="24">24 mois</option>
+            </select>
+            <button id="simulateMonthsBtn" class="btn ghost">Simuler</button>
+          </div>
+        </div>
+      </section>
+
+      <section class="stats-grid">
+        <article class="stat card blue"><span>💳 Trésorerie</span><strong id="cashStat">0 €</strong><small id="cashflowStat">0 €/mois</small></article>
+        <article class="stat card violet"><span>🏦 Patrimoine net</span><strong id="netWorthStat">0 €</strong><small id="debtStat">Dettes : 0 €</small></article>
+        <article class="stat card green"><span>💼 Revenus</span><strong id="incomeStat">0 €/mois</strong><small id="passiveIncomeStat">Passifs : 0 €/mois</small></article>
+        <article class="stat card amber"><span>🙂 Bonheur</span><strong id="wellbeingStat">75 / 100</strong><small id="riskStat">Minimum : 50/100</small></article>
+      </section>
+
+      <section class="layout">
+        <div class="main-column">
+          <section class="card section-card budget-card">
+            <div class="section-head">
+              <div><p class="eyebrow">Budget mensuel</p><h3>Budget automatique</h3></div>
+              <span class="pill inflation-pill" id="inflationRate">Inflation : 2,4 % / an</span>
+            </div>
+            <p class="budget-help">Le jeu calcule les dépenses courantes automatiquement. Ton niveau de vie agit sur ton bonheur, avec un minimum de 50/100. Les prix et les imprévus du quotidien évoluent avec l’inflation.</p>
+            <div class="lifestyle-selector" aria-label="Niveau de vie">
+              <button class="lifestyle-btn" data-lifestyle="economy"><span>🌱</span><strong>Économe</strong><small>Épargne ++ · Bonheur −2/mois</small></button>
+              <button class="lifestyle-btn" data-lifestyle="balanced"><span>⚖️</span><strong>Équilibré</strong><small>Budget normal · Bonheur −0,5/mois</small></button>
+              <button class="lifestyle-btn" data-lifestyle="comfort"><span>✨</span><strong>Confort</strong><small>Dépenses + · Bonheur +2/mois</small></button>
+            </div>
+            <div class="budget-auto-grid">
+              <div><span>🏠 Logement & charges</span><strong id="housingAuto">0 €</strong></div>
+              <div><span>🛒 Vie quotidienne</span><strong id="livingAuto">0 €</strong></div>
+              <div><span>🚇 Transport</span><strong id="transportAuto">0 €</strong></div>
+              <div><span>🎉 Loisirs</span><strong id="leisureAuto">0 €</strong></div>
+              <div><span>💳 Crédits</span><strong id="debtPaymentsAuto">0 €</strong></div>
+              <div><span>🧾 Autres charges</span><strong id="otherCostsAuto">0 €</strong></div><div><span>🏛️ Impôt sur le revenu</span><strong id="taxAuto">0 €</strong></div><div><span>🔁 Versements automatiques</span><strong id="autoInvestAuto">0 €</strong></div>
+            </div>
+            <div class="inflation-note"><span>📊 Inflation cumulée depuis le début</span><strong id="cumulativeInflation">+0,0 %</strong></div>
+            <div class="budget-summary">
+              <div><span>Revenus</span><strong id="budgetIncome"></strong></div>
+              <div><span>Dépenses</span><strong id="budgetExpenses"></strong></div>
+              <div><span>Reste disponible</span><strong id="budgetCapacity"></strong></div>
+              <div><span>Taux d'épargne</span><strong id="budgetSavingsRate"></strong></div>
+            </div>
+          </section>
+
+          <section class="card section-card invest-card">
+            <div class="section-head"><div><p class="eyebrow">Placements</p><h3>Construire ton capital</h3></div><span class="pill">Rendements simplifiés</span></div>
+            <div class="action-grid investments">
+              <article class="action-card safety"><div><div class="icon">🛟</div><h4>Livret A / LEP</h4><p>Capital stable, rendement faible. Idéal pour le fonds d'urgence.</p><strong id="livretCard">0 €</strong><small class="return-line" id="livretReturnCard">Rendement : 0 € (0 %)</small></div><div class="action-row"><input id="livretAmount" type="number" min="50" step="50" value="200"><button data-asset="livret" data-direction="in" class="btn mini">Verser</button><button data-asset="livret" data-direction="out" class="btn mini ghost">Retirer</button></div><div class="auto-row"><label>🔁 Auto / mois <input id="livretAuto" type="number" min="0" step="25" value="0"></label></div></article>
+              <article class="action-card pea"><div><div class="icon">🌍</div><h4>PEA — ETF Monde</h4><p>Actions diversifiées. Volatil mais puissant sur longue durée.</p><strong id="peaCard">0 €</strong><small class="return-line" id="peaReturnCard">Rendement : 0 € (0 %)</small></div><div class="action-row"><input id="peaAmount" type="number" min="50" step="50" value="200"><button data-asset="pea" data-direction="in" class="btn mini">Investir</button><button data-asset="pea" data-direction="out" class="btn mini ghost">Vendre</button></div><div class="auto-row"><label>🔁 Auto / mois <input id="peaAuto" type="number" min="0" step="25" value="0"></label></div></article>
+              <article class="action-card assurance"><div><div class="icon">🧱</div><h4>Assurance-vie</h4><p>Profil défensif simplifié. Rendement modéré, peu volatil.</p><strong id="assuranceCard">0 €</strong><small class="return-line" id="assuranceReturnCard">Rendement : 0 € (0 %)</small></div><div class="action-row"><input id="assuranceAmount" type="number" min="50" step="50" value="200"><button data-asset="assurance" data-direction="in" class="btn mini">Verser</button><button data-asset="assurance" data-direction="out" class="btn mini ghost">Retirer</button></div><div class="auto-row"><label>🔁 Auto / mois <input id="assuranceAuto" type="number" min="0" step="25" value="0"></label></div></article>
+              <article class="action-card cto"><div><div class="icon">📈</div><h4>CTO — Actions</h4><p>Plus concentré et plus volatil que l'ETF Monde.</p><strong id="ctoCard">0 €</strong><small class="return-line" id="ctoReturnCard">Rendement : 0 € (0 %)</small></div><div class="action-row"><input id="ctoAmount" type="number" min="50" step="50" value="200"><button data-asset="cto" data-direction="in" class="btn mini">Investir</button><button data-asset="cto" data-direction="out" class="btn mini ghost">Vendre</button></div><div class="auto-row"><label>🔁 Auto / mois <input id="ctoAuto" type="number" min="0" step="25" value="0"></label></div></article>
+              <article class="action-card crypto"><div><div class="icon">₿</div><h4>Crypto</h4><p>Très forte volatilité. Potentiel élevé, risque de perte important.</p><strong id="cryptoCard">0 €</strong><small class="return-line" id="cryptoReturnCard">Rendement : 0 € (0 %)</small></div><div class="action-row"><input id="cryptoAmount" type="number" min="50" step="50" value="100"><button data-asset="crypto" data-direction="in" class="btn mini">Investir</button><button data-asset="crypto" data-direction="out" class="btn mini ghost">Vendre</button></div><div class="auto-row"><label>🔁 Auto / mois <input id="cryptoAuto" type="number" min="0" step="25" value="0"></label></div></article>
+            </div>
+          </section>
+
+          <section class="two-cards">
+            <section class="card section-card career-card">
+              <div class="section-head"><div><p class="eyebrow">Carrière</p><h3 id="jobTitle">—</h3></div><span class="pill" id="careerLevel">Niveau 1</span></div>
+              <p id="careerDescription" class="muted"></p>
+              <div class="career-stats"><div><span>Salaire net</span><strong id="salaryCareer">0 €</strong></div><div><span>Stabilité</span><strong id="stabilityCareer">—</strong></div></div>
+              <button id="trainingBtn" class="btn warning full">🎓 Suivre une formation — <span id="trainingCost">1 200 €</span></button>
+            </section>
+
+            <section class="card section-card mobility-card">
+              <div class="section-head"><div><p class="eyebrow">Mobilité & crédit</p><h3 id="vehicleTitle">Sans voiture</h3></div><span class="pill" id="carDebtChip">0 € de crédit</span></div>
+              <p id="vehicleDescription" class="muted">Tu utilises principalement les transports ou un véhicule déjà amorti.</p>
+              <div class="button-stack"><button id="usedCarBtn" class="btn ghost full">🚗 Occasion — 9 000 €</button><button id="newCarBtn" class="btn ghost full">✨ Récente — 22 000 €</button></div>
+            </section>
+          </section>
+
+          <section class="card section-card loan-card">
+            <div class="section-head"><div><p class="eyebrow">Banque</p><h3>Prêt personnel</h3></div><span class="pill">Taux simulé 8 %</span></div>
+            <p class="muted">Emprunte pour absorber un besoin de trésorerie, mais les intérêts réduisent ton budget futur.</p>
+            <div class="loan-controls"><label>Montant<select id="loanAmount"><option value="2000">2 000 €</option><option value="5000" selected>5 000 €</option><option value="10000">10 000 €</option></select></label><label>Durée<select id="loanMonths"><option value="24">24 mois</option><option value="36" selected>36 mois</option><option value="60">60 mois</option></select></label><button id="loanBtn" class="btn ghost">Simuler le prêt</button></div>
+          </section>
+
+          <section class="card section-card realestate-card">
+            <div class="section-head"><div><p class="eyebrow">Immobilier</p><h3>Résidence principale & locatif</h3></div><span class="pill">Taux bancaire simplifié</span></div>
+            <div class="realestate-grid">
+              <article><div class="icon">🏢</div><h4>Appartement principal</h4><p>180 000 € • apport 10 % • crédit 25 ans.</p><button id="buyApartmentBtn" class="btn ghost full">Simuler l'achat</button></article>
+              <article><div class="icon">🏡</div><h4>Maison principale</h4><p>280 000 € • apport 10 % • crédit 25 ans.</p><button id="buyHouseBtn" class="btn ghost full">Simuler l'achat</button></article>
+              <article><div class="icon">🔑</div><h4>Bien locatif</h4><p>160 000 € • apport 20 000 € • loyer 850 €/mois.</p><button id="buyRentalBtn" class="btn ghost full">Simuler l'investissement</button></article>
+            </div>
+          </section>
+        </div>
+
+        <aside class="side-column">
+          <section class="card side-card">
+            <p class="eyebrow">Patrimoine</p><h3>Répartition</h3>
+            <div class="asset-list asset-performance">
+              <div><span>Trésorerie<small id="cashInflationLoss">Inflation : 0 €</small></span><strong id="cashAsset">0 €</strong></div>
+              <div><span>Livret<small id="livretReturn">0 € • 0 %</small></span><strong id="livretAsset">0 €</strong></div>
+              <div><span>PEA<small id="peaReturn">0 € • 0 %</small></span><strong id="peaAsset">0 €</strong></div>
+              <div><span>Assurance-vie<small id="assuranceReturn">0 € • 0 %</small></span><strong id="assuranceAsset">0 €</strong></div>
+              <div><span>CTO<small id="ctoReturn">0 € • 0 %</small></span><strong id="ctoAsset">0 €</strong></div>
+              <div><span>Crypto<small id="cryptoReturn">0 € • 0 %</small></span><strong id="cryptoAsset">0 €</strong></div>
+              <div><span>Immobilier</span><strong id="propertyAsset">0 €</strong></div><div><span>Véhicule</span><strong id="vehicleAsset">0 €</strong></div>
+            </div>
+          </section>
+
+          <section class="card side-card history-card"><p class="eyebrow">Historique</p><h3>Derniers événements</h3><ul id="historyList" class="history-list"></ul></section>
+
+          <section class="card side-card debt-card">
+            <p class="eyebrow">Endettement</p><h3>Crédits</h3>
+            <div class="asset-list debt-list">
+              <div><span>Résidence<small id="homeDebtInfo">—</small></span><strong id="homeDebt">0 €</strong></div>
+              <div><span>Locatif<small id="rentalDebtInfo">—</small></span><strong id="rentalDebt">0 €</strong></div>
+              <div><span>Auto<small id="autoDebtInfo">—</small></span><strong id="autoDebt">0 €</strong></div>
+              <div><span>Études<small id="studentDebtInfo">—</small></span><strong id="studentDebtDisplay">0 €</strong></div>
+              <div><span>Prêt personnel<small id="consumerDebtInfo">—</small></span><strong id="consumerDebtDisplay">0 €</strong></div>
+              <div class="total-line"><span>Total</span><strong id="totalDebt">0 €</strong></div>
+            </div>
+          </section>
+
+          <section class="card side-card journey-card">
+            <p class="eyebrow">Parcours</p><h3>Prochain objectif</h3>
+            <div class="mission-box">
+              <div class="mission-head"><div><strong id="missionTitle">Premier pas</strong><p id="missionDesc" class="mission-desc">Commence à construire ton patrimoine.</p></div><span id="missionIcon">🎯</span></div>
+              <div class="mission-progress"><progress id="missionProgress" max="100" value="0"></progress><strong id="missionProgressText">0 %</strong></div>
+            </div>
+            <div class="score-line"><span>Score de progression</span><strong id="progressScore">0</strong></div>
+            <div id="badgeGrid" class="badge-grid"></div>
+          </section>
+
+          <section class="card side-card health-card">
+            <p class="eyebrow">Pilotage</p><h3>Santé financière</h3>
+            <div class="health-score-row"><strong id="healthScore">—</strong><span id="healthChip" class="health-chip good">Stable</span></div>
+            <progress id="healthProgress" max="100" value="0"></progress>
+            <div class="health-lines">
+              <div><span>Trésorerie critique</span><strong id="distressText">0 / 3 mois</strong></div>
+              <div><span>Taux d’endettement</span><strong id="healthDebt">0 %</strong></div>
+              <div><span>Fonds de sécurité</span><strong id="healthEmergency">0 mois</strong></div>
+            </div>
+            <div class="danger-meter"><span id="dangerMeter"></span></div>
+          </section>
+
+          <section class="card side-card">
+            <p class="eyebrow">Repères</p><h3>Objectifs long terme</h3>
+            <div class="goal"><div><span>3 mois de sécurité</span><strong id="emergencyGoalText">0 %</strong></div><progress id="emergencyGoal" max="100" value="0"></progress></div>
+            <div class="goal"><div><span>100 000 € nets</span><strong id="wealthGoalText">0 %</strong></div><progress id="wealthGoal" max="100" value="0"></progress></div>
+            <div class="goal"><div><span>1 500 € passifs/mois</span><strong id="passiveGoalText">0 %</strong></div><progress id="passiveGoal" max="100" value="0"></progress></div>
+          </section>
+
+          <section class="card side-card recap-card"><p class="eyebrow">Mois écoulé</p><h3>Récapitulatif</h3><div class="recap-grid"><div><span>Revenus</span><strong id="recapIncome">—</strong></div><div><span>Dépenses</span><strong id="recapExpenses">—</strong></div><div><span>Placements</span><strong id="recapInvestments">—</strong></div><div><span>Variation patrimoine</span><strong id="recapWorth">—</strong></div></div><p id="recapText" class="muted compact-note">Passe ton premier mois pour afficher le récapitulatif.</p><div id="recapAchievements" class="recap-achievements"></div></section>
+          <section class="card side-card event-info-card"><p class="eyebrow">Vie quotidienne</p><h3>Imprévus</h3><p class="muted compact-note">En moyenne 4 à 6 imprévus par an. Ils sont volontairement plus souvent défavorables que favorables.</p><div class="event-balance"><span>Fréquence</span><strong>≈ 40 % / mois</strong></div><div class="event-balance"><span>Tendance</span><strong>≈ 75 % négatifs</strong></div></section>
+          
+          <section class="card side-card disclaimer"><strong>🎓 Jeu éducatif</strong><p>Fiscalité, taux, rendements et critères bancaires sont simplifiés. Les résultats ne constituent pas un conseil financier.</p></section>
+        </aside>
+      </section>
+    </main>
+  </div>
+
+  <div id="startModal" class="modal hidden">
+    <div class="modal-card wide">
+      <p class="eyebrow">Nouvelle partie</p><h2>Choisis ton départ</h2><p class="muted">Chaque carrière modifie le salaire, la stabilité et la progression.</p><div class="rules-box"><strong>🎯 Règles pour ne pas perdre</strong><ul><li>Garde ta trésorerie au-dessus de 0 €.</li><li>Constitue progressivement 3 mois de dépenses sur le livret.</li><li>Évite de cumuler trop de crédits : la banque contrôle ton endettement.</li><li>Les imprévus sont fréquents et majoritairement négatifs.</li><li>Investir aide à long terme, mais les marchés peuvent baisser.</li><li>Le bonheur ne descend jamais sous 50/100, mais un budget trop serré le réduit.</li><li>Atteins les paliers du parcours pour débloquer des badges et de petits bonus de bonheur.</li><li><strong>Défaite :</strong> rester sous −3 000 € de trésorerie pendant 3 mois consécutifs.</li><li><strong>Victoire V1 :</strong> atteindre 100 000 € de patrimoine net. Tu peux ensuite continuer librement.</li></ul></div>
+      <div class="career-choice-grid">
+        <button class="career-choice" data-career="public"><span>🛡️</span><strong>Fonction publique</strong><small>1 950 €/mois • très stable</small></button>
+        <button class="career-choice" data-career="tech"><span>🛠️</span><strong>Technicien</strong><small>2 200 €/mois • progression régulière</small></button>
+        <button class="career-choice" data-career="sales"><span>🤝</span><strong>Commercial</strong><small>1 900 €/mois • primes variables</small></button>
+        <button class="career-choice" data-career="engineer"><span>💻</span><strong>Ingénieur</strong><small>2 700 €/mois • prêt étudiant</small></button>
+      </div>
+      <div class="start-options"><label>Trésorerie initiale<select id="difficultySelect"><option value="easy">Confortable — 5 000 €</option><option value="normal" selected>Normal — 2 500 €</option><option value="hard">Serré — 800 €</option></select></label></div>
+      <button id="startGameBtn" class="btn primary full big" disabled>Démarrer la partie</button>
+    </div>
+  </div>
+
+  <div id="decisionModal" class="modal hidden">
+    <div class="modal-card"><button id="closeDecision" class="modal-close">×</button><p class="eyebrow" id="decisionEyebrow">Événement</p><h2 id="decisionTitle">Décision</h2><p id="decisionText" class="muted"></p><div id="decisionChoices" class="decision-choices"></div></div>
+  </div>
+
+  <div id="purchaseModal" class="modal hidden">
+    <div class="modal-card"><button id="closePurchase" class="modal-close">×</button><p class="eyebrow">Simulation</p><h2 id="purchaseTitle">Projet</h2><div id="purchaseDetails" class="purchase-details"></div><div id="purchaseChoices" class="decision-choices"></div></div>
+  </div>
+
+
+
+
+  <div id="simulationModal" class="modal hidden sim-modal">
+    <div class="modal-card">
+      <p class="eyebrow">Simulation terminée</p>
+      <h2 id="simulationTitle">Période simulée</h2>
+      <p id="simulationSubtitle" class="muted"></p>
+      <div class="sim-summary-grid">
+        <div><span>Revenus cumulés</span><strong id="simIncome">—</strong></div>
+        <div><span>Dépenses cumulées</span><strong id="simExpenses">—</strong></div>
+        <div><span>Placements</span><strong id="simInvestments">—</strong></div>
+        <div><span>Variation patrimoine</span><strong id="simWorthDelta">—</strong></div>
+        <div><span>Impôts</span><strong id="simTaxes">—</strong></div>
+        <div><span>Intérêts bancaires</span><strong id="simInterest">—</strong></div>
+        <div><span>Imprévus</span><strong id="simEvents">—</strong></div>
+        <div><span>Bonheur final</span><strong id="simWellbeing">—</strong></div>
+      </div>
+      <div id="simMonthList" class="sim-month-list"></div>
+      <div id="simEventSummary" class="sim-events"></div>
+      <p class="sim-warning">La simulation applique mois par mois les mêmes règles que le jeu normal. Les événements à choix complexes sont ignorés pendant l’avance rapide pour éviter d’interrompre la simulation.</p>
+      <button id="closeSimulationBtn" class="btn primary full">Revenir au jeu</button>
+    </div>
+  </div>
+
+  <div id="annualModal" class="modal hidden annual-modal">
+    <div class="modal-card">
+      <div class="annual-head">
+        <div><p class="eyebrow">Bilan annuel</p><h2 id="annualTitle">Année terminée</h2><p id="annualSubtitle" class="muted"></p></div>
+        <div id="annualGrade" class="annual-grade">B</div>
+      </div>
+      <div class="annual-grid">
+        <div><span>Revenus</span><strong id="annualIncome">—</strong></div>
+        <div><span>Dépenses</span><strong id="annualExpenses">—</strong></div>
+        <div><span>Placements</span><strong id="annualInvestments">—</strong></div>
+        <div><span>Impôts payés</span><strong id="annualTaxes">—</strong></div>
+        <div><span>Intérêts bancaires</span><strong id="annualInterest">—</strong></div>
+        <div><span>Imprévus</span><strong id="annualEvents">—</strong></div>
+      </div>
+      <div class="annual-comparison">
+        <div><span>Patrimoine au 1er janvier</span><strong id="annualOpeningWorth">—</strong></div>
+        <div><span>Patrimoine au 31 décembre</span><strong id="annualClosingWorth">—</strong></div>
+        <div><span>Évolution du patrimoine</span><strong id="annualWorthChange">—</strong></div>
+        <div><span>Inflation de l’année</span><strong id="annualInflation">—</strong></div>
+      </div>
+      <p id="annualSummary" class="annual-summary"></p>
+      <button id="closeAnnualBtn" class="btn primary full">Commencer la nouvelle année →</button>
+    </div>
+  </div>
+
+  <div id="endModal" class="modal hidden end-modal">
+    <div class="modal-card">
+      <span id="endEmoji" class="end-emoji">🏆</span>
+      <p class="eyebrow" id="endEyebrow">Fin de partie</p>
+      <h2 id="endTitle">Résultat</h2>
+      <p id="endText" class="muted"></p>
+      <div class="end-actions">
+        <button id="continueAfterWinBtn" class="btn primary">Continuer la partie</button>
+        <button id="restartFromEndBtn" class="btn danger">Nouvelle partie</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="saveNote" class="save-note">Sauvegarde effectuée</div>
+
+  <script>
+const fmtEUR=n=>new Intl.NumberFormat('fr-FR',{style:'currency',currency:'EUR',maximumFractionDigits:0}).format(Math.round(n||0));
+const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
+const rand=(a,b)=>a+Math.random()*(b-a);
+const el=id=>document.getElementById(id);
+const STORAGE='patrimoineGameV171';
+const MIN_WELLBEING=50;
+const clampWellbeing=v=>clamp(v,MIN_WELLBEING,100);
+const lifestyleProfiles={economy:{name:'Économe',living:400,leisure:100,wellbeing:-2},balanced:{name:'Équilibré',living:500,leisure:220,wellbeing:-.5},comfort:{name:'Confort',living:650,leisure:400,wellbeing:2}};
+const careers={
+  public:{name:'Fonction publique',salary:1950,stability:96,raise:.018,training:1100,trainingRaise:90,description:'Très stable, progression régulière mais relativement modérée.'},
+  tech:{name:'Technicien',salary:2200,stability:91,raise:.025,training:1300,trainingRaise:135,description:'Bon équilibre entre salaire, employabilité et progression.'},
+  sales:{name:'Commercial',salary:1900,stability:82,raise:.03,training:1200,trainingRaise:120,description:'Salaire fixe plus bas, mais des primes peuvent fortement améliorer certains mois.'},
+  engineer:{name:'Ingénieur',salary:2700,stability:89,raise:.03,training:1700,trainingRaise:165,description:'Revenus élevés et progression forte, avec un prêt étudiant au départ.'}
+};
+function baseState(){return{started:false,careerKey:null,difficulty:'normal',month:1,year:2026,ageMonths:240,cash:2500,livret:0,pea:0,assurance:0,cto:0,crypto:0,housing:650,living:500,transport:180,leisure:220,lifestyle:'balanced',annualInflation:.024,priceIndex:1,salary:0,careerLevel:1,wellbeing:75,history:[],lastEvent:'Commence par organiser ton budget, puis investis progressivement.',homeValue:0,homeDebt:0,homePayment:0,homeCost:0,rentalValue:0,rentalDebt:0,rentalPayment:0,rentIncome:0,rentalCosts:0,carValue:0,carDebt:0,carPayment:0,carMonths:0,studentDebt:0,studentPayment:0,studentMonths:0,consumerDebt:0,consumerPayment:0,consumerMonths:0,repairSurchargeMonths:0,lastYearWorth:null,totalMonths:0,lastLifeEventId:null,monthInvested:0,autoInvest:{livret:0,pea:0,assurance:0,cto:0,crypto:0},basis:{livret:0,pea:0,assurance:0,cto:0,crypto:0},debtMeta:{home:null,rental:null,car:null,student:null,consumer:null},lastRecap:null,unlockedMilestones:{},progressScore:0,lastUnlocked:[],distressMonths:0,gameOver:false,victoryShown:false,gameResult:null,
+yearStats:{year:2026,openingWorth:2500,income:0,expenses:0,taxes:0,interest:0,investments:0,events:0,eventCost:0},
+lastAnnualReport:null}};
+function load(){try{let raw=localStorage.getItem(STORAGE)||localStorage.getItem('patrimoineGameV17')||localStorage.getItem('patrimoineGameV16')||localStorage.getItem('patrimoineGameV15')||localStorage.getItem('patrimoineGameV14')||localStorage.getItem('patrimoineGameV13')||localStorage.getItem('patrimoineGameV12')||localStorage.getItem('patrimoineGameV1')||localStorage.getItem('patrimoineGameV32')||localStorage.getItem('patrimoineGameV31')||localStorage.getItem('patrimoineGameV3');return raw?JSON.parse(raw):null}catch{return null}}
+function netWorthFromState(s){return (s.cash||0)+(s.livret||0)+(s.pea||0)+(s.assurance||0)+(s.cto||0)+(s.crypto||0)+(s.homeValue||0)+(s.rentalValue||0)+(s.carValue||0)-((s.homeDebt||0)+(s.rentalDebt||0)+(s.carDebt||0)+(s.studentDebt||0)+(s.consumerDebt||0))}
+function hydrate(raw){let s=Object.assign(baseState(),raw||{});if(!s.lifestyle){s.lifestyle=s.leisure<160?'economy':s.leisure>330?'comfort':'balanced'}if(!Number.isFinite(s.annualInflation))s.annualInflation=.024;if(!Number.isFinite(s.priceIndex)||s.priceIndex<=0)s.priceIndex=1;s.wellbeing=clampWellbeing(Number.isFinite(s.wellbeing)?s.wellbeing:75);s.autoInvest=Object.assign({livret:0,pea:0,assurance:0,cto:0,crypto:0},s.autoInvest||{});s.basis=Object.assign({livret:s.livret||0,pea:s.pea||0,assurance:s.assurance||0,cto:s.cto||0,crypto:s.crypto||0},s.basis||{});s.debtMeta=Object.assign({home:null,rental:null,car:null,student:null,consumer:null},s.debtMeta||{});if(!Number.isFinite(s.monthInvested))s.monthInvested=0;s.unlockedMilestones=Object.assign({},s.unlockedMilestones||{});if(!Number.isFinite(s.progressScore))s.progressScore=Object.keys(s.unlockedMilestones).length*10;if(!Array.isArray(s.lastUnlocked))s.lastUnlocked=[];
+if(!Number.isFinite(s.distressMonths))s.distressMonths=0;
+s.gameOver=!!s.gameOver;s.victoryShown=!!s.victoryShown;
+s.yearStats=Object.assign({year:s.year||2026,openingWorth:netWorthFromState(s),income:0,expenses:0,taxes:0,interest:0,investments:0,events:0,eventCost:0},s.yearStats||{});
+s.lastAnnualReport=s.lastAnnualReport||null;
+return s}
+let state=hydrate(load());
+let selectedCareer=null;let pendingDecision=null;let pendingPurchase=null;let simulationMode=false;
+function silentSave(){localStorage.setItem(STORAGE,JSON.stringify(state))}
+function save(){silentSave();showSaveNote('Sauvegarde effectuée')}
+function showSaveNote(msg){let n=el('saveNote');if(!n)return;n.textContent=msg;n.classList.add('show');clearTimeout(window.__saveNoteTimer);window.__saveNoteTimer=setTimeout(()=>n.classList.remove('show'),1800)}
+function exportSave(){
+  silentSave();
+  let payload={app:'Patrimoine Simulator',version:'1.7.1',exportedAt:new Date().toISOString(),state};
+  let blob=new Blob([JSON.stringify(payload,null,2)],{type:'application/json'});
+  let url=URL.createObjectURL(blob),a=document.createElement('a');
+  a.href=url;a.download=`patrimoine-sauvegarde-${state.year}-${String(state.month).padStart(2,'0')}.json`;
+  document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);
+  showSaveNote('Fichier de sauvegarde exporté');
+}
+function importSaveFile(file){
+  if(!file)return;
+  let reader=new FileReader();
+  reader.onload=()=>{
+    try{
+      let parsed=JSON.parse(reader.result),incoming=parsed&&parsed.state?parsed.state:parsed;
+      if(!incoming||typeof incoming!=='object'||!('cash'in incoming)||!('ageMonths'in incoming))throw new Error('Format invalide');
+      state=hydrate(incoming);state.started=true;silentSave();selectedCareer=state.careerKey||null;
+      el('startModal').classList.add('hidden');render();showSaveNote('Sauvegarde importée');
+    }catch(e){alert('Ce fichier ne semble pas être une sauvegarde Patrimoine valide.')}
+    el('importFile').value='';
+  };
+  reader.readAsText(file);
+}
+
+function career(){return careers[state.careerKey]||careers.public}
+function monthName(m){return['Janvier','Février','Mars','Avril','Mai','Juin','Juillet','Août','Septembre','Octobre','Novembre','Décembre'][m-1]}
+function ageText(){let y=Math.floor(state.ageMonths/12),m=state.ageMonths%12;return m?`${y} ans ${m} mois`:`${y} ans`}
+function totalDebt(){return state.homeDebt+state.rentalDebt+state.carDebt+state.studentDebt+state.consumerDebt}
+function passiveIncome(){return Math.max(0,state.rentIncome-state.rentalCosts-state.rentalPayment)}
+function monthlyIncome(){return state.salary+state.rentIncome}
+function monthlyDebtPayments(){return state.homePayment+state.rentalPayment+state.carPayment+state.studentPayment+state.consumerPayment}
+function monthlyTax(){let taxable=Math.max(0,state.salary+Math.max(0,state.rentIncome-state.rentalCosts));if(taxable<=1600)return 0;if(taxable<=2200)return (taxable-1600)*.05;if(taxable<=3000)return 30+(taxable-2200)*.08;return 94+(taxable-3000)*.12}
+function monthlyAutoInvest(){return Object.values(state.autoInvest||{}).reduce((a,b)=>a+(Number(b)||0),0)}
+function resetYearStats(year=state.year){state.yearStats={year,openingWorth:netWorth(),income:0,expenses:0,taxes:0,interest:0,investments:0,events:0,eventCost:0}}
+function annualGrade(report){
+  let change=report.openingWorth?report.worthChange/Math.max(1,Math.abs(report.openingWorth)):0;
+  let saving=report.income?report.investments/report.income:0;
+  let score=50+change*70+saving*45-(report.interest/Math.max(1,report.income))*80;
+  if(score>=85)return'A';if(score>=70)return'B';if(score>=55)return'C';if(score>=40)return'D';return'E';
+}
+function buildAnnualReport(finishedYear, inflationRate){
+  let ys=state.yearStats||{};
+  let closing=netWorth(),opening=Number.isFinite(ys.openingWorth)?ys.openingWorth:closing;
+  let report={year:finishedYear,openingWorth:opening,closingWorth:closing,worthChange:closing-opening,
+    income:ys.income||0,expenses:ys.expenses||0,taxes:ys.taxes||0,interest:ys.interest||0,
+    investments:ys.investments||0,events:ys.events||0,eventCost:ys.eventCost||0,inflation:inflationRate};
+  report.grade=annualGrade(report);state.lastAnnualReport=report;return report;
+}
+function showAnnualReport(report){
+  if(!report)return;
+  el('annualTitle').textContent=`Bilan ${report.year}`;
+  el('annualSubtitle').textContent=`${career().name} • ${Math.floor(state.ageMonths/12)} ans • note financière annuelle`;
+  el('annualGrade').textContent=report.grade;
+  el('annualIncome').textContent=fmtEUR(report.income);el('annualExpenses').textContent=fmtEUR(report.expenses);
+  el('annualInvestments').textContent=fmtEUR(report.investments);el('annualTaxes').textContent=fmtEUR(report.taxes);
+  el('annualInterest').textContent=fmtEUR(report.interest);el('annualEvents').textContent=`${report.events} • ${fmtEUR(report.eventCost)}`;
+  el('annualOpeningWorth').textContent=fmtEUR(report.openingWorth);el('annualClosingWorth').textContent=fmtEUR(report.closingWorth);
+  let pc=report.openingWorth?report.worthChange/Math.abs(report.openingWorth)*100:0;
+  el('annualWorthChange').textContent=`${report.worthChange>=0?'+':''}${fmtEUR(report.worthChange)} (${pc>=0?'+':''}${pc.toFixed(1).replace('.',',')} %)`;
+  el('annualWorthChange').className=report.worthChange>=0?'positive':'negative';
+  el('annualInflation').textContent=`${(report.inflation*100).toFixed(1).replace('.',',')} %`;
+  let real=pc-report.inflation*100;
+  let sentence=real>=0
+    ?`Ton patrimoine a progressé plus vite que l’inflation d’environ ${real.toFixed(1).replace('.',',')} points.`
+    :`L’inflation a progressé plus vite que ton patrimoine d’environ ${Math.abs(real).toFixed(1).replace('.',',')} points.`;
+  el('annualSummary').innerHTML=`<strong>Note ${report.grade}.</strong> ${sentence} Tu as payé ${fmtEUR(report.taxes)} d’impôts et ${fmtEUR(report.interest)} d’intérêts bancaires sur l’année.`;
+  el('annualModal').classList.remove('hidden');
+}
+function monthlyExpenses(){return state.housing+state.living+state.transport+state.leisure+state.homePayment+state.rentalPayment+state.rentalCosts+state.carPayment+state.studentPayment+state.consumerPayment+(state.repairSurchargeMonths>0?60:0)+monthlyTax()}
+function cashflow(){return monthlyIncome()-monthlyExpenses()}
+function grossAssets(){return state.cash+state.livret+state.pea+state.assurance+state.cto+state.crypto+state.homeValue+state.rentalValue+state.carValue}
+function netWorth(){return grossAssets()-totalDebt()}
+function otherFixedCosts(){return state.rentalCosts+(state.repairSurchargeMonths>0?60:0)}
+function emergencyTarget(){return Math.max(1,monthlyExpenses()*3)}
+function emergencyMonths(){return state.livret/Math.max(1,monthlyExpenses())}
+function financialHealth(){
+  let flow=cashflow(),exp=Math.max(1,monthlyExpenses()),debt=debtRatio(),em=emergencyMonths();
+  let score=0;
+  score+=clamp(25+(flow/exp)*25,0,35);
+  score+=clamp(em/3*30,0,30);
+  score+=clamp(25-(Math.max(0,debt-20)/25)*25,0,25);
+  score+=clamp((state.cash/exp)*10,0,10);
+  score=Math.round(clamp(score,0,100));
+  let status=score>=70?'Stable':score>=45?'À surveiller':'Fragile';
+  if(state.distressMonths>0)status='Danger';
+  return{score,status,flow,debt,em};
+}
+function evaluateEndConditions(){
+  if(state.cash<-3000)state.distressMonths=(state.distressMonths||0)+1;
+  else state.distressMonths=0;
+  if(state.distressMonths>=3&&!state.gameOver){
+    state.gameOver=true;state.gameResult='loss';
+    state.lastEvent='💥 Partie perdue : ta trésorerie est restée sous −3 000 € pendant 3 mois consécutifs.';
+    addHistory(`${monthName(state.month)} ${state.year} — ${state.lastEvent}`);
+    silentSave();
+    showEndModal('loss');
+    return;
+  }
+  if(netWorth()>=100000&&!state.victoryShown){
+    state.victoryShown=true;state.gameResult='win';
+    addHistory(`${monthName(state.month)} ${state.year} — 🏆 Victoire V1 : 100 000 € de patrimoine net atteints.`);
+    silentSave();
+    showEndModal('win');
+  }
+}
+function showEndModal(kind){
+  let win=kind==='win';
+  el('endEmoji').textContent=win?'🏆':'💥';
+  el('endEyebrow').textContent=win?'Objectif principal atteint':'Fin de partie';
+  el('endTitle').textContent=win?'100 000 € de patrimoine !':'Situation financière insoutenable';
+  el('endText').textContent=win
+    ?`Tu as atteint ${fmtEUR(netWorth())} de patrimoine net. La V1 est gagnée, mais tu peux continuer pour améliorer ton score et poursuivre tes investissements.`
+    :`Ta trésorerie est restée sous −3 000 € pendant trois mois consécutifs. Ta partie est terminée avec un patrimoine net de ${fmtEUR(netWorth())}.`;
+  el('continueAfterWinBtn').style.display=win?'block':'none';
+  el('endModal').classList.remove('hidden');
+}
+function applyLifestyle(kind,announce=true){if(!lifestyleProfiles[kind])return;state.lifestyle=kind;let p=lifestyleProfiles[kind];state.living=p.living*state.priceIndex;state.leisure=p.leisure*state.priceIndex;if(announce){let impact=p.wellbeing<0?`${String(p.wellbeing).replace('.',',')} bonheur/mois`:`+${String(p.wellbeing).replace('.',',')} bonheur/mois`;setEvent(`Niveau de vie : ${p.name}. Budget recalculé au niveau actuel des prix • ${impact}.`)}render()}
+function inflateMonthlyCosts(){let f=Math.pow(1+state.annualInflation,1/12);state.priceIndex*=f;state.living*=f;state.leisure*=f;state.transport*=f;state.housing*=f;state.rentalCosts*=f;if(state.homeValue>0)state.homeCost=state.housing}
+function riskLabel(){let risky=state.pea+state.cto+state.crypto,total=Math.max(1,state.livret+state.assurance+risky);let r=risky/total;if(r>.72)return'élevé';if(r>.38)return'modéré';return'faible'}
+function addHistory(t){state.history.unshift(t);state.history=state.history.slice(0,10)}
+function setEvent(t){state.lastEvent=t;addHistory(`${monthName(state.month)} ${state.year} — ${t}`)}
+function debtRatio(extraPayment=0,extraIncome=0){return ((monthlyDebtPayments()+extraPayment)/(Math.max(1,state.salary+extraIncome)))*100}
+function annuity(principal,annualRate,months){let r=annualRate/12;if(!r)return principal/months;return principal*r/(1-Math.pow(1+r,-months))}
+function amortize(balance,payment,rate){if(balance<=0)return 0;let interest=balance*(rate/12);let principal=Math.max(0,payment-interest);return Math.max(0,balance-principal)}
+function creditMeta(principal,rate,months,payment){return{principal,rate,months,payment,totalInterest:Math.max(0,payment*months-principal)}}
+function debtInfo(meta){return meta?`${(meta.rate*100).toFixed(1).replace('.',',')} % • intérêts ${fmtEUR(meta.totalInterest)}`:'—'}
+function assetReturn(asset){let basis=Math.max(0,state.basis?.[asset]||0),value=state[asset]||0,gain=value-basis,p=basis?gain/basis*100:0;return{basis,value,gain,p}}
+function returnText(asset){let r=assetReturn(asset);return `${r.gain>=0?'+':''}${fmtEUR(r.gain)} • ${r.p>=0?'+':''}${r.p.toFixed(1).replace('.',',')} %`}
+const milestones=[
+ {id:'invest1k',icon:'🌱',title:'Premier capital',desc:'Atteindre 1 000 € de placements financiers',value:()=>state.livret+state.pea+state.assurance+state.cto+state.crypto,target:1000,reward:1},
+ {id:'safety1',icon:'🛟',title:'1 mois de sécurité',desc:'Avoir 1 mois de dépenses sur le Livret',value:()=>state.livret,target:()=>monthlyExpenses(),reward:1},
+ {id:'wealth10k',icon:'💰',title:'Cap des 10 000 €',desc:'Atteindre 10 000 € de patrimoine net',value:()=>netWorth(),target:10000,reward:1},
+ {id:'safety3',icon:'🧯',title:'Matelas solide',desc:'Avoir 3 mois de dépenses sur le Livret',value:()=>state.livret,target:()=>emergencyTarget(),reward:2},
+ {id:'wealth25k',icon:'📈',title:'25 000 € nets',desc:'Atteindre 25 000 € de patrimoine net',value:()=>netWorth(),target:25000,reward:1},
+ {id:'property',icon:'🏠',title:'Premier immobilier',desc:'Acheter une résidence principale ou un bien locatif',value:()=>state.homeValue+state.rentalValue,target:1,reward:2,binary:true},
+ {id:'wealth50k',icon:'🏅',title:'50 000 € nets',desc:'Atteindre 50 000 € de patrimoine net',value:()=>netWorth(),target:50000,reward:1},
+ {id:'wealth100k',icon:'🏆',title:'100 000 € nets',desc:'Atteindre 100 000 € de patrimoine net',value:()=>netWorth(),target:100000,reward:2}
+];
+function milestoneTarget(m){return typeof m.target==='function'?Math.max(1,m.target()):m.target}
+function milestonePct(m){let v=Math.max(0,m.value()),t=milestoneTarget(m);return clamp(v/t*100,0,100)}
+function checkMilestones(){let newly=[];for(const m of milestones){if(state.unlockedMilestones[m.id])continue;if(milestonePct(m)>=100){state.unlockedMilestones[m.id]={month:state.month,year:state.year};state.progressScore+=10;state.wellbeing=clampWellbeing(state.wellbeing+(m.reward||0));newly.push(m)}}state.lastUnlocked=newly.map(m=>m.id);if(newly.length){let labels=newly.map(m=>`${m.icon} ${m.title}`).join(' • ');addHistory(`${monthName(state.month)} ${state.year} — 🏆 Objectif atteint : ${labels}.`);state.lastEvent=`🏆 Objectif atteint : ${labels}. Bonus bonheur +${newly.reduce((s,m)=>s+(m.reward||0),0)}.`}return newly}
+function currentMilestone(){return milestones.find(m=>!state.unlockedMilestones[m.id])||null}
+function renderJourney(){let current=currentMilestone();if(current){el('missionTitle').textContent=current.title;el('missionDesc').textContent=current.desc;el('missionIcon').textContent=current.icon;let p=milestonePct(current);el('missionProgress').value=p;el('missionProgressText').textContent=`${Math.round(p)} %`}else{el('missionTitle').textContent='Parcours principal terminé';el('missionDesc').textContent='Tu as débloqué tous les paliers de cette première version.';el('missionIcon').textContent='🏆';el('missionProgress').value=100;el('missionProgressText').textContent='100 %'}el('progressScore').textContent=`${state.progressScore} pts`;el('badgeGrid').innerHTML=milestones.map(m=>{let u=!!state.unlockedMilestones[m.id];return `<div class="badge-item ${u?'unlocked':''}"><span class="badge-icon">${u?m.icon:'🔒'}</span><span class="badge-copy"><strong>${m.title}</strong><small>${u?'Débloqué':'À atteindre'}</small></span></div>`}).join('')}
+
+function applyAutoInvestments(){let total=0,done=[];for(const a of ['livret','pea','assurance','cto','crypto']){let amount=Math.max(0,Number(state.autoInvest[a]||0));if(!amount)continue;let actual=Math.min(amount,Math.max(0,state.cash));if(actual<=0)break;state.cash-=actual;state[a]+=actual;state.basis[a]+=actual;total+=actual;done.push(`${a==='livret'?'Livret':a==='assurance'?'Assurance-vie':a.toUpperCase()} ${fmtEUR(actual)}`)}state.monthInvested+=total;return{total,done}}
+function updateAutoFromInputs(){for(const a of ['livret','pea','assurance','cto','crypto'])state.autoInvest[a]=Math.max(0,Number(el(`${a}Auto`).value||0));silentSave();render()}
+
+function render(){
+  state.wellbeing=clampWellbeing(state.wellbeing);
+  if(!state.started){
+    el('startModal').classList.remove('hidden');
+    let legacy=load();
+    let box=el('existingSaveBox');
+    if(box)box.remove();
+    if(legacy&&legacy.started){
+      let hydrated=hydrate(legacy);
+      let wrap=document.createElement('div');wrap.id='existingSaveBox';wrap.className='start-save-box';
+      wrap.innerHTML=`<strong>💾 Une partie sauvegardée a été trouvée</strong><small>${monthName(hydrated.month)} ${hydrated.year} • ${Math.floor(hydrated.ageMonths/12)} ans • patrimoine ${fmtEUR((hydrated.cash||0)+(hydrated.livret||0)+(hydrated.pea||0)+(hydrated.assurance||0)+(hydrated.cto||0)+(hydrated.crypto||0)+(hydrated.homeValue||0)+(hydrated.rentalValue||0)+(hydrated.carValue||0)-((hydrated.homeDebt||0)+(hydrated.rentalDebt||0)+(hydrated.carDebt||0)+(hydrated.studentDebt||0)+(hydrated.consumerDebt||0)))}</small><div class="start-save-actions"><button id="continueSaveBtn" class="btn primary">Continuer la partie</button><button id="importStartBtn" class="btn ghost">Importer une sauvegarde</button></div>`;
+      let modalCard=el('startModal').querySelector('.modal-card');
+      let rules=modalCard.querySelector('.rules-box');
+      (rules||modalCard.firstElementChild).insertAdjacentElement('afterend',wrap);
+      el('continueSaveBtn').onclick=()=>{state=hydrate(legacy);state.started=true;el('startModal').classList.add('hidden');render()};
+      el('importStartBtn').onclick=()=>el('importFile').click();
+    }
+    return
+  }
+  el('startModal').classList.add('hidden');
+  if(state.gameOver){setTimeout(()=>showEndModal('loss'),0)}
+  let inc=monthlyIncome(),exp=monthlyExpenses(),flow=inc-exp,plannedAuto=monthlyAutoInvest(),available=flow-state.monthInvested-plannedAuto,worth=netWorth(),savingRate=inc?(state.monthInvested+plannedAuto)/inc*100:0;
+  let health=financialHealth();
+  el('healthScore').textContent=`${health.score}/100`;
+  el('healthProgress').value=health.score;
+  el('healthChip').textContent=health.status;
+  el('healthChip').className=`health-chip ${health.status==='Stable'?'good':health.status==='À surveiller'?'watch':'danger'}`;
+  el('distressText').textContent=`${state.distressMonths||0} / 3 mois`;
+  el('healthDebt').textContent=`${health.debt.toFixed(0)} %`;
+  el('healthEmergency').textContent=`${health.em.toFixed(1).replace('.',',')} mois`;
+  el('dangerMeter').style.width=`${Math.min(100,(state.distressMonths||0)/3*100)}%`;
+  el('nextMonthBtn').disabled=!!state.gameOver;el('simulateMonthsBtn').disabled=!!state.gameOver;
+  el('nextMonthBtn').textContent=state.gameOver?'Partie terminée':'Mois suivant →';
+  checkMilestones();renderJourney();
+  el('dateLabel').textContent=`${monthName(state.month)} ${state.year} • ${ageText()}`;el('turnLabel').textContent=`Mois ${state.totalMonths+1}`;el('careerHero').textContent=`${career().name} • niveau ${state.careerLevel}`;el('eventText').textContent=state.lastEvent;el('difficultyTag').textContent=state.difficulty==='easy'?'Départ confortable':state.difficulty==='hard'?'Départ difficile':'Mode normal';el('housingTag').textContent=state.homeValue>0?'Propriétaire':'Locataire';
+  el('cashStat').textContent=fmtEUR(state.cash);el('cashflowStat').textContent=`${flow>=0?'+':''}${fmtEUR(flow)}/mois`;el('cashflowStat').className=flow>=0?'positive':'negative';el('netWorthStat').textContent=fmtEUR(worth);el('debtStat').textContent=`Dettes : ${fmtEUR(totalDebt())}`;el('incomeStat').textContent=`${fmtEUR(inc)}/mois`;el('passiveIncomeStat').textContent=`Passifs : ${fmtEUR(passiveIncome())}/mois`;el('wellbeingStat').textContent=`${Math.round(state.wellbeing)} / 100`;el('riskStat').textContent=`Minimum 50/100 • Risque : ${riskLabel()}`;
+  el('taxAuto').textContent=fmtEUR(monthlyTax());el('autoInvestAuto').textContent=fmtEUR(monthlyAutoInvest());el('inflationRate').textContent=`Inflation : ${(state.annualInflation*100).toFixed(1).replace('.',',')} % / an`;el('cumulativeInflation').textContent=`+${((state.priceIndex-1)*100).toFixed(1).replace('.',',')} %`;el('housingAuto').textContent=fmtEUR(state.housing);el('livingAuto').textContent=fmtEUR(state.living);el('transportAuto').textContent=fmtEUR(state.transport);el('leisureAuto').textContent=fmtEUR(state.leisure);el('debtPaymentsAuto').textContent=fmtEUR(monthlyDebtPayments());el('otherCostsAuto').textContent=fmtEUR(otherFixedCosts());document.querySelectorAll('[data-lifestyle]').forEach(b=>b.classList.toggle('active',b.dataset.lifestyle===state.lifestyle));
+  el('budgetIncome').textContent=fmtEUR(inc);el('budgetExpenses').textContent=fmtEUR(exp);el('budgetCapacity').textContent=fmtEUR(available);el('budgetCapacity').className=available>=0?'positive':'negative';el('budgetSavingsRate').textContent=`${Math.round(savingRate)} %`;
+  for(const a of ['livret','pea','assurance','cto','crypto']){
+    el(`${a}Card`).textContent=fmtEUR(state[a]);el(`${a}Asset`).textContent=fmtEUR(state[a]);
+    let perf=assetReturn(a),cls=perf.gain>0?'return-positive':perf.gain<0?'return-negative':'return-neutral';
+    el(`${a}ReturnCard`).textContent=`Rendement : ${returnText(a)}`;el(`${a}ReturnCard`).className=`return-line ${cls}`;
+    el(`${a}Return`).textContent=returnText(a);el(`${a}Return`).className=cls;
+    el(`${a}Auto`).value=state.autoInvest[a]||0
+  }let inflationLoss=Math.max(0,state.cash*(1-1/state.priceIndex));el('cashInflationLoss').textContent=`Pouvoir d’achat perdu : ${fmtEUR(inflationLoss)} (${((state.priceIndex-1)*100).toFixed(1).replace('.',',')} % d’inflation)`;el('cashAsset').textContent=fmtEUR(state.cash);el('propertyAsset').textContent=fmtEUR(state.homeValue+state.rentalValue);el('vehicleAsset').textContent=fmtEUR(state.carValue);
+  el('homeDebt').textContent=fmtEUR(state.homeDebt);el('rentalDebt').textContent=fmtEUR(state.rentalDebt);el('autoDebt').textContent=fmtEUR(state.carDebt);el('studentDebtDisplay').textContent=fmtEUR(state.studentDebt);el('consumerDebtDisplay').textContent=fmtEUR(state.consumerDebt);el('homeDebtInfo').textContent=debtInfo(state.debtMeta.home);el('rentalDebtInfo').textContent=debtInfo(state.debtMeta.rental);el('autoDebtInfo').textContent=debtInfo(state.debtMeta.car);el('studentDebtInfo').textContent=debtInfo(state.debtMeta.student);el('consumerDebtInfo').textContent=debtInfo(state.debtMeta.consumer);el('totalDebt').textContent=fmtEUR(totalDebt());
+  el('jobTitle').textContent=career().name;el('careerDescription').textContent=career().description;el('careerLevel').textContent=`Niveau ${state.careerLevel}`;el('salaryCareer').textContent=`${fmtEUR(state.salary)}/mois`;el('stabilityCareer').textContent=`${career().stability} %`;el('trainingCost').textContent=fmtEUR(Math.round(career().training*(1+(state.careerLevel-1)*.18)));
+  el('vehicleTitle').textContent=state.carValue>0?(state.carValue>14000?'Voiture récente':'Voiture d’occasion'):'Sans voiture';el('vehicleDescription').textContent=state.carValue>0?`Valeur estimée ${fmtEUR(state.carValue)} • coût de transport ${fmtEUR(state.transport)}/mois.`:'Tu utilises principalement les transports ou un véhicule déjà amorti.';el('carDebtChip').textContent=`${fmtEUR(state.carDebt)} de crédit`;
+  let eg=clamp(state.livret/emergencyTarget()*100,0,100),wg=clamp(worth/100000*100,0,100),pg=clamp(passiveIncome()/1500*100,0,100);el('emergencyGoal').value=eg;el('emergencyGoalText').textContent=`${Math.round(eg)} %`;el('wealthGoal').value=wg;el('wealthGoalText').textContent=`${Math.round(wg)} %`;el('passiveGoal').value=pg;el('passiveGoalText').textContent=`${Math.round(pg)} %`;
+  if(state.lastRecap){el('recapIncome').textContent=fmtEUR(state.lastRecap.income);el('recapExpenses').textContent=fmtEUR(state.lastRecap.expenses);el('recapInvestments').textContent=fmtEUR(state.lastRecap.investments);el('recapWorth').textContent=`${state.lastRecap.worthDelta>=0?'+':''}${fmtEUR(state.lastRecap.worthDelta)}`;el('recapWorth').className=state.lastRecap.worthDelta>=0?'positive':'negative';el('recapText').textContent=state.lastRecap.text;el('recapAchievements').textContent=state.lastRecap.achievements||'';}el('historyList').innerHTML=state.history.length?state.history.map(x=>`<li>${x}</li>`).join(''):'<li>Aucun événement pour le moment.</li>';silentSave();
+}
+function startGame(){if(!selectedCareer)return;state=baseState();state.started=true;state.careerKey=selectedCareer;state.difficulty=el('difficultySelect').value;state.cash=state.difficulty==='easy'?5000:state.difficulty==='hard'?800:2500;state.salary=careers[selectedCareer].salary;state.wellbeing=75;if(selectedCareer==='engineer'){state.studentDebt=12000;state.studentPayment=Math.round(annuity(12000,.025,72));state.studentMonths=72;state.debtMeta.student=creditMeta(12000,.025,72,state.studentPayment)}state.history=[`Début de partie : ${career().name}, ${fmtEUR(state.cash)} de trésorerie.`];state.lastEvent='Ton premier objectif : conserver une trésorerie positive et constituer trois mois de sécurité.';silentSave();render()}
+function moveAsset(asset,direction){let input=Number(el(`${asset}Amount`).value||0);if(input<=0)return;if(direction==='in'){if(state.cash<input){setEvent(`Trésorerie insuffisante pour placer ${fmtEUR(input)}.`)}else{state.cash-=input;state[asset]+=input;state.basis[asset]+=input;state.monthInvested+=input;setEvent(`${fmtEUR(input)} placés sur ${asset==='livret'?'le livret':asset==='assurance'?"l’assurance-vie":asset.toUpperCase()}.`)}}else{let amount=Math.min(input,state[asset]);if(amount<=0){setEvent('Aucun capital disponible à retirer.')}else{let ratio=state[asset]>0?amount/state[asset]:1;state.basis[asset]=Math.max(0,state.basis[asset]*(1-ratio));state[asset]-=amount;state.cash+=amount;state.monthInvested=Math.max(0,state.monthInvested-amount);setEvent(`${fmtEUR(amount)} récupérés depuis ${asset==='livret'?'le livret':asset==='assurance'?"l’assurance-vie":asset.toUpperCase()}.`)}}render()}
+function training(){let cost=Math.round(career().training*(1+(state.careerLevel-1)*.18));if(state.careerLevel>=6){setEvent('Niveau de carrière maximal atteint dans cette version.');return render()}if(state.cash<cost){setEvent(`Il te faut ${fmtEUR(cost)} de trésorerie pour cette formation.`);return render()}state.cash-=cost;state.careerLevel++;state.salary+=career().trainingRaise;state.wellbeing=clampWellbeing(state.wellbeing-1);setEvent(`Formation terminée : ton salaire progresse de ${fmtEUR(career().trainingRaise)}/mois.`);render()}
+function updateWellbeing(flow){let lifestyleImpact=lifestyleProfiles[state.lifestyle]?.wellbeing||0;state.wellbeing+=lifestyleImpact;if(flow<0)state.wellbeing-=1.5;else if(flow>500)state.wellbeing+=.2;if(state.cash<0)state.wellbeing-=1.2;state.wellbeing=clampWellbeing(state.wellbeing)}
+function marketMonth(){state.livret*=1+.022/12;state.assurance*=1+.03/12;let pea=rand(-.035,.045),cto=rand(-.055,.065),crypto=rand(-.12,.13);state.pea*=1+pea;state.cto*=1+cto;state.crypto*=1+crypto;if(state.homeValue)state.homeValue*=1+rand(-.003,.005);if(state.rentalValue)state.rentalValue*=1+rand(-.004,.006);if(state.carValue)state.carValue*=.987;return{pea,cto,crypto}}
+function payDebts(){
+  let interest=0;
+  function pay(balanceKey,paymentKey,rate,monthsKey=null){
+    let balance=state[balanceKey]||0,payment=state[paymentKey]||0;
+    if(!balance||!payment)return;
+    interest+=balance*rate/12;
+    state[balanceKey]=amortize(balance,payment,rate);
+    if(monthsKey){state[monthsKey]--;if(state[monthsKey]<=0||state[balanceKey]<10){state[balanceKey]=0;state[paymentKey]=0}}
+  }
+  pay('homeDebt','homePayment',.034);
+  pay('rentalDebt','rentalPayment',.036);
+  pay('carDebt','carPayment',.055,'carMonths');
+  pay('studentDebt','studentPayment',.025,'studentMonths');
+  pay('consumerDebt','consumerPayment',.08,'consumerMonths');
+  if(state.repairSurchargeMonths>0)state.repairSurchargeMonths--;
+  return interest;
+}
+function annualUpdate(){let old=state.salary;state.salary=Math.round(state.salary*(1+career().raise));state.annualInflation=rand(.012,.040);let delta=state.salary-old;setEvent(`Nouvelle année : salaire +${fmtEUR(delta)}/mois. Inflation de référence pour ${state.year} : ${(state.annualInflation*100).toFixed(1)} %.`)}
+function variableCareerEvent(){if(state.careerKey==='sales'&&Math.random()<.14){let bonus=Math.round(rand(250,750));state.cash+=bonus;setEvent(`Prime commerciale : +${fmtEUR(bonus)} ce mois-ci.`);return true}return false}
+const negativeLifeEvents=[
+ {id:'energy',ok:()=>true,weight:7,title:'Régularisation d’énergie',text:'La facture d’électricité ou de gaz est plus élevée que prévu.',cost:[70,260],wellbeing:0},
+ {id:'phone',ok:()=>true,weight:5,title:'Téléphone cassé',text:'Ton téléphone doit être réparé ou remplacé rapidement.',cost:[90,350],wellbeing:-1},
+ {id:'health',ok:()=>true,weight:6,title:'Dépense santé',text:'Consultation, pharmacie ou reste à charge : le mois coûte plus cher que prévu.',cost:[45,220],wellbeing:-1},
+ {id:'appliance',ok:()=>true,weight:4,title:'Achat indispensable',text:'Un appareil du quotidien tombe en panne et doit être remplacé.',cost:[100,420],wellbeing:-1},
+ {id:'admin',ok:()=>true,weight:4,title:'Facture oubliée',text:'Une dépense administrative que tu n’avais pas anticipée arrive ce mois-ci.',cost:[60,240],wellbeing:0},
+ {id:'insurance',ok:()=>true,weight:4,title:'Hausse d’assurance',text:'Ton assureur applique une hausse et une régularisation sur le contrat.',cost:[50,190],wellbeing:0},
+ {id:'travel',ok:()=>true,weight:4,title:'Déplacement imprévu',text:'Un déplacement non prévu augmente tes dépenses du mois.',cost:[60,240],wellbeing:0},
+ {id:'fine',ok:()=>true,weight:2,title:'Amende',text:'Une petite infraction vient grever ton budget.',cost:[35,150],wellbeing:-1},
+ {id:'subscription',ok:()=>true,weight:3,title:'Abonnement oublié',text:'Un abonnement annuel est renouvelé automatiquement.',cost:[45,170],wellbeing:0},
+ {id:'overdraft',ok:()=>state.cash<500,weight:8,title:'Frais de découvert',text:'Ta trésorerie faible déclenche des frais bancaires et agios.',cost:[25,95],wellbeing:-1},
+ {id:'renter_charges',ok:()=>state.homeValue<=0,weight:5,title:'Régularisation de charges locatives',text:'Ton propriétaire ou ton bailleur régularise les charges du logement.',cost:[80,330],wellbeing:0},
+ {id:'rent_damage',ok:()=>state.homeValue<=0,weight:3,title:'Petite réparation locative',text:'Une réparation reste à ta charge dans le logement.',cost:[70,240],wellbeing:-1},
+ {id:'car_breakdown',ok:()=>state.carValue>0,weight:8,title:'Panne automobile',text:'La voiture nécessite une réparation imprévue.',cost:[280,1100],wellbeing:-2},
+ {id:'car_tires',ok:()=>state.carValue>0,weight:5,title:'Pneus à changer',text:'Tes pneus sont à remplacer plus tôt que prévu.',cost:[320,720],wellbeing:-1},
+ {id:'car_service',ok:()=>state.carValue>0,weight:5,title:'Entretien automobile',text:'Révision, freins ou batterie : l’entretien tombe ce mois-ci.',cost:[140,480],wellbeing:0},
+ {id:'home_repair',ok:()=>state.homeValue>0,weight:7,title:'Réparation du logement',text:'Un équipement du logement nécessite une intervention rapide.',cost:[180,820],wellbeing:-1},
+ {id:'property_tax',ok:()=>state.homeValue>0,weight:4,title:'Taxe foncière',text:'La fiscalité liée à ton logement tombe ce mois-ci.',cost:[450,1100],wellbeing:0},
+ {id:'copro',ok:()=>state.homeValue>0,weight:4,title:'Charges de copropriété',text:'Une régularisation ou un appel de fonds arrive.',cost:[160,680],wellbeing:0},
+ {id:'rental_work',ok:()=>state.rentalValue>0,weight:6,title:'Travaux sur le bien locatif',text:'Une réparation est nécessaire dans ton logement mis en location.',cost:[220,900],wellbeing:-1},
+ {id:'rental_vacancy',ok:()=>state.rentalValue>0,weight:4,title:'Vacance locative',text:'Un changement de locataire réduit tes revenus ce mois-ci.',cost:[300,850],wellbeing:-1},
+ {id:'debt_fee',ok:()=>state.consumerDebt>0||state.carDebt>0,weight:3,title:'Frais liés au crédit',text:'Des frais annexes ou une régularisation viennent s’ajouter à tes mensualités.',cost:[35,140],wellbeing:0},
+ {id:'comfort_spend',ok:()=>state.lifestyle==='comfort',weight:6,title:'Dépense plaisir imprévue',text:'Ton niveau de vie confortable entraîne un achat non prévu.',cost:[90,320],wellbeing:1}
+];
+const positiveLifeEvents=[
+ {id:'refund',ok:()=>true,weight:6,title:'Remboursement inattendu',text:'Tu récupères une somme que tu pensais perdue.',gain:[80,330],wellbeing:1},
+ {id:'bonus',ok:()=>true,weight:4,title:'Petit coup de pouce',text:'Une prime ou gratification ponctuelle améliore ton mois.',gain:[120,460],wellbeing:1},
+ {id:'resale',ok:()=>true,weight:4,title:'Vente d’un objet',text:'Tu revends quelque chose que tu n’utilisais plus.',gain:[60,280],wellbeing:1},
+ {id:'regularization',ok:()=>true,weight:3,title:'Régularisation en ta faveur',text:'Une facture ou un prélèvement est remboursé en partie.',gain:[50,230],wellbeing:0},
+ {id:'sales_commission',ok:()=>state.careerKey==='sales',weight:8,title:'Bonne commission',text:'Une bonne performance commerciale déclenche une prime supplémentaire.',gain:[250,750],wellbeing:1},
+ {id:'insurance_refund',ok:()=>state.carValue>0||state.homeValue>0,weight:3,title:'Remboursement d’assurance',text:'Ton assurance te rembourse une dépense récente.',gain:[80,350],wellbeing:1}
+];
+function scaledAmount(range){return Math.max(1,Math.round(rand(range[0],range[1])*state.priceIndex))}
+function weightedPick(pool){
+  let total=pool.reduce((s,e)=>s+(e.weight||1),0),r=Math.random()*total;
+  for(const e of pool){r-=e.weight||1;if(r<=0)return e}
+  return pool[pool.length-1];
+}
+function applyAutomaticLifeEvent(evt,isPositive){
+  let amount=isPositive?scaledAmount(evt.gain):scaledAmount(evt.cost);
+  if(isPositive){
+    state.cash+=amount;
+    if(state.yearStats){state.yearStats.events++;state.yearStats.eventCost-=amount}
+  }else{
+    state.cash-=amount;
+    if(state.yearStats){state.yearStats.events++;state.yearStats.eventCost+=amount}
+  }
+  state.wellbeing=clampWellbeing(state.wellbeing+(evt.wellbeing||0));
+  state.lastLifeEventId=evt.id||evt.title;
+  let prefix=isPositive?'Bonne surprise':'Imprévu';
+  setEvent(`${prefix} — ${evt.title} : ${isPositive?'+':'−'}${fmtEUR(amount)}.`);
+  render();
+  if(!simulationMode)showSimpleEvent(evt,amount,isPositive);
+}
+function showSimpleEvent(evt,amount,isPositive){
+  pendingDecision=evt;
+  el('decisionEyebrow').textContent=isPositive?'Bonne surprise':'Imprévu du quotidien';
+  el('decisionTitle').textContent=evt.title;
+  el('decisionText').textContent=`${evt.text} Impact sur le budget : ${isPositive?'+':'−'}${fmtEUR(amount)}.`;
+  el('decisionChoices').innerHTML='';
+  let b=document.createElement('button');b.className='decision-choice';b.innerHTML=`Continuer<small>${isPositive?'Cette fois, le mois se termine un peu mieux.':'Il faut absorber cette dépense dans ton budget.'}</small>`;b.onclick=()=>{el('decisionModal').classList.add('hidden');render()};el('decisionChoices').appendChild(b);
+  el('decisionModal').classList.remove('hidden');
+}
+function maybeDecision(){
+  if(Math.random()>.40)return false;
+  const positive=Math.random()<.25;
+  let pool=(positive?positiveLifeEvents:negativeLifeEvents).filter(e=>e.ok()&&(e.id||e.title)!==state.lastLifeEventId);
+  if(!pool.length)pool=(positive?positiveLifeEvents:negativeLifeEvents).filter(e=>e.ok());
+  if(!pool.length)return false;
+  applyAutomaticLifeEvent(weightedPick(pool),positive);
+  return true;
+}
+function showDecision(evt){pendingDecision=evt;el('decisionEyebrow').textContent='Événement';el('decisionTitle').textContent=evt.title;el('decisionText').textContent=evt.text;el('decisionChoices').innerHTML='';evt.choices.forEach((c,i)=>{let b=document.createElement('button');b.className='decision-choice';b.innerHTML=`${c.label}<small>${c.desc}</small>`;b.onclick=()=>{el('decisionModal').classList.add('hidden');c.action();state.wellbeing=clampWellbeing(state.wellbeing);render()};el('decisionChoices').appendChild(b)});el('decisionModal').classList.remove('hidden')}
+function nextMonth(){
+  if(state.gameOver){showEndModal('loss');return}
+  let startWorth=netWorth(),inc=monthlyIncome(),tax=monthlyTax(),exp=monthlyExpenses(),manualInvested=state.monthInvested,flow=inc-exp;
+  if(!state.yearStats||state.yearStats.year!==state.year)resetYearStats(state.year);
+  state.yearStats.income+=inc;state.yearStats.expenses+=exp;state.yearStats.taxes+=tax;
+  state.cash+=flow;
+  updateWellbeing(flow);
+  let auto=applyAutoInvestments();state.yearStats.investments+=manualInvested+auto.total;
+  let moves=marketMonth();
+  let interestPaid=payDebts();state.yearStats.interest+=interestPaid;
+  inflateMonthlyCosts();
+  state.monthInvested=0;
+  state.totalMonths++;state.ageMonths++;state.month++;
+  let annualReportToShow=null;
+  if(state.month===13){
+    let finishedYear=state.year,finishedInflation=state.annualInflation;
+    annualReportToShow=buildAnnualReport(finishedYear,finishedInflation);
+    state.month=1;state.year++;annualUpdate();resetYearStats(state.year);
+  }
+  let newly=checkMilestones();
+  let endWorth=netWorth();
+  state.lastRecap={income:inc,expenses:exp,investments:manualInvested+auto.total,worthDelta:endWorth-startWorth,achievements:newly.length?`🏆 ${newly.map(m=>m.title).join(' • ')}`:'',text:`Mois terminé : ${fmtEUR(inc)} de revenus, ${fmtEUR(exp)} de dépenses et ${fmtEUR(manualInvested+auto.total)} placés.${auto.done.length?' Versements auto : '+auto.done.join(', ')+'.':''}`};
+  if(!newly.length&&!variableCareerEvent()){state.lastEvent=`Marchés : PEA ${(moves.pea*100).toFixed(1)} %, CTO ${(moves.cto*100).toFixed(1)} %, crypto ${(moves.crypto*100).toFixed(1)} %.`;addHistory(`${monthName(state.month)} ${state.year} — ${state.lastEvent}`)}
+  if(state.cash<-2500){state.lastEvent='⚠️ Trésorerie critique : il faut réduire les dépenses, vendre des actifs ou éviter de nouvelles dettes.'}
+  evaluateEndConditions();render();if(annualReportToShow&&!state.gameOver&&!simulationMode)showAnnualReport(annualReportToShow);else if(!state.gameOver&&!simulationMode)maybeDecision()
+}
+
+function simulateOneMonth(){
+  if(state.gameOver)return null;
+  let label=`${monthName(state.month)} ${state.year}`,startWorth=netWorth(),startCash=state.cash,startHist=state.history.length;
+  let inc=monthlyIncome(),tax=monthlyTax(),exp=monthlyExpenses(),manualInvested=state.monthInvested,flow=inc-exp;
+  if(!state.yearStats||state.yearStats.year!==state.year)resetYearStats(state.year);
+  state.yearStats.income+=inc;state.yearStats.expenses+=exp;state.yearStats.taxes+=tax;
+  state.cash+=flow;updateWellbeing(flow);
+  let auto=applyAutoInvestments();state.yearStats.investments+=manualInvested+auto.total;
+  let moves=marketMonth();
+  let interestPaid=payDebts();state.yearStats.interest+=interestPaid;
+  inflateMonthlyCosts();
+  state.monthInvested=0;
+  state.totalMonths++;state.ageMonths++;state.month++;
+  if(state.month===13){
+    let finishedYear=state.year,finishedInflation=state.annualInflation;
+    buildAnnualReport(finishedYear,finishedInflation);
+    state.month=1;state.year++;annualUpdate();resetYearStats(state.year);
+  }
+  let newly=checkMilestones(),eventBefore=state.lastEvent;
+  if(!newly.length&&!variableCareerEvent()){state.lastEvent=`Marchés : PEA ${(moves.pea*100).toFixed(1)} %, CTO ${(moves.cto*100).toFixed(1)} %, crypto ${(moves.crypto*100).toFixed(1)} %.`;addHistory(`${monthName(state.month)} ${state.year} — ${state.lastEvent}`)}
+  if(state.cash<-2500)state.lastEvent='⚠️ Trésorerie critique : il faut réduire les dépenses, vendre des actifs ou éviter de nouvelles dettes.';
+  let lifeEventHappened=false,lifeEventText='';
+  if(!state.gameOver){
+    if(Math.random()<=.40){
+      const positive=Math.random()<.25;
+      let pool=(positive?positiveLifeEvents:negativeLifeEvents).filter(e=>e.ok()&&(e.id||e.title)!==state.lastLifeEventId);
+      if(!pool.length)pool=(positive?positiveLifeEvents:negativeLifeEvents).filter(e=>e.ok());
+      if(pool.length){
+        let beforeCash=state.cash,evt=weightedPick(pool);
+        applyAutomaticLifeEvent(evt,positive);
+        lifeEventHappened=true;lifeEventText=`${positive?'Bonne surprise':'Imprévu'} : ${evt.title} (${positive?'+':'−'}${fmtEUR(Math.abs(state.cash-beforeCash))})`;
+      }
+    }
+  }
+  evaluateEndConditions();
+  let endWorth=netWorth();
+  state.lastRecap={income:inc,expenses:exp,investments:manualInvested+auto.total,worthDelta:endWorth-startWorth,achievements:newly.length?`🏆 ${newly.map(m=>m.title).join(' • ')}`:'',text:`Mois terminé : ${fmtEUR(inc)} de revenus, ${fmtEUR(exp)} de dépenses et ${fmtEUR(manualInvested+auto.total)} placés.`};
+  silentSave();
+  return{label,income:inc,expenses:exp,investments:manualInvested+auto.total,taxes:tax,interest:interestPaid,worthDelta:endWorth-startWorth,cashDelta:state.cash-startCash,event:lifeEventText,wellbeing:state.wellbeing};
+}
+function simulateMonths(count){
+  count=Math.max(1,Math.min(120,Number(count)||1));
+  if(state.gameOver){showEndModal('loss');return}
+  simulationMode=true;
+  let startWorth=netWorth(),startLabel=`${monthName(state.month)} ${state.year}`,rows=[],totals={income:0,expenses:0,investments:0,taxes:0,interest:0,events:0};
+  for(let i=0;i<count;i++){
+    let r=simulateOneMonth();
+    if(!r)break;
+    rows.push(r);totals.income+=r.income;totals.expenses+=r.expenses;totals.investments+=r.investments;totals.taxes+=r.taxes;totals.interest+=r.interest;if(r.event)totals.events++;
+    if(state.gameOver)break;
+  }
+  simulationMode=false;
+  render();
+  showSimulationReport(startLabel,rows,startWorth,totals);
+}
+function showSimulationReport(startLabel,rows,startWorth,totals){
+  let endWorth=netWorth(),endLabel=rows.length?rows[rows.length-1].label:startLabel;
+  el('simulationTitle').textContent=`${rows.length} mois simulé${rows.length>1?'s':''}`;
+  el('simulationSubtitle').textContent=`De ${startLabel} à ${endLabel}. Toutes les recettes et dépenses mensuelles ont été exécutées successivement.`;
+  el('simIncome').textContent=fmtEUR(totals.income);el('simExpenses').textContent=fmtEUR(totals.expenses);el('simInvestments').textContent=fmtEUR(totals.investments);
+  let wd=endWorth-startWorth;el('simWorthDelta').textContent=`${wd>=0?'+':''}${fmtEUR(wd)}`;el('simWorthDelta').className=wd>=0?'positive':'negative';
+  el('simTaxes').textContent=fmtEUR(totals.taxes);el('simInterest').textContent=fmtEUR(totals.interest);el('simEvents').textContent=String(totals.events);el('simWellbeing').textContent=`${Math.round(state.wellbeing)}/100`;
+  el('simMonthList').innerHTML=`<div class="sim-month-row head"><strong>Mois</strong><strong>Revenus</strong><strong>Dépenses</strong><strong>Placements</strong><strong>Δ patrimoine</strong></div>`+rows.map(r=>`<div class="sim-month-row"><strong>${r.label}</strong><span>${fmtEUR(r.income)}</span><span>${fmtEUR(r.expenses)}</span><span>${fmtEUR(r.investments)}</span><span class="${r.worthDelta>=0?'positive':'negative'}">${r.worthDelta>=0?'+':''}${fmtEUR(r.worthDelta)}</span></div>`).join('');
+  let events=rows.filter(r=>r.event).map(r=>`• ${r.label} — ${r.event}`);
+  el('simEventSummary').innerHTML=events.length?`<strong>Événements sur la période</strong><br>${events.join('<br>')}`:`<strong>Événements sur la période</strong><br>Aucun imprévu ce coup-ci.`;
+  el('simulationModal').classList.remove('hidden');
+}
+
+function openVehicle(type){if(state.carValue>0){setEvent('Tu possèdes déjà un véhicule. Revendre/renouveler sera ajouté dans une prochaine version.');return render()}let data=type==='used'?{title:'Voiture d’occasion',price:9000,months:48,transport:Math.round(260*state.priceIndex)}:{title:'Voiture récente',price:22000,months:60,transport:Math.round(330*state.priceIndex)};let payment=Math.round(annuity(data.price,.055,data.months));pendingPurchase={kind:'car',...data,payment,rate:.055,totalInterest:payment*data.months-data.price};el('purchaseTitle').textContent=data.title;el('purchaseDetails').innerHTML=`<div><span>Prix</span><strong>${fmtEUR(data.price)}</strong></div><div><span>Crédit auto</span><strong>${fmtEUR(payment)}/mois</strong></div><div><span>Taux</span><strong>5,5 %</strong></div><div><span>Intérêts totaux</span><strong>${fmtEUR(payment*data.months-data.price)}</strong></div><div><span>Durée</span><strong>${data.months} mois</strong></div><div><span>Budget transport estimé</span><strong>${fmtEUR(data.transport)}/mois</strong></div>`;el('purchaseChoices').innerHTML='';addPurchaseChoice('Payer comptant',`Il faut ${fmtEUR(data.price)} disponibles`,()=>buyCar(false));addPurchaseChoice('Financer à crédit',`Taux simulé 5,5 % • ratio après achat ${debtRatio(payment).toFixed(0)} %`,()=>buyCar(true));el('purchaseModal').classList.remove('hidden')}
+function buyCar(credit){let p=pendingPurchase;if(credit){if(debtRatio(p.payment)>38){setEvent('Crédit auto refusé : endettement trop élevé.')}else{state.carDebt=p.price;state.carPayment=p.payment;state.carMonths=p.months;state.debtMeta.car=creditMeta(p.price,.055,p.months,p.payment);state.carValue=p.price;state.transport=p.transport;setEvent(`${p.title} achetée à crédit : ${fmtEUR(p.payment)}/mois.`)}}else{if(state.cash<p.price)setEvent('Achat comptant impossible : trésorerie insuffisante.');else{state.cash-=p.price;state.carValue=p.price;state.transport=p.transport;setEvent(`${p.title} achetée comptant.`)}}el('purchaseModal').classList.add('hidden');render()}
+const projects={apartment:{title:'Appartement principal',price:180000,deposit:.10,rate:.034,months:300,cost:240},house:{title:'Maison principale',price:280000,deposit:.10,rate:.034,months:300,cost:340},rental:{title:'Bien locatif',price:160000,depositCash:20000,rate:.036,months:300,cost:170,rent:850}};
+function openPurchase(kind){let p=projects[kind];if((kind==='apartment'||kind==='house')&&state.homeValue>0){setEvent('Tu possèdes déjà une résidence principale.');return render()}if(kind==='rental'&&state.rentalValue>0){setEvent('Tu possèdes déjà un bien locatif dans cette version.');return render()}let deposit=p.depositCash||Math.round(p.price*p.deposit),loan=p.price-deposit,payment=Math.round(annuity(loan,p.rate,p.months)),bankIncome=kind==='rental'?p.rent*.7:0,ratio=debtRatio(payment,bankIncome);pendingPurchase={kind,...p,deposit,loan,payment,ratio,totalInterest:payment*p.months-loan};el('purchaseTitle').textContent=p.title;el('purchaseDetails').innerHTML=`<div><span>Prix</span><strong>${fmtEUR(p.price)}</strong></div><div><span>Apport</span><strong>${fmtEUR(deposit)}</strong></div><div><span>Emprunt</span><strong>${fmtEUR(loan)}</strong></div><div><span>Taux</span><strong>${(p.rate*100).toFixed(1).replace('.',',')} %</strong></div><div><span>Mensualité</span><strong>${fmtEUR(payment)}/mois</strong></div><div><span>Intérêts totaux</span><strong>${fmtEUR(payment*p.months-loan)}</strong></div>${p.rent?`<div><span>Loyer estimé</span><strong>${fmtEUR(p.rent)}/mois</strong></div>`:''}<div><span>Taux d’endettement simulé</span><strong class="${ratio<=35?'positive':'negative'}">${ratio.toFixed(0)} %</strong></div>`;el('purchaseChoices').innerHTML='';addPurchaseChoice('Confirmer le projet',ratio<=35?'Le financement semble compatible avec le critère simplifié de 35 %.':'Le financement risque d’être refusé.',()=>confirmProperty());addPurchaseChoice('Annuler','Conserver ta situation actuelle',()=>el('purchaseModal').classList.add('hidden'));el('purchaseModal').classList.remove('hidden')}
+function addPurchaseChoice(label,desc,fn){let b=document.createElement('button');b.className='decision-choice';b.innerHTML=`${label}<small>${desc}</small>`;b.onclick=fn;el('purchaseChoices').appendChild(b)}
+function confirmProperty(){let p=pendingPurchase;if(p.ratio>35){setEvent('Projet refusé par la banque : taux d’endettement supérieur à 35 % dans cette simulation.');el('purchaseModal').classList.add('hidden');return render()}if(state.cash<p.deposit){setEvent(`Apport insuffisant : il faut ${fmtEUR(p.deposit)} en trésorerie.`);el('purchaseModal').classList.add('hidden');return render()}state.cash-=p.deposit;if(p.kind==='rental'){state.rentalValue=p.price;state.rentalDebt=p.loan;state.rentalPayment=p.payment;state.debtMeta.rental=creditMeta(p.loan,p.rate,p.months,p.payment);state.rentIncome=p.rent;state.rentalCosts=p.cost*state.priceIndex;setEvent(`Bien locatif acheté : loyer ${fmtEUR(p.rent)}/mois.`)}else{state.homeValue=p.price;state.homeDebt=p.loan;state.homePayment=p.payment;state.debtMeta.home=creditMeta(p.loan,p.rate,p.months,p.payment);state.homeCost=p.cost*state.priceIndex;state.housing=state.homeCost;setEvent(`${p.title} acheté : tu deviens propriétaire de ta résidence principale.`)}el('purchaseModal').classList.add('hidden');render()}
+function openLoan(){if(state.consumerDebt>0){setEvent('Tu as déjà un prêt personnel en cours.');return render()}let amount=Number(el('loanAmount').value),months=Number(el('loanMonths').value),rate=.08,payment=Math.round(annuity(amount,rate,months)),ratio=debtRatio(payment),interest=payment*months-amount;pendingPurchase={kind:'consumer',amount,months,rate,payment,ratio,interest};el('purchaseTitle').textContent='Prêt personnel';el('purchaseDetails').innerHTML=`<div><span>Montant reçu</span><strong>${fmtEUR(amount)}</strong></div><div><span>Taux</span><strong>8,0 %</strong></div><div><span>Durée</span><strong>${months} mois</strong></div><div><span>Mensualité</span><strong>${fmtEUR(payment)}/mois</strong></div><div><span>Intérêts totaux</span><strong>${fmtEUR(interest)}</strong></div><div><span>Endettement après prêt</span><strong class="${ratio<=38?'positive':'negative'}">${ratio.toFixed(0)} %</strong></div>`;el('purchaseChoices').innerHTML='';addPurchaseChoice('Accepter le prêt',ratio<=38?'Le financement est compatible avec le seuil simplifié.':'La banque refusera probablement ce prêt.',confirmLoan);addPurchaseChoice('Annuler','Ne pas modifier ta situation',()=>el('purchaseModal').classList.add('hidden'));el('purchaseModal').classList.remove('hidden')}
+function confirmLoan(){let p=pendingPurchase;if(p.ratio>38){setEvent('Prêt refusé : endettement trop élevé.');el('purchaseModal').classList.add('hidden');return render()}state.cash+=p.amount;state.consumerDebt=p.amount;state.consumerPayment=p.payment;state.consumerMonths=p.months;state.debtMeta.consumer=creditMeta(p.amount,p.rate,p.months,p.payment);setEvent(`Prêt personnel obtenu : +${fmtEUR(p.amount)}, mensualité ${fmtEUR(p.payment)} pendant ${p.months} mois.`);el('purchaseModal').classList.add('hidden');render()}
+document.querySelectorAll('[data-lifestyle]').forEach(b=>b.addEventListener('click',()=>applyLifestyle(b.dataset.lifestyle)));
+document.querySelectorAll('[data-asset]').forEach(b=>b.addEventListener('click',()=>moveAsset(b.dataset.asset,b.dataset.direction)));document.querySelectorAll('[id$="Auto"]').forEach(i=>i.addEventListener('change',updateAutoFromInputs));
+document.querySelectorAll('.career-choice').forEach(b=>b.addEventListener('click',()=>{selectedCareer=b.dataset.career;document.querySelectorAll('.career-choice').forEach(x=>x.classList.toggle('selected',x===b));el('startGameBtn').disabled=false}));
+el('startGameBtn').onclick=startGame;el('loanBtn').onclick=openLoan;el('nextMonthBtn').onclick=nextMonth;el('simulateMonthsBtn').onclick=()=>simulateMonths(el('simulateMonthsSelect').value);el('trainingBtn').onclick=training;el('usedCarBtn').onclick=()=>openVehicle('used');el('newCarBtn').onclick=()=>openVehicle('new');el('buyApartmentBtn').onclick=()=>openPurchase('apartment');el('buyHouseBtn').onclick=()=>openPurchase('house');el('buyRentalBtn').onclick=()=>openPurchase('rental');el('saveBtn').onclick=()=>{save()};el('exportBtn').onclick=exportSave;el('importBtn').onclick=()=>el('importFile').click();el('importFile').onchange=e=>importSaveFile(e.target.files&&e.target.files[0]);el('resetBtn').onclick=()=>{if(confirm('Recommencer une nouvelle partie ?')){localStorage.removeItem(STORAGE);localStorage.removeItem('patrimoineGameV17');localStorage.removeItem('patrimoineGameV16');localStorage.removeItem('patrimoineGameV15');localStorage.removeItem('patrimoineGameV14');localStorage.removeItem('patrimoineGameV13');localStorage.removeItem('patrimoineGameV12');localStorage.removeItem('patrimoineGameV1');localStorage.removeItem('patrimoineGameV32');localStorage.removeItem('patrimoineGameV31');localStorage.removeItem('patrimoineGameV3');state=baseState();selectedCareer=null;document.querySelectorAll('.career-choice').forEach(x=>x.classList.remove('selected'));el('startGameBtn').disabled=true;render()}};el('closeDecision').onclick=()=>el('decisionModal').classList.add('hidden');el('closePurchase').onclick=()=>el('purchaseModal').classList.add('hidden');
+el('closeSimulationBtn').onclick=()=>el('simulationModal').classList.add('hidden');
+el('closeAnnualBtn').onclick=()=>{el('annualModal').classList.add('hidden');if(!state.gameOver)maybeDecision()};
+el('continueAfterWinBtn').onclick=()=>{el('endModal').classList.add('hidden');render()};
+el('restartFromEndBtn').onclick=()=>{
+  if(confirm('Recommencer une nouvelle partie ?')){
+    localStorage.removeItem(STORAGE);
+    state=baseState();selectedCareer=null;
+    document.querySelectorAll('.career-choice').forEach(x=>x.classList.remove('selected'));
+    el('startGameBtn').disabled=true;el('endModal').classList.add('hidden');render();
+  }
+};
+if('serviceWorker'in navigator){window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js').catch(()=>{}))}render();
+</script>
+</body>
+</html>
