@@ -1,16 +1,26 @@
-PATRIMOINE SIMULATOR — FISCALITÉ 2026 — VERSION MOBILE / mobile-ui
+PATRIMOINE SIMULATOR — V1.9 MARCHÉS RÉALISTES + FRAIS
+Branche de test : mobile-ui
 
-À tester en PREMIER sur la branche mobile-ui.
+À ajouter sur mobile-ui :
+- market-engine.js   (nouveau)
+- market-ui.css      (nouveau)
+- sw.js              (remplace l'ancien)
 
-Fichiers :
-- tax-engine.js : moteur fiscal partagé PC/mobile
-- tax-ui.css : UI fiscalité + optimisation de l’onglet Investir
-- sw.js : service worker mobile qui conserve la V2.1 et charge le moteur fiscal
+À CONSERVER :
+- index.html
+- tax-engine.js
+- tax-ui.css
+- mobile.css
+- mobile-v2.css
+- mobile-v21.css
+- mobile-nav-v21.js
 
-Sur GitHub / branche mobile-ui :
-1. Add file > Upload files
-2. Ajouter les 3 fichiers ci-dessus
-3. sw.js doit remplacer l’ancien
-4. Commit changes
+Le moteur V1.9 :
+- remplace les rendements mensuels uniformes par un modèle probabiliste calibré ;
+- ajoute des cycles normal / haussier / baissier / crise ;
+- applique les frais réellement au patrimoine ;
+- affiche les frais par produit, par année et cumulés ;
+- intègre les frais de cession CTO/crypto dans la plus-value fiscale simulée ;
+- conserve la fiscalité V1.8 existante.
 
-Conserver mobile.css, mobile-v2.css, mobile-v21.css, mobile-nav-v21.js et index.html.
+Ne pas installer sur main avant validation du Preview mobile-ui.
