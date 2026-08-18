@@ -626,10 +626,25 @@
     if (el('trainingCost')) el('trainingCost').textContent = '—';
   }
 
+  function refreshSavedGamePreview() {
+    if (state.started) return;
+    const box = document.getElementById('existingSaveBox');
+    const small = box?.querySelector('small');
+    if (!small || typeof load !== 'function') return;
+    const raw = load();
+    if (!raw || !raw.started) return;
+    const saved = hydrate(raw);
+    const worth = typeof netWorthFromState === 'function'
+      ? netWorthFromState(saved)
+      : 0;
+    small.textContent = `${monthName(saved.month)} ${saved.year} • ${Math.floor(saved.ageMonths / 12)} ans • patrimoine ${fmtEUR(worth)}`;
+  }
+
   render = function () {
     const result = CORE.render();
     makeUi();
     applyPersonalUi();
+    refreshSavedGamePreview();
     return result;
   };
 
