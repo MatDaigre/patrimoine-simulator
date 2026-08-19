@@ -1,26 +1,29 @@
-const CACHE='patrimoine-simulator-v210-stable-crypto';
+const CACHE='patrimoine-simulator-v213-mobile-common-fixes';
 const ASSETS=[
   './','./index.html',
   './tax-ui.css','./tax-engine.js',
   './market-ui.css','./market-engine.js',
   './personal-ui.css','./personal-situation.js','./crypto-calibration.js',
+  './common-fixes-v213.css','./common-fixes-v213.js',
   './mobile.css','./mobile-v2.css','./mobile-v21.css','./mobile-nav-v21.js',
   './manifest.webmanifest','./icon-192.png','./icon-512.png'
 ];
 
 const MOBILE_LAYER=[
-  '<link rel="stylesheet" href="./tax-ui.css?v=210">',
-  '<link rel="stylesheet" href="./market-ui.css?v=210">',
-  '<link rel="stylesheet" href="./personal-ui.css?v=210">',
-  '<link rel="stylesheet" href="./mobile.css?v=210" media="(max-width: 720px)">',
-  '<link rel="stylesheet" href="./mobile-v2.css?v=210" media="(max-width: 720px)">',
-  '<link rel="stylesheet" href="./mobile-v21.css?v=210" media="(max-width: 720px)">',
+  '<link rel="stylesheet" href="./tax-ui.css?v=213">',
+  '<link rel="stylesheet" href="./market-ui.css?v=213">',
+  '<link rel="stylesheet" href="./personal-ui.css?v=213">',
+  '<link rel="stylesheet" href="./common-fixes-v213.css?v=213">',
+  '<link rel="stylesheet" href="./mobile.css?v=213" media="(max-width: 720px)">',
+  '<link rel="stylesheet" href="./mobile-v2.css?v=213" media="(max-width: 720px)">',
+  '<link rel="stylesheet" href="./mobile-v21.css?v=213" media="(max-width: 720px)">',
   '<meta name="theme-color" media="(max-width: 720px)" content="#070b14">',
-  '<script defer src="./tax-engine.js?v=210"></script>',
-  '<script defer src="./market-engine.js?v=210"></script>',
-  '<script defer src="./crypto-calibration.js?v=210"></script>',
-  '<script defer src="./personal-situation.js?v=210"></script>',
-  '<script defer src="./mobile-nav-v21.js?v=210"></script>'
+  '<script defer src="./tax-engine.js?v=213"></script>',
+  '<script defer src="./market-engine.js?v=213"></script>',
+  '<script defer src="./crypto-calibration.js?v=213"></script>',
+  '<script defer src="./personal-situation.js?v=213"></script>',
+  '<script defer src="./common-fixes-v213.js?v=213"></script>',
+  '<script defer src="./mobile-nav-v21.js?v=213"></script>'
 ].join('');
 
 self.addEventListener('install',event=>{
@@ -44,14 +47,26 @@ async function injectLayer(response){
   if(!type.includes('text/html'))return response;
 
   const html=await response.text();
-  if(html.includes('personal-situation.js?v=210')&&html.includes('market-engine.js?v=210')){
-    return new Response(html,{status:response.status,statusText:response.statusText,headers:response.headers});
+  if(
+    html.includes('common-fixes-v213.js?v=213') &&
+    html.includes('personal-situation.js?v=213') &&
+    html.includes('market-engine.js?v=213')
+  ){
+    return new Response(html,{
+      status:response.status,
+      statusText:response.statusText,
+      headers:response.headers
+    });
   }
 
   const patched=html.replace('</head>',`${MOBILE_LAYER}</head>`);
   const headers=new Headers(response.headers);
   headers.delete('content-length');
-  return new Response(patched,{status:response.status,statusText:response.statusText,headers});
+  return new Response(patched,{
+    status:response.status,
+    statusText:response.statusText,
+    headers
+  });
 }
 
 self.addEventListener('fetch',event=>{
@@ -59,7 +74,10 @@ self.addEventListener('fetch',event=>{
 
   const url=new URL(event.request.url);
   const nav=event.request.mode==='navigate'||
-    (url.origin===self.location.origin&&(url.pathname.endsWith('/')||url.pathname.endsWith('/index.html')));
+    (url.origin===self.location.origin&&(
+      url.pathname.endsWith('/')||
+      url.pathname.endsWith('/index.html')
+    ));
 
   if(nav){
     event.respondWith((async()=>{
