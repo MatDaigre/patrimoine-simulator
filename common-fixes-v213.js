@@ -55,7 +55,6 @@ if(C.hydrate)hydrate=raw=>ensure(C.hydrate(raw));
 state=ensure(state);
 
 // Bonheur : 50 n'est plus un plancher.
-if(typeof clampWellbeing==='function')clampWellbeing=v=>clamp(N(v),0,100);
 function happinessLoss(){
  if(state.gameOver||N(state.wellbeing)>=LOSS_HAPPINESS)return false;
  state.gameOver=true;state.gameResult='loss-happiness';
