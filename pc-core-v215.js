@@ -6,7 +6,7 @@ if (typeof state === 'undefined' || typeof render !== 'function') {
   return;
 }
 
-const VERSION = '2.1.5';
+const VERSION = '2.1.5.1';
 const LOSS_HAPPINESS = 50;
 const MAX_LEVEL = 6;
 const N = v => Number.isFinite(Number(v)) ? Number(v) : 0;
@@ -594,7 +594,7 @@ function renderNegativeCashflow() {
 function setVersion() {
   const chip = document.querySelector('.version-chip');
   if (chip) {
-    chip.textContent = 'V2.1.5 • stable';
+    chip.textContent = 'V2.1.5.1 • stable';
     chip.dataset.runtimeVersion = VERSION;
   }
 }
@@ -647,11 +647,65 @@ if (ORIGINAL.showAnnualReport) {
   };
 }
 
+function rebindHistoricalControls() {
+  // La base V2.1.2 avait capturé les anciennes fonctions dans onclick
+  // avant le chargement du moteur V2.1.5. On rebinde explicitement les
+  // contrôles vers les fonctions corrigées.
+
+  const nextBtn = document.getElementById('nextMonthBtn');
+  if (nextBtn) nextBtn.onclick = () => nextMonth();
+
+  const simBtn = document.getElementById('simulateMonthsBtn');
+  if (simBtn) {
+    simBtn.onclick = () => {
+      const select = document.getElementById('simulateMonthsSelect');
+      simulateMonths(select ? select.value : 1);
+    };
+  }
+
+  const trainingBtn = document.getElementById('trainingBtn');
+  if (trainingBtn) trainingBtn.onclick = () => training();
+
+  // Le bouton historique "Prêt personnel" devient compatible avec les prêts multiples.
+  const loanBtn = document.getElementById('loanBtn');
+  if (loanBtn) {
+    loanBtn.onclick = () => {
+      const amount = Number(document.getElementById('loanAmount')?.value || 0);
+      const months = Number(document.getElementById('loanMonths')?.value || 0);
+      const ratePct = 8;
+      const annual = ratePct / 100;
+      const payment = annuity(amount, annual, months);
+      const interest = payment * months - amount;
+      const projectedRatio = typeof debtRatio === 'function' ? debtRatio(payment) : 0;
+
+      if (projectedRatio > 38) {
+        const msg = `Prêt refusé : taux d’endettement simulé ${projectedRatio.toFixed(0)} %, supérieur au seuil de 38 %.`;
+        if (typeof setEvent === 'function') setEvent(msg); else alert(msg);
+        render();
+        return;
+      }
+
+      const ok = confirm(
+        `Prêt personnel de ${EUR(amount)}\n\n` +
+        `Taux : ${ratePct.toFixed(1).replace('.',',')} %\n` +
+        `Durée : ${months} mois\n` +
+        `Mensualité : ${EUR(payment)}\n` +
+        `Intérêts totaux estimés : ${EUR(interest)}\n` +
+        `Endettement après prêt : ${projectedRatio.toFixed(0)} %\n\n` +
+        `Accepter ce prêt ?`
+      );
+
+      if (ok) addPersonalLoan(amount, ratePct, months);
+    };
+  }
+}
+
 const observerTarget = document.querySelector('.topbar') || document.body;
 if (observerTarget) {
   new MutationObserver(setVersion).observe(observerTarget,{subtree:true,childList:true,characterData:true});
 }
 
+rebindHistoricalControls();
 enhanceUI();
 
 window.PatrimoinePCV215 = {
