@@ -6,7 +6,7 @@ if (typeof state === 'undefined' || typeof render !== 'function') {
   return;
 }
 
-const VERSION = '2.1.5.1';
+const VERSION = '2.1.5.2';
 const LOSS_HAPPINESS = 50;
 const MAX_LEVEL = 6;
 const N = v => Number.isFinite(Number(v)) ? Number(v) : 0;
@@ -594,7 +594,9 @@ function renderNegativeCashflow() {
 function setVersion() {
   const chip = document.querySelector('.version-chip');
   if (chip) {
-    chip.textContent = 'V2.1.5.1 • stable';
+    if (chip.textContent !== 'V2.1.5.2 • stable') {
+      chip.textContent = 'V2.1.5.2 • stable';
+    }
     chip.dataset.runtimeVersion = VERSION;
   }
 }
@@ -700,11 +702,9 @@ function rebindHistoricalControls() {
   }
 }
 
-const observerTarget = document.querySelector('.topbar') || document.body;
-if (observerTarget) {
-  new MutationObserver(setVersion).observe(observerTarget,{subtree:true,childList:true,characterData:true});
-}
-
+// Pas de MutationObserver ici : render() appelle déjà enhanceUI(), qui remet
+// le badge de version. Observer le badge puis réécrire son textContent peut
+// créer une boucle de mutations et bloquer le rendu initial du navigateur.
 rebindHistoricalControls();
 enhanceUI();
 
