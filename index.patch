@@ -1,0 +1,5 @@
+--- a/index.html
++++ b/index.html
+@@
+-const MIN_WELLBEING=50;
++const MIN_WELLBEING=0;
