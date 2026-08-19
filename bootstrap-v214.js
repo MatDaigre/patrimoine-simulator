@@ -1,7 +1,7 @@
 (() => {
 'use strict';
 
-const VERSION='214directpc';
+const VERSION='214directpc-r2';
 
 const css=[
   './tax-ui.css',
@@ -39,19 +39,44 @@ for(const path of css){
   document.head.appendChild(l);
 }
 
+function markRuntime(){
+  document.documentElement.dataset.patrimoineVersion='2.1.4';
+
+  const apply=()=>{
+    const chip=document.querySelector('.version-chip');
+    if(chip){
+      chip.textContent='V2.1.4 • stable';
+      chip.title='Runtime V2.1.4 chargé directement';
+      chip.dataset.runtimeVersion='2.1.4';
+    }
+    document.body?.setAttribute('data-runtime-version','2.1.4');
+  };
+
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',apply,{once:true});
+  else apply();
+
+  window.PatrimoineRuntimeDiagnostic={
+    version:'2.1.4',
+    bootstrap:VERSION,
+    commonFixes:window.PatrimoineCommonFixes?.version || null,
+    hotfix:window.PatrimoineHotfixV214?.version || null,
+    loadedScripts:Array.from(document.querySelectorAll('script[src]')).map(s=>s.getAttribute('src'))
+  };
+
+  window.dispatchEvent(new CustomEvent('patrimoine-v214-ready',{detail:window.PatrimoineRuntimeDiagnostic}));
+}
+
 function load(i=0){
-  if(i>=js.length){
-    document.documentElement.dataset.patrimoineVersion='2.1.4';
-    window.dispatchEvent(new CustomEvent('patrimoine-v214-ready'));
-    return;
-  }
+  if(i>=js.length){ markRuntime(); return; }
   const path=js[i];
   if(hasJs(path)){ load(i+1); return; }
   const s=document.createElement('script');
   s.src=`${path}?v=${VERSION}`;
+  s.async=false;
   s.onload=()=>load(i+1);
   s.onerror=()=>console.error('[Patrimoine V2.1.4] Échec du chargement :',path);
   document.head.appendChild(s);
 }
+
 load();
 })();
