@@ -1,0 +1,6 @@
+Ajouter à ASSETS :
+'./common-fixes-v213.css','./common-fixes-v213.js',
+
+Puis, après personal-situation.js dans la couche injectée :
+'<link rel="stylesheet" href="./common-fixes-v213.css?v=213">',
+'<script defer src="./common-fixes-v213.js?v=213"></script>'
