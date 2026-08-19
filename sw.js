@@ -1,4 +1,4 @@
-const CACHE='patrimoine-simulator-v213-pc-common-fixes';
+const CACHE='patrimoine-simulator-v214-pc-hotfix';
 const ASSETS=[
   './','./index.html',
   './tax-ui.css','./tax-engine.js',
@@ -6,23 +6,24 @@ const ASSETS=[
   './personal-ui.css','./personal-situation.js',
   './pc-theme.css','./crypto-calibration.js',
   './pc-tabs-v211.css','./pc-tabs-v211.js',
-  './common-fixes-v213.css','./common-fixes-v213.js',
+  './common-fixes-v213.css','./common-fixes-v213.js','./common-hotfix-v214.js',
   './manifest.webmanifest','./icon-192.png','./icon-512.png'
 ];
 
 const PC_LAYER=[
-  '<link rel="stylesheet" href="./tax-ui.css?v=213pc">',
-  '<link rel="stylesheet" href="./market-ui.css?v=213pc">',
-  '<link rel="stylesheet" href="./personal-ui.css?v=213pc">',
-  '<link rel="stylesheet" href="./pc-theme.css?v=213pc">',
-  '<link rel="stylesheet" href="./pc-tabs-v211.css?v=213pc">',
-  '<link rel="stylesheet" href="./common-fixes-v213.css?v=213pc">',
-  '<script defer src="./tax-engine.js?v=213pc"></script>',
-  '<script defer src="./market-engine.js?v=213pc"></script>',
-  '<script defer src="./crypto-calibration.js?v=213pc"></script>',
-  '<script defer src="./personal-situation.js?v=213pc"></script>',
-  '<script defer src="./common-fixes-v213.js?v=213pc"></script>',
-  '<script defer src="./pc-tabs-v211.js?v=213pc"></script>'
+  '<link rel="stylesheet" href="./tax-ui.css?v=214pc">',
+  '<link rel="stylesheet" href="./market-ui.css?v=214pc">',
+  '<link rel="stylesheet" href="./personal-ui.css?v=214pc">',
+  '<link rel="stylesheet" href="./pc-theme.css?v=214pc">',
+  '<link rel="stylesheet" href="./pc-tabs-v211.css?v=214pc">',
+  '<link rel="stylesheet" href="./common-fixes-v213.css?v=214pc">',
+  '<script defer src="./tax-engine.js?v=214pc"></script>',
+  '<script defer src="./market-engine.js?v=214pc"></script>',
+  '<script defer src="./crypto-calibration.js?v=214pc"></script>',
+  '<script defer src="./personal-situation.js?v=214pc"></script>',
+  '<script defer src="./common-fixes-v213.js?v=214pc"></script>',
+  '<script defer src="./common-hotfix-v214.js?v=214pc"></script>',
+  '<script defer src="./pc-tabs-v211.js?v=214pc"></script>'
 ].join('');
 
 self.addEventListener('install',event=>{
@@ -44,12 +45,12 @@ async function injectLayer(response){
   if(!response||!response.ok)return response;
   const type=response.headers.get('content-type')||'';
   if(!type.includes('text/html'))return response;
-
   const html=await response.text();
+
   if(
-    html.includes('common-fixes-v213.js?v=213pc') &&
-    html.includes('personal-situation.js?v=213pc') &&
-    html.includes('market-engine.js?v=213pc')
+    html.includes('common-hotfix-v214.js?v=214pc') &&
+    html.includes('common-fixes-v213.js?v=214pc') &&
+    html.includes('market-engine.js?v=214pc')
   ){
     return new Response(html,{status:response.status,statusText:response.statusText,headers:response.headers});
   }
@@ -62,7 +63,6 @@ async function injectLayer(response){
 
 self.addEventListener('fetch',event=>{
   if(event.request.method!=='GET')return;
-
   const url=new URL(event.request.url);
   const nav=event.request.mode==='navigate'||
     (url.origin===self.location.origin&&(url.pathname.endsWith('/')||url.pathname.endsWith('/index.html')));
