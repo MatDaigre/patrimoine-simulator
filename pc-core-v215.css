@@ -1,0 +1,15 @@
+/* Patrimoine Simulator — PC V2.1.5 fonctions intégrées */
+.v215-budget-happiness{display:grid;grid-template-columns:auto auto 1fr;align-items:center;gap:10px;padding:10px 12px;margin:10px 0;border:1px solid rgba(148,163,184,.25);border-radius:12px;background:rgba(59,130,246,.08)}
+.v215-budget-happiness>span{font-weight:800}.v215-budget-happiness>strong{font-size:20px}.v215-budget-happiness>small{color:var(--muted,#64748b);text-align:right}
+.v215-pea-cash{display:grid;gap:7px;margin-top:10px;padding:10px;border-radius:12px;border:1px dashed rgba(59,130,246,.35);background:rgba(59,130,246,.07)}
+.v215-pea-cash>span,.v215-pea-cash>small{font-size:11px;color:var(--muted,#64748b)}.v215-pea-cash>strong{font-size:18px}
+.v215-loans{margin-top:14px;display:grid;gap:10px}.v215-credit-warning{display:grid;gap:4px;padding:11px;border-radius:12px;background:rgba(245,158,11,.10);border:1px solid rgba(245,158,11,.27)}
+.v215-credit-warning span{font-size:12px;line-height:1.45}.v215-loan-form{display:grid;grid-template-columns:repeat(3,minmax(0,1fr)) auto;gap:8px;align-items:end}
+.v215-loan-form label{display:grid;gap:4px;font-size:11px}.v215-loan-form input{width:100%;box-sizing:border-box}.v215-loan-list{display:grid;gap:7px}
+.v215-loan-list>div{display:grid;gap:3px;padding:9px 10px;border:1px solid rgba(148,163,184,.20);border-radius:10px}.v215-loan-list small{color:var(--muted,#64748b)}
+.v215-cumulative-bilan{display:grid;gap:7px;margin-top:14px;padding-top:14px;border-top:1px solid rgba(148,163,184,.22)}.v215-cumulative-bilan h4{margin:0 0 3px}
+.v215-cumulative-bilan>div{display:flex;justify-content:space-between;gap:14px;font-size:12px}.v215-cumulative-bilan>div span{color:var(--muted,#64748b)}
+.v215-cumulative-bilan>small{line-height:1.4;color:var(--muted,#64748b)}.v215-worth-detail{display:block;margin-top:3px;font-size:10px;opacity:.82;font-weight:600}
+.v215-annual-cumulative{margin:12px 0;padding:11px 12px;border-radius:12px;background:rgba(14,165,233,.08);border:1px solid rgba(14,165,233,.20);font-size:12px;line-height:1.45}
+.v215-cash-impact{display:block;margin-top:4px;color:var(--red,#e11d48);font-size:11px;font-weight:700}
+@media(max-width:720px){.v215-budget-happiness{grid-template-columns:1fr auto}.v215-budget-happiness>small{grid-column:1/-1;text-align:left}.v215-loan-form{grid-template-columns:1fr}.v215-cumulative-bilan>div{display:grid;gap:2px}}
