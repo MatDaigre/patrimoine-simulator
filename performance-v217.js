@@ -1,7 +1,7 @@
 (() => {
 'use strict';
 if (typeof state === 'undefined' || typeof render !== 'function') return;
-const VERSION='2.1.8.2';
+const VERSION='2.1.8.3';
 const ASSETS=['livret','pea','assurance','cto','crypto'];
 const LABEL={livret:'Livret',pea:'PEA World',assurance:'Assurance-vie',cto:'CTO',crypto:'Crypto'};
 const ICON={livret:'🛟',pea:'🌍',assurance:'🧱',cto:'📈',crypto:'₿'};
@@ -17,7 +17,10 @@ function ensureHistory(){
   if(!state.performanceHistory||state.performanceHistory.schema!==2){
     const assets={};
     ASSETS.forEach(a=>assets[a]={contributions:referenceCapital(a),withdrawals:0});
-    state.performanceHistory={schema:2,assets,migratedFromLegacy:true,createdMonth:N(state.totalMonths)};
+    const isLegacy =
+      N(state.totalMonths) > 0 ||
+      ASSETS.some(a => currentValue(a) > 0.005 || referenceCapital(a) > 0.005);
+    state.performanceHistory={schema:2,assets,migratedFromLegacy:isLegacy,createdMonth:N(state.totalMonths)};
   }
   ASSETS.forEach(a=>{
     state.performanceHistory.assets[a] ||= {contributions:referenceCapital(a),withdrawals:0};

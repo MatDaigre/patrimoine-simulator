@@ -6,7 +6,7 @@ if (typeof state === 'undefined' || typeof render !== 'function') {
   return;
 }
 
-const VERSION='2.1.9.1';
+const VERSION='2.2.0';
 
 if(!document.querySelector('link[data-reporting-v219-css]')){
   const link=document.createElement('link');
@@ -49,6 +49,10 @@ function ensureJournal(){
     state.reportingV219.yearPerformance={};
   }
   state.reportingV219.seq=Math.max(0,N(state.reportingV219.seq));
+  const y=N(state.year);
+  if(y && !state.reportingV219.yearPerformance[y]){
+    state.reportingV219.yearPerformance[y]={start:currentPerf(),end:null};
+  }
   return state.reportingV219;
 }
 
@@ -87,7 +91,11 @@ function snapshot(){
     interest:N(state.pcV215?.bankInterestPaid),
     eventCost:N(state.yearStats?.eventCost),
     eventCount:N(state.yearStats?.events),
-    perf:currentPerf()
+    perf:currentPerf(),
+    perfCapital:(()=>{
+      try{return Math.max(0,N(window.PerformanceDashboardV217?.compute?.()?.totalCapital));}
+      catch(_){return 0;}
+    })()
   };
 }
 
@@ -205,6 +213,33 @@ if(typeof moveAsset==='function' && !moveAsset.__reportingV219){
     return out;
   };
   moveAsset.__reportingV219=true;
+}
+
+
+/* Prime commerciale : c'est un revenu professionnel, pas une "bonne surprise".
+   Le moteur de base la crédite après le calcul mensuel des revenus : on la
+   réintègre donc explicitement dans le revenu du mois et de l'année. */
+if(typeof variableCareerEvent==='function' && !variableCareerEvent.__reportingV220){
+  const coreCareerEvent=variableCareerEvent;
+  variableCareerEvent=function(...args){
+    const before=snapshot();
+    const beforeIncome=N(state.yearStats?.income);
+    const out=coreCareerEvent(...args);
+    const after=snapshot();
+    const bonus=Math.max(0,after.cash-before.cash);
+    if(bonus>EPS){
+      record('bonus_income',`Prime professionnelle ${EUR(bonus)}`,bonus,{
+        cashImpact:bonus,detail:'Revenu professionnel variable'
+      });
+      if(state.yearStats){
+        const already=Math.max(0,N(state.yearStats.income)-beforeIncome);
+        const missing=Math.max(0,bonus-already);
+        if(missing>EPS) state.yearStats.income=N(state.yearStats.income)+missing;
+      }
+    }
+    return out;
+  };
+  variableCareerEvent.__reportingV220=true;
 }
 
 if(typeof training==='function' && !training.__reportingV219){
@@ -408,7 +443,13 @@ function detectMajorEvent(before,after,isSimulation){
 
 function finalizePeriod(period,after,isSimulation,row){
   const j=ensureJournal();
-  const newEntries=entriesSince(period.seqStart);
+
+  // Une "période mensuelle" commence en pratique juste après le passage du
+  // mois précédent. Les actions manuelles (formation, placement, prêt, achat)
+  // effectuées avant de cliquer sur "Mois suivant" portent déjà ce gameMonth.
+  // On prend donc TOUTES les écritures de ce gameMonth, pas seulement celles
+  // créées après beginPeriod().
+  let newEntries=entriesForGameMonth(period.gameMonth);
 
   const feeDelta=Math.max(0,after.fees-period.snap.fees);
   const taxDelta=after.taxes-period.snap.taxes;
@@ -440,27 +481,46 @@ function finalizePeriod(period,after,isSimulation,row){
     });
   }
 
+  // Les versements automatiques passent par applyAutoInvestments() et non par
+  // moveAsset(). On détecte donc l'augmentation du capital réellement versé.
+  newEntries=entriesForGameMonth(period.gameMonth);
+  const alreadyInvested=sum(newEntries,'investment');
+  const capitalDelta=Math.max(0,N(after.perfCapital)-N(period.snap.perfCapital));
+  const autoInvestment=Math.max(0,capitalDelta-alreadyInvested);
+  if(autoInvestment>EPS){
+    record('investment','Versements automatiques du mois',autoInvestment,{
+      cashImpact:-autoInvestment,
+      detail:'Somme des versements automatiques effectivement exécutés'
+    });
+  }
+
   const major=detectMajorEvent({
     majorCount:period.majorCount,
     yearExpenses:period.yearExpenses
   },after,isSimulation);
 
-  const all=entriesSince(period.seqStart);
+  const all=entriesForGameMonth(period.gameMonth);
   const uncountedEventExpense=all
     .filter(e=>e.type==='event_expense'&&!e.includedInExpenses)
     .reduce((s,e)=>s+N(e.amount),0);
+  const bonusIncome=sum(all,'bonus_income');
 
   if(isSimulation && row){
     if(uncountedEventExpense>EPS){
       row.expenses=N(row.expenses)+uncountedEventExpense;
       all.filter(e=>e.type==='event_expense'&&!e.includedInExpenses).forEach(e=>e.includedInExpenses=true);
     }
+    if(bonusIncome>EPS) row.income=N(row.income)+bonusIncome;
     row.reportingV219=all.map(e=>e.id);
     row.eventCosts=sum(all,'event_expense');
     row.fees=Math.max(N(row.fees),feeDelta);
     row.reportingTaxes=Math.max(0,taxDelta);
     row.reportingInterest=interestDelta;
   }else if(state.lastRecap){
+    if(bonusIncome>EPS && !state.lastRecap.reportingBonusIncomeAdded){
+      state.lastRecap.income=N(state.lastRecap.income)+bonusIncome;
+      state.lastRecap.reportingBonusIncomeAdded=bonusIncome;
+    }
     if(uncountedEventExpense>EPS && !state.lastRecap.reportingEventExpenseAdded){
       state.lastRecap.expenses=N(state.lastRecap.expenses)+uncountedEventExpense;
       state.lastRecap.reportingEventExpenseAdded=uncountedEventExpense;
@@ -555,6 +615,7 @@ function actionLabel(e){
     asset_purchase:'🏠',
     event_expense:'⚠️',
     event_income:'🎁',
+    bonus_income:'💼',
     tax:'🏛️',
     tax_refund:'🏛️',
     fee:'🧾',
@@ -581,6 +642,7 @@ function renderMonthlyBlock(){
   const entries=ids?ensureJournal().entries.filter(e=>ids.has(e.id)):[];
   const events=sum(entries,'event_expense');
   const eventIncome=sum(entries,'event_income');
+  const bonusIncome=sum(entries,'bonus_income');
   const fees=sum(entries,'fee');
   const taxes=sum(entries,'tax')-sum(entries,'tax_refund');
   const interests=sum(entries,'interest');
@@ -592,6 +654,7 @@ function renderMonthlyBlock(){
     <div class="reporting-v219-grid">
       <div><span>Imprévus / événements</span><strong>${EUR(events)}</strong></div>
       <div><span>Bonnes surprises</span><strong>${eventIncome>EPS?'+'+EUR(eventIncome):EUR(0)}</strong></div>
+      <div><span>Primes professionnelles</span><strong>${bonusIncome>EPS?'+'+EUR(bonusIncome):EUR(0)}</strong></div>
       <div><span>Frais placements</span><strong>${EUR(fees)}</strong></div>
       <div><span>Impôts / fiscalité</span><strong>${signedEUR(-taxes)}</strong></div>
       <div><span>Intérêts bancaires</span><strong>${EUR(interests)}</strong></div>
@@ -612,6 +675,7 @@ function totalsHtml(entries){
   const debtPrincipal=sum(entries,'debt_repayment');
   const events=sum(entries,'event_expense');
   const eventIncome=sum(entries,'event_income');
+  const bonusIncome=sum(entries,'bonus_income');
   const trainingCost=sum(entries,'training');
   const financing=sum(entries,'financing');
   const purchases=sum(entries,'asset_purchase');
@@ -626,6 +690,7 @@ function totalsHtml(entries){
       <div><span>Capital dette remboursé</span><strong>${EUR(debtPrincipal)}</strong></div>
       <div><span>Imprévus / événements</span><strong>${EUR(events)}</strong></div>
       <div><span>Bonnes surprises</span><strong>${EUR(eventIncome)}</strong></div>
+      <div><span>Primes professionnelles</span><strong>${EUR(bonusIncome)}</strong></div>
       <div><span>Formations</span><strong>${EUR(trainingCost)}</strong></div>
       <div><span>Financements reçus</span><strong>${EUR(financing)}</strong></div>
       <div><span>Achats d'actifs</span><strong>${EUR(purchases)}</strong></div>
@@ -696,8 +761,11 @@ if(typeof showSimulationReport==='function' && !showSimulationReport.__reporting
        Évite qu'un événement ajouté après monthlyExpenses disparaisse du total. */
     if(totals && Array.isArray(rows)){
       totals.expenses=rows.reduce((s,row)=>s+N(row.expenses),0);
+      totals.income=rows.reduce((s,row)=>s+N(row.income),0);
       const elExpenses=document.getElementById('simExpenses');
       if(elExpenses) elExpenses.textContent=EUR(totals.expenses);
+      const elIncome=document.getElementById('simIncome');
+      if(elIncome) elIncome.textContent=EUR(totals.income);
     }
 
     setTimeout(()=>renderSimulationJournal(rows),0);
