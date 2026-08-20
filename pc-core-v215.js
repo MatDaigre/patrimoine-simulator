@@ -6,7 +6,7 @@ if (typeof state === 'undefined' || typeof render !== 'function') {
   return;
 }
 
-const VERSION = '2.1.5.2';
+const VERSION = '2.1.5.3';
 const LOSS_HAPPINESS = 50;
 const MAX_LEVEL = 6;
 const N = v => Number.isFinite(Number(v)) ? Number(v) : 0;
@@ -423,43 +423,28 @@ if (ORIGINAL.training) {
 
 /* ===== PEA : UTILISE UNIQUEMENT LE MOTEUR FISCAL ===== */
 
-function renderPeaCash() {
-  const peaCard =
-    document.querySelector('.action-card.pea') ||
-    document.querySelector('[data-asset="pea"]')?.closest('.action-card');
+function syncOfficialPeaUi() {
+  // Le moteur fiscal crée déjà la poche espèces PEA et son bouton Retirer.
+  // On supprime toute ancienne poche V2.1.5 éventuellement laissée dans le DOM.
+  document.getElementById('v215PeaCash')?.remove();
 
-  if (!peaCard) return;
+  const withdraw = document.querySelector('[data-tax-withdraw="pea"]');
+  if (!withdraw || withdraw.dataset.v2153Bound) return;
 
-  let box = document.getElementById('v215PeaCash');
-  if (!box) {
-    box = document.createElement('div');
-    box.id = 'v215PeaCash';
-    box.className = 'v215-pea-cash';
-    peaCard.appendChild(box);
-  }
+  withdraw.dataset.v2153Bound = '1';
 
-  const cash = Math.max(0,N(state.tax?.peaCash));
-  if (cash <= .01) {
-    box.hidden = true;
-    return;
-  }
-
-  box.hidden = false;
-  box.innerHTML =
-    `<span>Espèces disponibles dans le PEA</span>` +
-    `<strong>${EUR(cash)}</strong>` +
-    `<button type="button" class="btn mini ghost">Retirer les espèces</button>` +
-    `<small>Le retrait passe par le moteur fiscal : avant 5 ans, la fiscalité et la clôture éventuelle du PEA sont appliquées.</small>`;
-
-  box.querySelector('button').onclick = () => {
-    const official = document.querySelector('[data-tax-withdraw="pea"]');
-    if (official) {
-      official.click();
-    } else if (typeof setEvent === 'function') {
-      setEvent('Retrait PEA indisponible : le moteur fiscal n’est pas chargé.');
-      render();
+  // Le handler fiscal lit #peaAmount. S'il est vide/à zéro, on utilise
+  // automatiquement la poche espèces disponible afin que "Retirer" ne
+  // semble jamais inactif après une vente PEA.
+  withdraw.addEventListener('click', () => {
+    const input = document.getElementById('peaAmount');
+    if (!input) return;
+    const current = Number(input.value || 0);
+    const available = Math.max(0, Number(state.tax?.peaCash) || 0);
+    if (current <= 0 && available > 0) {
+      input.value = String(Math.max(1, Math.floor(available)));
     }
-  };
+  }, true);
 }
 
 /* ===== UI ===== */
@@ -594,8 +579,8 @@ function renderNegativeCashflow() {
 function setVersion() {
   const chip = document.querySelector('.version-chip');
   if (chip) {
-    if (chip.textContent !== 'V2.1.5.2 • stable') {
-      chip.textContent = 'V2.1.5.2 • stable';
+    if (chip.textContent !== 'V2.1.5.3 • stable') {
+      chip.textContent = 'V2.1.5.3 • stable';
     }
     chip.dataset.runtimeVersion = VERSION;
   }
@@ -605,7 +590,7 @@ function enhanceUI() {
   ensureState();
   renderHappiness();
   renderLoans();
-  renderPeaCash();
+  syncOfficialPeaUi();
   renderCumulativeBilan();
   renderNegativeCashflow();
   setVersion();
