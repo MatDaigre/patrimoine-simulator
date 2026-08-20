@@ -11,9 +11,17 @@ const VERSION='2.2.0';
 if(!document.querySelector('link[data-reporting-v219-css]')){
   const link=document.createElement('link');
   link.rel='stylesheet';
-  link.href='./reporting-v219.css?v=219pc';
+  link.href='./reporting-v219.css?v=221pc';
   link.dataset.reportingV219Css='1';
   document.head.appendChild(link);
+}
+
+if(!document.querySelector('link[data-pc-visual-v221]')){
+  const visual=document.createElement('link');
+  visual.rel='stylesheet';
+  visual.href='./pc-visual-v221.css?v=221pc-2';
+  visual.dataset.pcVisualV221='1';
+  document.head.appendChild(visual);
 }
 
 const N=v=>Number.isFinite(Number(v))?Number(v):0;
