@@ -1,7 +1,7 @@
 (() => {
 'use strict';
 if (typeof state === 'undefined' || typeof render !== 'function') return;
-const VERSION='2.1.8.1';
+const VERSION='2.1.8.2';
 const ASSETS=['livret','pea','assurance','cto','crypto'];
 const LABEL={livret:'Livret',pea:'PEA World',assurance:'Assurance-vie',cto:'CTO',crypto:'Crypto'};
 const ICON={livret:'🛟',pea:'🌍',assurance:'🧱',cto:'📈',crypto:'₿'};
@@ -189,4 +189,15 @@ window.PerformanceDashboardV217={
   compute,
   history:()=>ensureHistory()
 };
+
+/* Chargement automatique du journal comptable / reporting V2.1.9.
+   Aucun ajout manuel dans index.html n'est nécessaire. */
+(function loadReportingV219(){
+  if (window.PatrimoineReportingV219 || document.querySelector('script[data-reporting-v219]')) return;
+  const s=document.createElement('script');
+  s.src='./reporting-v219.js?v=219pc';
+  s.dataset.reportingV219='1';
+  document.head.appendChild(s);
+})();
+
 })();

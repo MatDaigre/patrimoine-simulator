@@ -1,0 +1,102 @@
+/* Patrimoine Simulator — Reporting cohérent V2.1.9 */
+.reporting-v219-block,
+.reporting-v219-cumulative{
+  margin-top:14px;
+  padding:13px;
+  border:1px solid var(--line);
+  border-radius:14px;
+  background:rgba(99,102,241,.055);
+}
+.reporting-v219-title{
+  display:flex;
+  justify-content:space-between;
+  align-items:baseline;
+  gap:10px;
+  margin-bottom:10px;
+}
+.reporting-v219-title strong{font-size:13px}
+.reporting-v219-title small{color:var(--muted);font-size:10px}
+.reporting-v219-grid{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:7px;
+}
+.reporting-v219-grid>div{
+  padding:8px 9px;
+  border-radius:10px;
+  background:rgba(255,255,255,.62);
+  border:1px solid rgba(169,187,219,.28);
+}
+.reporting-v219-grid span{
+  display:block;
+  color:var(--muted);
+  font-size:9px;
+  font-weight:800;
+}
+.reporting-v219-grid strong{
+  display:block;
+  margin-top:3px;
+  font-size:12px;
+}
+.reporting-v219-actions{
+  display:grid;
+  gap:4px;
+  margin-top:10px;
+  padding-top:9px;
+  border-top:1px solid rgba(169,187,219,.22);
+}
+.reporting-v219-actions>strong{font-size:11px}
+.reporting-v219-actions>small{color:var(--muted);font-size:10px;line-height:1.4}
+.reporting-v219-performance{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:12px;
+  margin-top:10px;
+  padding:10px;
+  border-radius:11px;
+  background:rgba(16,185,129,.06);
+  border:1px solid rgba(16,185,129,.16);
+}
+.reporting-v219-performance span{
+  color:var(--muted);
+  font-size:10px;
+  font-weight:800;
+}
+.reporting-v219-performance strong{font-size:13px}
+.reporting-v219-cumulative h4{margin:0 0 10px}
+.reporting-v219-cumulative>small{
+  display:block;
+  margin-top:9px;
+  color:var(--muted);
+  font-size:9px;
+  line-height:1.4;
+}
+
+@media(min-width:721px){
+  .reporting-v219-block,
+  .reporting-v219-cumulative{
+    color:#eef4fb!important;
+    background:#263c57!important;
+    border-color:rgba(185,202,224,.30)!important;
+  }
+  .reporting-v219-grid>div{
+    background:#2a405d!important;
+    border-color:rgba(185,202,224,.24)!important;
+  }
+  .reporting-v219-title small,
+  .reporting-v219-grid span,
+  .reporting-v219-actions>small,
+  .reporting-v219-performance span,
+  .reporting-v219-cumulative>small{
+    color:#bdcad9!important;
+  }
+  .reporting-v219-performance{
+    background:rgba(16,185,129,.11)!important;
+    border-color:rgba(69,214,160,.26)!important;
+  }
+}
+
+@media(max-width:720px){
+  .reporting-v219-grid{grid-template-columns:1fr 1fr}
+}
