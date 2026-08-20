@@ -16,12 +16,19 @@ if(!document.querySelector('link[data-reporting-v219-css]')){
   document.head.appendChild(link);
 }
 
-if(!document.querySelector('link[data-pc-visual-v221]')){
+if(!document.querySelector('link[data-pc-visual-v230]')){
   const visual=document.createElement('link');
   visual.rel='stylesheet';
-  visual.href='./pc-visual-v221.css?v=221pc-2';
-  visual.dataset.pcVisualV221='1';
+  visual.href='./pc-visual-v230.css?v=230pc';
+  visual.dataset.pcVisualV230='1';
   document.head.appendChild(visual);
+}
+
+if(!document.querySelector('script[data-pc-visual-v230]')){
+  const visualJs=document.createElement('script');
+  visualJs.src='./pc-visual-v230.js?v=230pc';
+  visualJs.dataset.pcVisualV230='1';
+  document.head.appendChild(visualJs);
 }
 
 const N=v=>Number.isFinite(Number(v))?Number(v):0;
