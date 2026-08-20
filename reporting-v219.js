@@ -6,7 +6,7 @@ if (typeof state === 'undefined' || typeof render !== 'function') {
   return;
 }
 
-const VERSION='2.1.9';
+const VERSION='2.1.9.1';
 
 if(!document.querySelector('link[data-reporting-v219-css]')){
   const link=document.createElement('link');
@@ -174,13 +174,26 @@ if(typeof moveAsset==='function' && !moveAsset.__reportingV219){
     if(direction==='in'){
       const cashOut=Math.max(0,before.cash-after.cash);
       const valueIn=Math.max(0,N(after.assets?.[asset])-N(before.assets?.[asset]));
+      const peaPocketUsed=asset==='pea'
+        ? Math.max(0,N(before.peaCash)-N(after.peaCash))
+        : 0;
+      const peaSecuritiesAdded=asset==='pea'
+        ? Math.max(0,N(after.peaSecurities)-N(before.peaSecurities))
+        : 0;
+
       if(cashOut>EPS){
         record('investment',`${EUR(cashOut)} versés sur ${asset==='pea'?'PEA World':asset}`,cashOut,{
-          asset,cashImpact:-cashOut,detail:valueIn>0?`Valeur acquise ${EUR(valueIn)}`:''
+          asset,cashImpact:-cashOut,
+          detail:asset==='pea'
+            ? `Versement externe ${EUR(cashOut)}${peaPocketUsed>EPS?` • espèces PEA réaffectées ${EUR(peaPocketUsed)}`:''}`
+            : (valueIn>0?`Valeur acquise ${EUR(valueIn)}`:'')
         });
-      }else if(asset==='pea' && valueIn>EPS){
-        record('reallocation',`Réaffectation interne vers PEA World`,valueIn,{
-          asset:'pea',cashImpact:0,detail:'Espèces PEA → titres, sans nouveau versement'
+      }
+
+      if(asset==='pea' && peaPocketUsed>EPS && peaSecuritiesAdded>EPS){
+        const internal=Math.min(peaPocketUsed,peaSecuritiesAdded);
+        record('reallocation',`Espèces PEA → PEA World ${EUR(internal)}`,internal,{
+          asset:'pea',cashImpact:0,detail:'Réaffectation interne • aucun nouveau versement'
         });
       }
     }
@@ -400,6 +413,7 @@ function finalizePeriod(period,after,isSimulation,row){
   const feeDelta=Math.max(0,after.fees-period.snap.fees);
   const taxDelta=after.taxes-period.snap.taxes;
   const interestDelta=Math.max(0,after.interest-period.snap.interest);
+  const debtPrincipalDelta=Math.max(0,period.snap.debt-after.debt);
 
   const alreadyFee=sum(newEntries,'fee');
   if(feeDelta-alreadyFee>EPS){
@@ -416,6 +430,13 @@ function finalizePeriod(period,after,isSimulation,row){
   if(interestDelta>EPS){
     record('interest','Intérêts bancaires du mois',interestDelta,{
       cashImpact:-interestDelta,includedInExpenses:true
+    });
+  }
+  if(debtPrincipalDelta>EPS){
+    record('debt_repayment','Capital de dette remboursé',debtPrincipalDelta,{
+      cashImpact:-debtPrincipalDelta,
+      includedInExpenses:true,
+      detail:'Part de la mensualité qui réduit réellement le capital restant dû'
     });
   }
 
@@ -538,6 +559,7 @@ function actionLabel(e){
     tax_refund:'🏛️',
     fee:'🧾',
     interest:'💳',
+    debt_repayment:'🏦',
     event:'ℹ️'
   }[e.type]||'•';
   return `${prefix} ${e.label}`;
@@ -558,18 +580,22 @@ function renderMonthlyBlock(){
   const ids=Array.isArray(state.lastRecap.reportingV219)?new Set(state.lastRecap.reportingV219):null;
   const entries=ids?ensureJournal().entries.filter(e=>ids.has(e.id)):[];
   const events=sum(entries,'event_expense');
+  const eventIncome=sum(entries,'event_income');
   const fees=sum(entries,'fee');
   const taxes=sum(entries,'tax')-sum(entries,'tax_refund');
   const interests=sum(entries,'interest');
-  const actions=compactEntries(entries.filter(e=>!['fee','tax','tax_refund','interest'].includes(e.type)));
+  const principal=sum(entries,'debt_repayment');
+  const actions=compactEntries(entries.filter(e=>!['fee','tax','tax_refund','interest','debt_repayment'].includes(e.type)));
 
   box.innerHTML=`
     <div class="reporting-v219-title"><strong>Récap comptable du mois</strong><small>Mêmes données utilisées dans les autres bilans</small></div>
     <div class="reporting-v219-grid">
-      <div><span>Événements</span><strong>${EUR(events)}</strong></div>
+      <div><span>Imprévus / événements</span><strong>${EUR(events)}</strong></div>
+      <div><span>Bonnes surprises</span><strong>${eventIncome>EPS?'+'+EUR(eventIncome):EUR(0)}</strong></div>
       <div><span>Frais placements</span><strong>${EUR(fees)}</strong></div>
       <div><span>Impôts / fiscalité</span><strong>${signedEUR(-taxes)}</strong></div>
       <div><span>Intérêts bancaires</span><strong>${EUR(interests)}</strong></div>
+      <div><span>Capital dette remboursé</span><strong>${EUR(principal)}</strong></div>
     </div>
     <div class="reporting-v219-actions">
       <strong>Actions enregistrées</strong>
@@ -583,6 +609,7 @@ function totalsHtml(entries){
   const fees=sum(entries,'fee');
   const taxes=sum(entries,'tax')-sum(entries,'tax_refund');
   const interests=sum(entries,'interest');
+  const debtPrincipal=sum(entries,'debt_repayment');
   const events=sum(entries,'event_expense');
   const eventIncome=sum(entries,'event_income');
   const trainingCost=sum(entries,'training');
@@ -596,6 +623,7 @@ function totalsHtml(entries){
       <div><span>Frais placements</span><strong>${EUR(fees)}</strong></div>
       <div><span>Impôts nets</span><strong>${EUR(taxes)}</strong></div>
       <div><span>Intérêts bancaires</span><strong>${EUR(interests)}</strong></div>
+      <div><span>Capital dette remboursé</span><strong>${EUR(debtPrincipal)}</strong></div>
       <div><span>Imprévus / événements</span><strong>${EUR(events)}</strong></div>
       <div><span>Bonnes surprises</span><strong>${EUR(eventIncome)}</strong></div>
       <div><span>Formations</span><strong>${EUR(trainingCost)}</strong></div>
