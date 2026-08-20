@@ -310,4 +310,24 @@ window.PeaIntegrityV216 = {
   }
 };
 
+/* Chargement automatique du tableau Performance V2.1.7.
+   Aucun ajout manuel dans index.html n'est nécessaire. */
+(function loadPerformanceV217(){
+  if (!document.querySelector('link[data-performance-v217]')) {
+    const css = document.createElement('link');
+    css.rel = 'stylesheet';
+    css.href = './performance-v217.css?v=217pc';
+    css.dataset.performanceV217 = '1';
+    document.head.appendChild(css);
+  }
+
+  if (!window.PerformanceDashboardV217 &&
+      !document.querySelector('script[data-performance-v217]')) {
+    const script = document.createElement('script');
+    script.src = './performance-v217.js?v=217pc';
+    script.dataset.performanceV217 = '1';
+    document.head.appendChild(script);
+  }
+})();
+
 })();
