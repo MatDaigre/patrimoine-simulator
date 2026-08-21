@@ -3,7 +3,7 @@
 if (window.matchMedia('(max-width: 720px)').matches) return;
 if (typeof state === 'undefined') return;
 
-const VERSION='2.4.5';
+const VERSION='2.4.6';
 const N=v=>Number.isFinite(Number(v))?Number(v):0;
 const EUR=v=>typeof fmtEUR==='function'
   ? fmtEUR(v)
@@ -82,7 +82,7 @@ const EVENTS=[
     text:'Tu peux l’utiliser immédiatement, renforcer ta sécurité ou l’investir.',
     choices:[
       {label:'La garder en trésorerie',desc:()=>`+${EUR(price(500))} en trésorerie`,cash:()=>price(500),happy:0,lesson:'Une rentrée d’argent peut renforcer ton fonds de sécurité.'},
-      {label:'Te faire plaisir avec une partie',desc:()=>`+${EUR(price(250))} net • bonheur +3`,cash:()=>price(250),happy:3,lesson:'Un budget durable peut aussi intégrer le plaisir.'},
+      {label:'Te faire plaisir avec une partie',desc:()=>`Prime ${EUR(price(500))} • ${EUR(price(250))} dépensés • +${EUR(price(250))} net • bonheur +3`,cash:()=>price(250),happy:3,grossIncome:()=>price(500),choiceExpense:()=>price(250),lesson:'Un budget durable peut aussi intégrer le plaisir.'},
       {label:'Investir la totalité sur le PEA',desc:()=>`${EUR(price(500))} dirigés vers le PEA`,cash:()=>0,happy:0,pea:()=>price(500),lesson:'Investir une prime accélère le patrimoine mais rend l’argent moins immédiatement disponible.'}
     ]
   },
@@ -186,7 +186,7 @@ function recordChoice(evt,choice,cashDelta,happinessDelta){
       if(cashDelta<0){
         rec('event_expense',label,Math.abs(cashDelta),{
           cashImpact:cashDelta,
-          includedInExpenses:false,
+          includedInExpenses:true,
           detail:`Décision joueur • bonheur ${happinessDelta>=0?'+':''}${happinessDelta}`
         });
       }else if(cashDelta>0){
@@ -202,6 +202,21 @@ function recordChoice(evt,choice,cashDelta,happinessDelta){
       }
     }
   }catch(_){}
+
+  /* Les décisions V2.4 sont hors du cycle mensuel natif : sans cette
+     ventilation, la trésorerie bouge mais le bilan annuel ne voit pas
+     forcément la dépense ou la rentrée d'argent. */
+  if(state.yearStats && typeof state.yearStats==='object'){
+    state.yearStats.events=N(state.yearStats.events)+1;
+
+    if(cashDelta<0){
+      const amount=Math.abs(cashDelta);
+      state.yearStats.expenses=N(state.yearStats.expenses)+amount;
+      state.yearStats.eventCost=N(state.yearStats.eventCost)+amount;
+    }else if(cashDelta>0){
+      state.yearStats.income=N(state.yearStats.income)+cashDelta;
+    }
+  }
 }
 
 function resolveChoice(evt,c,index){
@@ -221,10 +236,14 @@ function resolveChoice(evt,c,index){
   let happinessDelta=0;
   let careerResult='';
   let directInvestmentAmount=0;
+  let grossChoiceIncome=0;
+  let explicitChoiceExpense=0;
 
   try{
     cashDelta=typeof c.cash==='function'?N(c.cash()):N(c.cash);
     happinessDelta=N(c.happy);
+    grossChoiceIncome=c.grossIncome?Math.max(0,N(c.grossIncome())):0;
+    explicitChoiceExpense=c.choiceExpense?Math.max(0,N(c.choiceExpense())):0;
 
     state.cash=beforeCash+cashDelta;
     state.wellbeing=clamp(beforeHappiness+happinessDelta,0,100);
@@ -296,6 +315,34 @@ function resolveChoice(evt,c,index){
       if(state.yearStats && typeof state.yearStats==='object'){
         state.yearStats.income=N(state.yearStats.income)+directInvestmentAmount;
         state.yearStats.investments=N(state.yearStats.investments)+directInvestmentAmount;
+        state.yearStats.events=N(state.yearStats.events)+1;
+      }
+    }else if(grossChoiceIncome>0 || explicitChoiceExpense>0){
+      const label=`${evt.icon} ${evt.title} — ${c.label}`;
+      try{
+        const rec=window.PatrimoineReportingV219?.record;
+        if(typeof rec==='function'){
+          if(grossChoiceIncome>0){
+            rec('event_income',label,grossChoiceIncome,{
+              cashImpact:cashDelta,
+              detail:'Prime exceptionnelle reçue'
+            });
+          }
+          if(explicitChoiceExpense>0){
+            rec('event_expense',`${label} • dépense plaisir`,explicitChoiceExpense,{
+              cashImpact:-explicitChoiceExpense,
+              includedInExpenses:true,
+              detail:`Arbitrage volontaire • bonheur ${happinessDelta>=0?'+':''}${happinessDelta}`
+            });
+          }
+        }
+      }catch(_){}
+
+      if(state.yearStats && typeof state.yearStats==='object'){
+        state.yearStats.events=N(state.yearStats.events)+1;
+        state.yearStats.income=N(state.yearStats.income)+grossChoiceIncome;
+        state.yearStats.expenses=N(state.yearStats.expenses)+explicitChoiceExpense;
+        state.yearStats.eventCost=N(state.yearStats.eventCost)+explicitChoiceExpense;
       }
     }else{
       recordChoice(evt,c,cashDelta,happinessDelta);
