@@ -2,7 +2,7 @@
 'use strict';
 if (window.matchMedia('(max-width: 720px)').matches) return;
 
-const VERSION='2.4.16';
+const VERSION='2.4.17';
 const EUR=v=>typeof fmtEUR==='function'
   ? fmtEUR(v)
   : new Intl.NumberFormat('fr-FR',{style:'currency',currency:'EUR',maximumFractionDigits:0}).format(Number(v)||0);
@@ -219,6 +219,16 @@ window.PcVisualV230={version:VERSION,refresh:apply};
   js.async=false;
   js.src='./annual-grade-v2416.js?v=2416pc';
   js.dataset.annualGradeV2416='1';
+  document.head.appendChild(js);
+})();
+
+/* V2.4.17 — score global structurel, non dépendant du marché. */
+(function loadStructuralScoreV2417(){
+  if(document.querySelector('script[data-structural-score-v2417]')) return;
+  const js=document.createElement('script');
+  js.async=false;
+  js.src='./structural-score-v2417.js?v=2417pc';
+  js.dataset.structuralScoreV2417='1';
   document.head.appendChild(js);
 })();
 })();
