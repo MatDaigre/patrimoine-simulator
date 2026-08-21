@@ -3,7 +3,7 @@
 if (window.matchMedia('(max-width: 720px)').matches) return;
 if (typeof state === 'undefined') return;
 
-const VERSION='2.4.3.1';
+const VERSION='2.4.4';
 const N=v=>Number.isFinite(Number(v))?Number(v):0;
 const clamp=(v,a=0,b=100)=>Math.max(a,Math.min(b,v));
 const EUR=v=>typeof fmtEUR==='function'
@@ -236,6 +236,46 @@ function ensureStartOptions(){
   });
 }
 
+function syncOpeningWorth(){
+  const nw=safe(()=>N(netWorth()),0);
+
+  /* baseState initialise historiquement openingWorth à 2 500 €.
+     Après difficulté, carrière et scénario, ce montant n'est plus forcément vrai. */
+  if(!state.yearStats || typeof state.yearStats!=='object') state.yearStats={};
+  state.yearStats.year=N(state.year)||2026;
+  state.yearStats.openingWorth=nw;
+
+  /* Le bilan de fin V2.4.1 doit lui aussi partir du vrai patrimoine initial. */
+  if(state.gameFeelV241 && typeof state.gameFeelV241==='object'){
+    state.gameFeelV241.firstWorth=nw;
+  }
+}
+
+function syncStartingInvestmentBasis(){
+  /* Le scénario Prudent déplace de la trésorerie vers le Livret.
+     C'est un versement, jamais une performance de marché. */
+  try{
+    const h=window.PerformanceDashboardV217?.history?.();
+    if(!h?.assets) return;
+
+    const assets=['livret','pea','assurance','cto','crypto'];
+    for(const a of assets){
+      if(!h.assets[a]) continue;
+      let contribution=Math.max(0,N(state.basis?.[a]));
+      if(a==='pea'){
+        contribution=Math.max(
+          contribution,
+          Math.max(0,N(state.tax?.peaContributions))
+        );
+      }
+      h.assets[a].contributions=contribution;
+      h.assets[a].withdrawals=0;
+    }
+    h.migratedFromLegacy=false;
+    h.createdMonth=0;
+  }catch(_){}
+}
+
 function applyNewGameConfig(){
   if(!state.started)return;
   const r=ensureState();
@@ -245,6 +285,11 @@ function applyNewGameConfig(){
   r.goal=pendingGoal in GOALS?pendingGoal:'wealth';
 
   SCENARIOS[r.scenario].apply();
+
+  /* Toutes les références de départ sont recalées APRÈS le scénario. */
+  syncOpeningWorth();
+  syncStartingInvestmentBasis();
+
   r.scenarioApplied=true;
   r.goalVictoryShown=false;
 
@@ -306,6 +351,8 @@ function showAlternativeVictory(){
   set('endEyebrow','Objectif atteint');
   set('endTitle',`Victoire — ${g.name}`);
   set('endText',`${g.desc} Tu as atteint cette route de victoire sans qu’une stratégie unique te soit imposée.`);
+  const continueBtn=document.getElementById('continueAfterWinBtn');
+  if(continueBtn) continueBtn.style.display='block';
   modal.classList.remove('hidden');
   setTimeout(()=>window.GameFeelV241?.renderEndSummary?.(),0);
 }
@@ -317,7 +364,11 @@ function checkGoalVictory(){
 
   if(safe(()=>!!g.reached(),false)){
     r.goalVictoryShown=true;
-    state.victoryShown=true;
+
+    /* Ne pas utiliser victoryShown ici :
+       ce drapeau appartient à la victoire historique des 100 000 €.
+       Si le joueur continue après une victoire alternative, il peut donc
+       encore atteindre et voir la victoire des 100 000 €. */
     state.gameResult='win';
     state.lastEvent=`🏆 Victoire : objectif « ${g.name} » atteint.`;
     try{if(typeof addHistory==='function')addHistory(state.lastEvent);}catch(_){}
