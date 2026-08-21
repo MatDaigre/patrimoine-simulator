@@ -1,0 +1,41 @@
+/* Patrimoine Simulator — V2.4.3 rejouabilité */
+@media(min-width:721px){
+  .replay-v243-start{
+    display:grid;grid-template-columns:1fr 1fr;gap:9px;margin:10px 0 14px
+  }
+  .replay-v243-field{
+    display:flex;flex-direction:column;gap:5px;padding:10px;border-radius:9px;
+    background:#f6f8fd;border:1px solid rgba(169,187,219,.48)
+  }
+  .replay-v243-field label{font-size:10px;font-weight:900;color:#34435a}
+  .replay-v243-field select{
+    width:100%;padding:9px;border-radius:8px;border:1px solid rgba(169,187,219,.6);
+    background:white;color:#172033;font-size:10px;font-weight:750
+  }
+  .replay-v243-field small{font-size:8px;line-height:1.35;color:#687791}
+  .replay-v243-help{
+    grid-column:1/-1;margin:0;padding:7px 9px;border-radius:8px;
+    background:rgba(79,70,229,.06);color:#626f85;font-size:8px;line-height:1.4
+  }
+
+  .replay-v243-goal-card{
+    margin-bottom:9px;padding:10px 11px;border-radius:9px;
+    background:linear-gradient(135deg,rgba(139,92,246,.075),rgba(41,198,246,.045));
+    border:1px solid rgba(139,92,246,.17)
+  }
+  .replay-v243-goal-head{display:flex;justify-content:space-between;align-items:center;gap:10px}
+  .replay-v243-goal-head>div{display:flex;align-items:center;gap:8px}
+  .replay-v243-goal-head>div>span{font-size:18px}
+  .replay-v243-goal-head small{display:block;color:#8297aa;font-size:7px;font-weight:900;text-transform:uppercase}
+  .replay-v243-goal-head strong{display:block;margin-top:2px;color:#eef5fb;font-size:11px}
+  .replay-v243-goal-head em{
+    padding:5px 7px;border-radius:7px;background:#102437;color:#aabac9;
+    font-size:7.5px;font-style:normal;font-weight:800
+  }
+  .replay-v243-goal-card>p{margin:7px 0;color:#91a5b8;font-size:8px;line-height:1.35}
+  .replay-v243-goal-progress progress{height:7px}
+  .replay-v243-goal-progress>div{
+    display:flex;justify-content:space-between;gap:8px;margin-top:4px;
+    color:#8ea3b5;font-size:7.5px;font-weight:800
+  }
+}

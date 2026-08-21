@@ -141,4 +141,20 @@ window.PcVisualV230={version:VERSION,refresh:apply};
   js.dataset.choiceEventsV242='1';
   document.head.appendChild(js);
 })();
+
+/* V2.4.3 — scénarios de départ et routes de victoire. */
+(function loadReplayabilityV243(){
+  if(document.querySelector('script[data-replayability-v243]')) return;
+
+  const css=document.createElement('link');
+  css.rel='stylesheet';
+  css.href='./replayability-v243.css?v=243pc';
+  css.dataset.replayabilityV243Css='1';
+  document.head.appendChild(css);
+
+  const js=document.createElement('script');
+  js.src='./replayability-v243.js?v=243pc';
+  js.dataset.replayabilityV243='1';
+  document.head.appendChild(js);
+})();
 })();
