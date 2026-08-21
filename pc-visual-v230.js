@@ -2,7 +2,7 @@
 'use strict';
 if (window.matchMedia('(max-width: 720px)').matches) return;
 
-const VERSION='2.3.0';
+const VERSION='2.4.11';
 const EUR=v=>typeof fmtEUR==='function'
   ? fmtEUR(v)
   : new Intl.NumberFormat('fr-FR',{style:'currency',currency:'EUR',maximumFractionDigits:0}).format(Number(v)||0);
@@ -106,6 +106,7 @@ window.PcVisualV230={version:VERSION,refresh:apply};
   document.head.appendChild(css);
 
   const js=document.createElement('script');
+  js.async=false;
   js.src='./progression-v240.js?v=240pc';
   js.dataset.progressionV240='1';
   document.head.appendChild(js);
@@ -121,6 +122,7 @@ window.PcVisualV230={version:VERSION,refresh:apply};
   document.head.appendChild(css);
 
   const js=document.createElement('script');
+  js.async=false;
   js.src='./gamefeel-v241.js?v=241pc';
   js.dataset.gamefeelV241='1';
   document.head.appendChild(js);
@@ -137,6 +139,7 @@ window.PcVisualV230={version:VERSION,refresh:apply};
   document.head.appendChild(css);
 
   const js=document.createElement('script');
+  js.async=false;
   js.src='./choice-events-v242.js?v=242pc';
   js.dataset.choiceEventsV242='1';
   document.head.appendChild(js);
@@ -153,6 +156,7 @@ window.PcVisualV230={version:VERSION,refresh:apply};
   document.head.appendChild(css);
 
   const js=document.createElement('script');
+  js.async=false;
   js.src='./replayability-v243.js?v=243pc';
   js.dataset.replayabilityV243='1';
   document.head.appendChild(js);
@@ -162,6 +166,7 @@ window.PcVisualV230={version:VERSION,refresh:apply};
 (function loadCoherenceV2410(){
   if(document.querySelector('script[data-coherence-v2410]')) return;
   const js=document.createElement('script');
+  js.async=false;
   js.src='./coherence-v2410.js?v=2410pc';
   js.dataset.coherenceV2410='1';
   document.head.appendChild(js);
