@@ -6,7 +6,7 @@ if (typeof state === 'undefined' || typeof render !== 'function') {
   return;
 }
 
-const VERSION='2.2.0';
+const VERSION='2.3.2';
 
 if(!document.querySelector('link[data-reporting-v219-css]')){
   const link=document.createElement('link');
@@ -351,7 +351,12 @@ if(typeof applyAutomaticLifeEvent==='function' && !applyAutomaticLifeEvent.__rep
     const label=state.lastEvent||'Événement de vie';
     if(delta<-EPS){
       const amount=-delta;
-      record('event_expense',label,amount,{cashImpact:-amount,includedInExpenses:false});
+      const isBankFee=/(?:frais de découvert|agios|frais bancaires|frais liés au crédit|frais annexes)/i.test(label);
+      record(isBankFee?'bank_fee':'event_expense',label,amount,{
+        cashImpact:-amount,
+        includedInExpenses:false,
+        detail:isBankFee?'Frais bancaire annexe distinct des intérêts du crédit':''
+      });
       addMissingYearExpense(amount,beforeYearExpenses);
     }else if(delta>EPS){
       record('event_income',label,delta,{cashImpact:delta});
@@ -516,14 +521,14 @@ function finalizePeriod(period,after,isSimulation,row){
 
   const all=entriesForGameMonth(period.gameMonth);
   const uncountedEventExpense=all
-    .filter(e=>e.type==='event_expense'&&!e.includedInExpenses)
+    .filter(e=>['event_expense','bank_fee'].includes(e.type)&&!e.includedInExpenses)
     .reduce((s,e)=>s+N(e.amount),0);
   const bonusIncome=sum(all,'bonus_income');
 
   if(isSimulation && row){
     if(uncountedEventExpense>EPS){
       row.expenses=N(row.expenses)+uncountedEventExpense;
-      all.filter(e=>e.type==='event_expense'&&!e.includedInExpenses).forEach(e=>e.includedInExpenses=true);
+      all.filter(e=>['event_expense','bank_fee'].includes(e.type)&&!e.includedInExpenses).forEach(e=>e.includedInExpenses=true);
     }
     if(bonusIncome>EPS) row.income=N(row.income)+bonusIncome;
     row.reportingV219=all.map(e=>e.id);
@@ -539,7 +544,7 @@ function finalizePeriod(period,after,isSimulation,row){
     if(uncountedEventExpense>EPS && !state.lastRecap.reportingEventExpenseAdded){
       state.lastRecap.expenses=N(state.lastRecap.expenses)+uncountedEventExpense;
       state.lastRecap.reportingEventExpenseAdded=uncountedEventExpense;
-      all.filter(e=>e.type==='event_expense'&&!e.includedInExpenses).forEach(e=>e.includedInExpenses=true);
+      all.filter(e=>['event_expense','bank_fee'].includes(e.type)&&!e.includedInExpenses).forEach(e=>e.includedInExpenses=true);
     }
     state.lastRecap.reportingV219=all.map(e=>e.id);
     state.lastRecap.eventCosts=sum(all,'event_expense');
@@ -634,6 +639,7 @@ function actionLabel(e){
     tax:'🏛️',
     tax_refund:'🏛️',
     fee:'🧾',
+    bank_fee:'🏦',
     interest:'💳',
     debt_repayment:'🏦',
     event:'ℹ️'
@@ -659,10 +665,11 @@ function renderMonthlyBlock(){
   const eventIncome=sum(entries,'event_income');
   const bonusIncome=sum(entries,'bonus_income');
   const fees=sum(entries,'fee');
+  const bankFees=sum(entries,'bank_fee');
   const taxes=sum(entries,'tax')-sum(entries,'tax_refund');
   const interests=sum(entries,'interest');
   const principal=sum(entries,'debt_repayment');
-  const actions=compactEntries(entries.filter(e=>!['fee','tax','tax_refund','interest','debt_repayment'].includes(e.type)));
+  const actions=compactEntries(entries.filter(e=>!['fee','bank_fee','tax','tax_refund','interest','debt_repayment'].includes(e.type)));
 
   box.innerHTML=`
     <div class="reporting-v219-title"><strong>Récap comptable du mois</strong><small>Mêmes données utilisées dans les autres bilans</small></div>
@@ -670,9 +677,10 @@ function renderMonthlyBlock(){
       <div><span>Imprévus / événements</span><strong>${EUR(events)}</strong></div>
       <div><span>Bonnes surprises</span><strong>${eventIncome>EPS?'+'+EUR(eventIncome):EUR(0)}</strong></div>
       <div><span>Primes professionnelles</span><strong>${bonusIncome>EPS?'+'+EUR(bonusIncome):EUR(0)}</strong></div>
-      <div><span>Frais placements</span><strong>${EUR(fees)}</strong></div>
+      <div><span>Frais des placements</span><strong>${EUR(fees)}</strong></div>
+      <div><span>Frais bancaires annexes</span><strong>${EUR(bankFees)}</strong></div>
       <div><span>Impôts / fiscalité</span><strong>${signedEUR(-taxes)}</strong></div>
-      <div><span>Intérêts bancaires</span><strong>${EUR(interests)}</strong></div>
+      <div><span>Intérêts des crédits</span><strong>${EUR(interests)}</strong></div>
       <div><span>Capital dette remboursé</span><strong>${EUR(principal)}</strong></div>
     </div>
     <div class="reporting-v219-actions">
@@ -685,6 +693,7 @@ function totalsHtml(entries){
   const investments=sum(entries,'investment');
   const withdrawals=sum(entries,['withdrawal','sale']);
   const fees=sum(entries,'fee');
+  const bankFees=sum(entries,'bank_fee');
   const taxes=sum(entries,'tax')-sum(entries,'tax_refund');
   const interests=sum(entries,'interest');
   const debtPrincipal=sum(entries,'debt_repayment');
@@ -699,9 +708,10 @@ function totalsHtml(entries){
     <div class="reporting-v219-grid">
       <div><span>Versements placements</span><strong>${EUR(investments)}</strong></div>
       <div><span>Retraits / ventes</span><strong>${EUR(withdrawals)}</strong></div>
-      <div><span>Frais placements</span><strong>${EUR(fees)}</strong></div>
+      <div><span>Frais des placements</span><strong>${EUR(fees)}</strong></div>
+      <div><span>Frais bancaires annexes</span><strong>${EUR(bankFees)}</strong></div>
       <div><span>Impôts nets</span><strong>${EUR(taxes)}</strong></div>
-      <div><span>Intérêts bancaires</span><strong>${EUR(interests)}</strong></div>
+      <div><span>Intérêts des crédits</span><strong>${EUR(interests)}</strong></div>
       <div><span>Capital dette remboursé</span><strong>${EUR(debtPrincipal)}</strong></div>
       <div><span>Imprévus / événements</span><strong>${EUR(events)}</strong></div>
       <div><span>Bonnes surprises</span><strong>${EUR(eventIncome)}</strong></div>
@@ -809,7 +819,7 @@ function renderCumulativeJournal(){
     <h4>Journal comptable depuis V2.1.9</h4>
     ${totalsHtml(entries)}
     <div class="reporting-v219-performance"><span>Performance placements actuellement suivie</span><strong class="${perf>=0?'positive':'negative'}">${signedEUR(perf)}</strong></div>
-    <small>Les opérations antérieures à l'installation de ce journal ne peuvent pas toutes être reconstruites automatiquement.</small>`;
+    <small>Les intérêts des crédits correspondent au coût du financement calculé sur le capital restant dû. Les frais bancaires annexes regroupent uniquement les frais ponctuels (découvert, agios ou frais liés au crédit). Les frais des placements restent suivis séparément. Les opérations antérieures à l'installation de ce journal ne peuvent pas toutes être reconstruites automatiquement.</small>`;
 }
 
 function renderJournalUi(){
