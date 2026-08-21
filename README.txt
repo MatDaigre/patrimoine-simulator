@@ -1,37 +1,45 @@
-PATRIMOINE SIMULATOR — PATCH PC V2.4.3
+PATRIMOINE SIMULATOR — COHÉRENCE OBJECTIFS V2.4.9
 
-SUR main :
-
-REMPLACER :
-- pc-visual-v230.js
-
-AJOUTER :
+SUR main, REMPLACER :
+- progression-v240.js
 - replayability-v243.js
-- replayability-v243.css
-
-IMPORTANT :
-Conserve le hotfix choice-events-v242.js V2.4.2.1 déjà intégré.
-Ne remplace pas choice-events-v242.js avec une ancienne version du ZIP précédent.
+- gamefeel-v241.js
 
 AUCUNE LIGNE À SAISIR.
-AUCUNE MODIFICATION DE index.html.
-AUCUNE MODIFICATION MOBILE.
 
-V2.4.3 AJOUTE AU LANCEMENT :
+RÈGLES HARMONISÉES :
 
-4 SCÉNARIOS :
-- Équilibré : base neutre ;
-- Prudent : dépenses légèrement réduites + épargne déjà structurée ;
-- Revenus élevés, vie chargée : salaire supérieur mais charges supérieures ;
-- Reconstruction : crédit personnel initial, trésorerie renforcée mais situation plus fragile.
+1. ÉPARGNE DE SÉCURITÉ
+Comptée uniquement avec :
+- trésorerie positive ;
+- Livret A / LEP (champ Livret du jeu).
 
-4 ROUTES DE VICTOIRE :
-- Bâtir 100 000 € de patrimoine net ;
-- Sécurité financière : 6 mois disponibles + endettement ≤20 % + bonheur ≥65 ;
-- Revenus passifs : 1 000 €/mois ;
-- Équilibre durable : score ≥80 + bonheur ≥75 + 3 mois de sécurité.
+Sont exclus :
+PEA, CTO, crypto, assurance-vie, immobilier, véhicule.
 
-Le cap historique de 100 000 € reste toujours une victoire possible.
-L'objectif choisi est visible dans le tableau de progression pendant la partie.
+2. VERSEMENTS AUTOMATIQUES
+L'objectif pédagogique « habitude d'investissement » regarde maintenant
+les versements automatiques réellement programmés vers :
+PEA, assurance-vie, CTO et crypto.
 
-Aucun calcul de marché, fiscalité, crédit ou performance n'est remplacé.
+Une fois un versement automatique programmé, l'objectif suivant porte sur
+la croissance du capital réellement investi.
+
+3. JALONS D'INVESTISSEMENT
+Les jalons 1 000 € et 10 000 € investis excluent désormais le Livret.
+Le Livret reste rattaché à la sécurité financière.
+
+4. DETTES COÛTEUSES
+Le crédit conso est considéré coûteux lorsque son taux est ≥ 6 %.
+Les prêts personnels utilisent la même logique.
+
+5. REVENUS PASSIFS
+Le moteur actuel ne verse pas de revenu mensuel financier pour le PEA/CTO.
+La route est donc renommée « Revenus locatifs nets » et mesure bien :
+loyers - charges - mensualité du crédit locatif.
+
+6. ROUTES SÉCURITÉ / ÉQUILIBRE
+Le texte indique explicitement que PEA, CTO et crypto ne comptent pas
+dans les mois de sécurité.
+
+Aucun calcul de marché, rendement, crédit, fiscalité ou inflation n'est modifié.

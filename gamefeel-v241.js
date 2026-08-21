@@ -3,7 +3,7 @@
 if (window.matchMedia('(max-width: 720px)').matches) return;
 if (typeof state === 'undefined') return;
 
-const VERSION='2.4.1';
+const VERSION='2.4.9';
 const N=v=>Number.isFinite(Number(v))?Number(v):0;
 const EUR=v=>typeof fmtEUR==='function'
   ? fmtEUR(v)
@@ -13,7 +13,9 @@ const safe=(fn,fallback=0)=>{try{return fn();}catch(_){return fallback;}};
 const worth=()=>safe(()=>N(netWorth()),0);
 const expenses=()=>Math.max(1,safe(()=>N(monthlyExpenses()),N(state.housing)+N(state.living)+N(state.transport)+N(state.leisure)));
 const debts=()=>safe(()=>N(totalDebt()),N(state.homeDebt)+N(state.rentalDebt)+N(state.carDebt)+N(state.studentDebt)+N(state.consumerDebt));
-const invested=()=>Math.max(0,N(state.livret))+Math.max(0,N(state.pea))+Math.max(0,N(state.assurance))+Math.max(0,N(state.cto))+Math.max(0,N(state.crypto));
+/* Les jalons d'investissement excluent le Livret :
+   il appartient à l'épargne de sécurité, pas aux placements de long terme. */
+const invested=()=>Math.max(0,N(state.pea))+Math.max(0,N(state.assurance))+Math.max(0,N(state.cto))+Math.max(0,N(state.crypto));
 const liquid=()=>Math.max(0,N(state.cash))+Math.max(0,N(state.livret));
 
 function ensureState(){
@@ -34,8 +36,8 @@ const MILESTONES=[
   {id:'cash-positive',icon:'💶',title:'Dans le vert',desc:'Ta trésorerie est positive.',test:()=>N(state.cash)>0},
   {id:'safety-1',icon:'🛟',title:'Premier filet de sécurité',desc:'Tu disposes d’au moins 1 mois de dépenses en liquidités.',test:()=>liquid()>=expenses()},
   {id:'safety-3',icon:'🛡️',title:'Matelas de sécurité',desc:'Tu disposes d’au moins 3 mois de dépenses en liquidités.',test:()=>liquid()>=expenses()*3},
-  {id:'invest-1k',icon:'🌱',title:'Premier millier investi',desc:'Tes placements ont franchi 1 000 €.',test:()=>invested()>=1000},
-  {id:'invest-10k',icon:'📈',title:'Investisseur régulier',desc:'Tes placements ont franchi 10 000 €.',test:()=>invested()>=10000},
+  {id:'invest-1k',icon:'🌱',title:'Premier millier investi',desc:'Tes placements de long terme (hors Livret) ont franchi 1 000 €.',test:()=>invested()>=1000},
+  {id:'invest-10k',icon:'📈',title:'Investisseur régulier',desc:'Tes placements de long terme (hors Livret) ont franchi 10 000 €.',test:()=>invested()>=10000},
   {id:'worth-10k',icon:'🧱',title:'Patrimoine à cinq chiffres',desc:'Ton patrimoine net dépasse 10 000 €.',test:()=>worth()>=10000},
   {id:'worth-50k',icon:'🏗️',title:'Bâtisseur de patrimoine',desc:'Ton patrimoine net dépasse 50 000 €.',test:()=>worth()>=50000},
   {id:'worth-100k',icon:'🏆',title:'Cap des 100 000 €',desc:'Ton patrimoine net dépasse 100 000 €.',test:()=>worth()>=100000},

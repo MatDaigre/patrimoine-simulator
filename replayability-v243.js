@@ -3,7 +3,7 @@
 if (window.matchMedia('(max-width: 720px)').matches) return;
 if (typeof state === 'undefined') return;
 
-const VERSION='2.4.8';
+const VERSION='2.4.9';
 const N=v=>Number.isFinite(Number(v))?Number(v):0;
 const clamp=(v,a=0,b=100)=>Math.max(a,Math.min(b,v));
 const EUR=v=>typeof fmtEUR==='function'
@@ -106,7 +106,7 @@ const GOALS={
   },
   safety:{
     icon:'🛡️',name:'Sécurité financière',
-    desc:'Atteindre 6 mois de dépenses disponibles, un endettement ≤ 20 % et conserver au moins 65 de bonheur.',
+    desc:'Atteindre 6 mois de dépenses en trésorerie + Livret uniquement, un endettement ≤ 20 % et conserver au moins 65 de bonheur.',
     progress(){
       const exp=Math.max(1,safe(()=>N(monthlyExpenses()),1));
       const liquid=Math.max(0,N(state.cash))+Math.max(0,N(state.livret));
@@ -127,15 +127,15 @@ const GOALS={
     }
   },
   passive:{
-    icon:'🌱',name:'Revenus passifs',
-    desc:'Victoire lorsque tes revenus passifs atteignent 1 000 € par mois.',
+    icon:'🏢',name:'Revenus locatifs nets',
+    desc:'Victoire lorsque ton revenu locatif net atteint 1 000 € par mois après charges et remboursement du crédit locatif.',
     progress:()=>clamp(safe(()=>N(passiveIncome()),0)/1000*100),
     reached:()=>safe(()=>N(passiveIncome()),0)>=1000,
     detail:()=>`${EUR(safe(()=>N(passiveIncome()),0))} / mois`
   },
   balance:{
     icon:'❤️',name:'Équilibre durable',
-    desc:'Victoire avec un score financier ≥ 80/100, un bonheur ≥ 75/100 et au moins 3 mois de dépenses disponibles.',
+    desc:'Victoire avec un score financier ≥ 80/100, un bonheur ≥ 75/100 et au moins 3 mois de dépenses en trésorerie + Livret uniquement.',
     progress(){
       const sc=safe(()=>N(window.ProgressionV240?.score?.()?.total),0);
       const exp=Math.max(1,safe(()=>N(monthlyExpenses()),1));
@@ -216,9 +216,9 @@ function ensureStartOptions(){
     box.querySelector('#replayV243GoalDesc').textContent=g.desc;
     let conditions=[];
     if(pendingGoal==='wealth') conditions=['Patrimoine net ≥ 100 000 €'];
-    else if(pendingGoal==='safety') conditions=['6 mois de dépenses disponibles','Taux d’endettement ≤ 20 %','Bonheur ≥ 65/100'];
-    else if(pendingGoal==='passive') conditions=['Revenus passifs ≥ 1 000 €/mois'];
-    else if(pendingGoal==='balance') conditions=['Score financier ≥ 80/100','Bonheur ≥ 75/100','Épargne de sécurité ≥ 3 mois'];
+    else if(pendingGoal==='safety') conditions=['6 mois de dépenses en trésorerie + Livret','PEA / CTO / crypto exclus','Taux d’endettement ≤ 20 %','Bonheur ≥ 65/100'];
+    else if(pendingGoal==='passive') conditions=['Revenu locatif net ≥ 1 000 €/mois','Après charges du bien','Après mensualité du crédit locatif'];
+    else if(pendingGoal==='balance') conditions=['Score financier ≥ 80/100','Bonheur ≥ 75/100','3 mois de sécurité en trésorerie + Livret','Placements de marché exclus'];
     box.querySelector('#replayV243GoalParams').innerHTML=
       `<strong>Condition${conditions.length>1?'s':''} de victoire :</strong><ul>${conditions.map(x=>`<li>${x}</li>`).join('')}</ul>`;
   };

@@ -3,7 +3,7 @@
 if (window.matchMedia('(max-width: 720px)').matches) return;
 if (typeof state === 'undefined') return;
 
-const VERSION='2.4.0';
+const VERSION='2.4.9';
 const N=v=>Number.isFinite(Number(v))?Number(v):0;
 const clamp=(v,min=0,max=100)=>Math.max(min,Math.min(max,v));
 const EUR=v=>typeof fmtEUR==='function'
@@ -18,14 +18,30 @@ function worth(){return safe(()=>N(netWorth()),0);}
 function debts(){return safe(()=>N(totalDebt()),N(state.homeDebt)+N(state.rentalDebt)+N(state.carDebt)+N(state.studentDebt)+N(state.consumerDebt));}
 function debtRatioPct(){return safe(()=>N(debtRatio()), safe(()=>N(monthlyDebtPayments())/income()*100,0));}
 function monthlyFlow(){return safe(()=>N(cashflow()),income()-expenses());}
+/* Épargne de sécurité = argent immédiatement disponible et sans risque de marché.
+   PEA, CTO, crypto, assurance-vie et immobilier sont volontairement exclus. */
 function liquid(){return Math.max(0,N(state.cash))+Math.max(0,N(state.livret));}
+
 function invested(){
   return Math.max(0,N(state.pea))+Math.max(0,N(state.assurance))+Math.max(0,N(state.cto))+Math.max(0,N(state.crypto));
 }
+
+function autoLongTerm(){
+  const a=state.autoInvest||{};
+  return Math.max(0,N(a.pea))+Math.max(0,N(a.assurance))+Math.max(0,N(a.cto))+Math.max(0,N(a.crypto));
+}
 function costlyDebt(){
-  let d=Math.max(0,N(state.consumerDebt));
+  let d=0;
+  const consumerRate=N(state.debtMeta?.consumer?.rate);
+  if(N(state.consumerDebt)>0 && (consumerRate>=.06 || consumerRate<=0)){
+    d+=Math.max(0,N(state.consumerDebt));
+  }
   const loans=state.pcV215?.personalLoans;
-  if(Array.isArray(loans)) d+=loans.filter(l=>N(l.rate)>=.06).reduce((s,l)=>s+Math.max(0,N(l.balance)),0);
+  if(Array.isArray(loans)){
+    d+=loans
+      .filter(l=>N(l.rate)>=.06)
+      .reduce((s,l)=>s+Math.max(0,N(l.balance)),0);
+  }
   return d;
 }
 function score(){
@@ -82,7 +98,7 @@ function objective(){
   if(liq<exp){
     return {
       icon:'🛟',title:'Construire 1 mois de sécurité',
-      desc:'Ton premier filet de sécurité : disposer d’un mois complet de dépenses en liquidités.',
+      desc:'Ton premier filet de sécurité : disposer d’un mois complet de dépenses en trésorerie et/ou Livret, sans dépendre des marchés.',
       current:liq,target:exp,
       label:`${EUR(liq)} sur ${EUR(exp)}`,
       tip:'Le Livret et la trésorerie sont adaptés à cet objectif car l’argent reste disponible.'
@@ -100,19 +116,31 @@ function objective(){
   if(liq<exp*3){
     return {
       icon:'🛡️',title:'Atteindre 3 mois de sécurité',
-      desc:'Un fonds d’urgence plus solide permet d’absorber davantage d’imprévus sans vendre tes placements.',
+      desc:'Atteins trois mois de dépenses uniquement avec la trésorerie et le Livret. Les placements exposés au marché ne comptent pas.',
       current:liq,target:exp*3,
       label:`${EUR(liq)} sur ${EUR(exp*3)}`,
       tip:'Tu peux avancer progressivement : il n’est pas nécessaire de tout constituer en un seul mois.'
     };
   }
+  const autoLT=autoLongTerm();
+  if(autoLT<=0){
+    const suggested=Math.max(50,Math.round(income()*.05/10)*10);
+    return {
+      icon:'🔁',title:'Mettre en place un versement automatique',
+      desc:'Une fois ton épargne de sécurité constituée, automatise une partie de ton investissement à long terme.',
+      current:0,target:suggested,
+      label:`0 € / mois programmés`,
+      tip:`Un premier repère peut être environ 5 % de tes revenus, soit ${EUR(suggested)}/mois ici. Tu peux adapter selon ta situation.`
+    };
+  }
+
   if(inv<exp*3){
     return {
-      icon:'📈',title:'Installer une habitude d’investissement',
-      desc:'Une fois la sécurité construite, commence à faire travailler une partie de ton épargne à long terme.',
+      icon:'📈',title:'Faire grandir tes placements de long terme',
+      desc:'Tes versements automatiques sont en place. Laisse maintenant le capital se construire progressivement.',
       current:inv,target:exp*3,
-      label:`${EUR(inv)} investis`,
-      tip:'Diversifier progressivement est généralement plus robuste que chercher immédiatement le meilleur placement.'
+      label:`${EUR(inv)} investis • ${EUR(autoLT)}/mois automatiques`,
+      tip:'Le Livret reste ton épargne de sécurité ; ici, seuls PEA, assurance-vie, CTO et crypto sont comptés comme placements de long terme.'
     };
   }
 
