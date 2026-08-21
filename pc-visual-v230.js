@@ -95,4 +95,19 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
 else boot();
 
 window.PcVisualV230={version:VERSION,refresh:apply};
+
+/* V2.4 — progression pédagogique / score, PC uniquement. */
+(function loadProgressionV240(){
+  if(document.querySelector('script[data-progression-v240]')) return;
+  const css=document.createElement('link');
+  css.rel='stylesheet';
+  css.href='./progression-v240.css?v=240pc';
+  css.dataset.progressionV240Css='1';
+  document.head.appendChild(css);
+
+  const js=document.createElement('script');
+  js.src='./progression-v240.js?v=240pc';
+  js.dataset.progressionV240='1';
+  document.head.appendChild(js);
+})();
 })();
