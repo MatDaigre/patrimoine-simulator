@@ -1,5 +1,5 @@
-PATRIMOINE SIMULATOR — PATCH PC V2.4.15
-CASH-FLOW LOCATIF RÉELLEMENT NET
+PATRIMOINE SIMULATOR — PATCH PC V2.4.16
+NOTE FINANCIÈRE ANNUELLE COHÉRENTE
 
 SUR main :
 
@@ -7,35 +7,30 @@ REMPLACER :
 - pc-visual-v230.js
 
 AJOUTER :
-- rental-net-v2415.js
+- annual-grade-v2416.js
 
 CONSERVER tous les autres fichiers V2.4.
 
-CORRECTION :
+PROBLÈME CORRIGÉ :
+La note annuelle historique utilisait :
+investissements annuels / revenus
 
-Avant :
-« Revenus locatifs nets » =
-loyer - charges - mensualité du crédit
+Or « investissements annuels » mesure les montants placés, pas l'enrichissement.
+Il était possible de retirer un capital puis de le replacer plus tard et de
+faire monter artificiellement la note.
 
-Mais l'impôt supplémentaire lié aux loyers était payé séparément par le jeu.
-L'indicateur était donc plus favorable que le cash-flow réellement disponible.
+NOUVELLE NOTE :
+- évolution du patrimoine corrigée de l'inflation ;
+- excédent ou déficit entre revenus et dépenses ;
+- poids des intérêts bancaires dans les revenus ;
+- épargne de sécurité = trésorerie + Livret ;
+- bonheur.
 
-Maintenant :
-Cash-flow locatif net =
-loyer
-- charges locatives
-- mensualité du crédit locatif
-- supplément d'impôt généré par le revenu locatif
+Le volume brut de placements reste affiché dans le bilan mais ne donne plus
+directement de points.
 
-Le supplément d'impôt est calculé avec le même barème simplifié que le moteur,
-par différence entre :
-- impôt salaire + revenu locatif taxable
-- impôt salaire seul
+Le joueur peut donc investir beaucoup, peu ou différemment :
+c'est le résultat global et la solidité de sa situation qui sont évalués.
 
-IMPORTANT :
-Ce patch ne prélève aucun impôt supplémentaire.
-monthlyTax() continue de gérer le vrai prélèvement mensuel.
-Le correctif ne change que l'indicateur et les objectifs afin d'éviter
-un double prélèvement.
-
-L'objectif « revenus locatifs » devient donc réellement net après fiscalité.
+Aucun patrimoine, investissement, rendement, impôt, crédit ou trésorerie
+n'est modifié par ce patch.
