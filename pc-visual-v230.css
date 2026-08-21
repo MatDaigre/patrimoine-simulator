@@ -145,3 +145,30 @@ input:not([type=range]),select,textarea{background:#102438!important;border-colo
  .stats-grid{grid-template-columns:repeat(3,minmax(0,1fr))!important}
  .layout{grid-template-columns:minmax(0,2.3fr) minmax(270px,.9fr)!important}
 }
+
+/* V2.3.1 — immobilier locatif dans le dashboard de performance */
+@media(min-width:721px){
+  .performance-v217-rental{margin-top:7px}
+  .performance-v217-rental-row{
+    display:grid!important;
+    grid-template-columns:1.25fr .85fr .9fr!important;
+    gap:8px!important;
+    padding:9px 10px!important;
+    border:1px solid rgba(255,200,76,.20)!important;
+    border-top:2px solid rgba(255,200,76,.55)!important;
+    border-radius:9px!important;
+    background:linear-gradient(135deg,rgba(119,83,28,.15),#0e2031)!important
+  }
+  .performance-v217-rental-row>div{
+    display:flex!important;
+    flex-direction:column!important;
+    justify-content:center!important;
+    gap:3px!important
+  }
+  .performance-v217-rental-row>div>span{
+    color:#93a8bc!important;
+    font-size:8px!important;
+    font-weight:800!important
+  }
+  .performance-v217-rental-row>div>strong{font-size:11px!important}
+}
