@@ -3,7 +3,7 @@
 if (window.matchMedia('(max-width: 720px)').matches) return;
 if (typeof state === 'undefined') return;
 
-const VERSION='2.4.4';
+const VERSION='2.4.7';
 const N=v=>Number.isFinite(Number(v))?Number(v):0;
 const clamp=(v,a=0,b=100)=>Math.max(a,Math.min(b,v));
 const EUR=v=>typeof fmtEUR==='function'
@@ -393,7 +393,12 @@ if(typeof evaluateEndConditions==='function'&&!evaluateEndConditions.__replayV24
   const coreEvaluate=evaluateEndConditions;
   evaluateEndConditions=function(...args){
     const out=coreEvaluate(...args);
-    if(!state.gameOver && !state.victoryShown) checkGoalVictory();
+
+    /* La victoire historique à 100 000 € et l'objectif choisi sont
+       indépendants. Le joueur peut donc débloquer les deux, dans n'importe
+       quel ordre, s'il continue sa partie. */
+    if(!state.gameOver) checkGoalVictory();
+
     return out;
   };
   evaluateEndConditions.__replayV243=true;
