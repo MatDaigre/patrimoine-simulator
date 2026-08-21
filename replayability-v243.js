@@ -3,7 +3,7 @@
 if (window.matchMedia('(max-width: 720px)').matches) return;
 if (typeof state === 'undefined') return;
 
-const VERSION='2.4.7';
+const VERSION='2.4.8';
 const N=v=>Number.isFinite(Number(v))?Number(v):0;
 const clamp=(v,a=0,b=100)=>Math.max(a,Math.min(b,v));
 const EUR=v=>typeof fmtEUR==='function'
@@ -403,6 +403,58 @@ if(typeof evaluateEndConditions==='function'&&!evaluateEndConditions.__replayV24
   };
   evaluateEndConditions.__replayV243=true;
 }
+
+const LEGACY_SAVE_KEYS=[
+  'patrimoineGameV17','patrimoineGameV16','patrimoineGameV15','patrimoineGameV14',
+  'patrimoineGameV13','patrimoineGameV12','patrimoineGameV1',
+  'patrimoineGameV32','patrimoineGameV31','patrimoineGameV3'
+];
+
+function clearLegacySaves(){
+  for(const key of LEGACY_SAVE_KEYS){
+    try{localStorage.removeItem(key);}catch(_){}
+  }
+}
+
+function resetStartChoices(){
+  pendingScenario='balanced';
+  pendingGoal='wealth';
+
+  const scenario=document.getElementById('replayV243Scenario');
+  const goal=document.getElementById('replayV243Goal');
+
+  if(scenario) scenario.value='balanced';
+  if(goal) goal.value='wealth';
+
+  const box=document.getElementById('replayV243Start');
+  if(box){
+    box.remove();
+  }
+
+  const oldSaveBox=document.getElementById('existingSaveBox');
+  if(oldSaveBox) oldSaveBox.remove();
+
+  ensureStartOptions();
+}
+
+/* Le moteur historique ne nettoie pas toutes les anciennes clés depuis le
+   bouton "Nouvelle partie" de l'écran de fin. On homogénéise les deux chemins
+   de réinitialisation sans modifier index.html. */
+document.addEventListener('click',e=>{
+  const btn=e.target?.closest?.('#restartFromEndBtn,#resetBtn');
+  if(!btn)return;
+
+  setTimeout(()=>{
+    /* Ne faire le nettoyage que si le moteur a réellement réinitialisé
+       la partie (confirmation acceptée). */
+    if(state.started) return;
+
+    clearLegacySaves();
+    resetStartChoices();
+
+    try{if(typeof render==='function')render();}catch(_){}
+  },0);
+},false);
 
 function refresh(){
   ensureStartOptions();
