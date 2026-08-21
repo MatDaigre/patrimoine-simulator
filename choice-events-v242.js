@@ -3,7 +3,7 @@
 if (window.matchMedia('(max-width: 720px)').matches) return;
 if (typeof state === 'undefined') return;
 
-const VERSION='2.4.2';
+const VERSION='2.4.2.1';
 const N=v=>Number.isFinite(Number(v))?Number(v):0;
 const EUR=v=>typeof fmtEUR==='function'
   ? fmtEUR(v)
@@ -154,6 +154,7 @@ function ensureModal(){
 }
 
 let activeEvent=null;
+let resolvingChoice=false;
 
 function openEvent(evt){
   if(!evt)return;
@@ -168,11 +169,12 @@ function openEvent(evt){
     const b=document.createElement('button');
     b.type='button';
     b.className='choice-v242-option';
+    b.dataset.choiceIndex=String(i);
     b.innerHTML=`<strong>${c.label}</strong><small>${typeof c.desc==='function'?c.desc():c.desc}</small>`;
-    b.onclick=()=>resolveChoice(evt,c,i);
     host.appendChild(b);
   });
   modal.hidden=false;
+  modal.removeAttribute('aria-hidden');
 }
 
 function recordChoice(evt,choice,cashDelta,happinessDelta){
@@ -202,57 +204,111 @@ function recordChoice(evt,choice,cashDelta,happinessDelta){
 }
 
 function resolveChoice(evt,c,index){
-  const cashDelta=typeof c.cash==='function'?N(c.cash()):N(c.cash);
-  const happinessDelta=N(c.happy);
+  if(resolvingChoice || !evt || !c) return;
+  resolvingChoice=true;
 
-  state.cash=N(state.cash)+cashDelta;
-  state.wellbeing=clamp(N(state.wellbeing)+happinessDelta,0,100);
-
-  if(c.pea){
-    const amount=Math.max(0,N(c.pea()));
-    if(amount>0){
-      if(!state.tax)state.tax={};
-      state.pea=N(state.pea)+amount;
-      state.basis ||= {};
-      state.basis.pea=N(state.basis.pea)+amount;
-      state.tax.peaContributions=N(state.tax.peaContributions)+amount;
-    }
-  }
-
-  if(c.livingMonthly){
-    const d=N(c.livingMonthly());
-    state.living=Math.max(0,N(state.living)+d);
-  }
-
-  let careerResult='';
-  if(c.careerChance && Math.random()<N(c.careerChance)){
-    const old=N(state.salary);
-    const gain=Math.max(20,Math.round(old*.025));
-    state.salary=old+gain;
-    careerResult=` • salaire +${EUR(gain)}/mois`;
-  }
-
-  const gf=ensureState();
-  gf.resolved++;
-  gf.lastMonth=N(state.totalMonths);
-  gf.seen.push(evt.id);
-  gf.seen=gf.seen.slice(-12);
-  gf.nextMonth=N(state.totalMonths)+ri(4,7);
-
-  const cashText=cashDelta===0?'0 €':`${cashDelta>0?'+':''}${EUR(cashDelta)}`;
-  state.lastEvent=`${evt.icon} ${choice.label} : ${cashText}, bonheur ${happinessDelta>=0?'+':''}${happinessDelta}${careerResult}.`;
-  try{if(typeof addHistory==='function')addHistory(state.lastEvent);}catch(_){}
-  recordChoice(evt,c,cashDelta,happinessDelta);
-
+  /* Libère immédiatement l'interface : même si un effet secondaire échoue,
+     le joueur ne peut plus rester prisonnier de la fenêtre de décision. */
   const modal=ensureModal();
   modal.hidden=true;
-  activeEvent=null;
+  modal.setAttribute('aria-hidden','true');
+  modal.querySelectorAll('.choice-v242-option').forEach(b=>b.disabled=true);
 
-  showResult(evt,c,cashDelta,happinessDelta,careerResult);
-  try{if(typeof silentSave==='function')silentSave();}catch(_){}
-  try{if(typeof render==='function')render();}catch(_){}
-  try{window.ProgressionV240?.refresh?.();}catch(_){}
-  try{window.GameFeelV241?.check?.();}catch(_){}
+  const beforeCash=N(state.cash);
+  const beforeHappiness=N(state.wellbeing);
+  let cashDelta=0;
+  let happinessDelta=0;
+  let careerResult='';
+
+  try{
+    cashDelta=typeof c.cash==='function'?N(c.cash()):N(c.cash);
+    happinessDelta=N(c.happy);
+
+    state.cash=beforeCash+cashDelta;
+    state.wellbeing=clamp(beforeHappiness+happinessDelta,0,100);
+
+    if(c.pea){
+      const amount=Math.max(0,N(c.pea()));
+      if(amount>0){
+        /* La prime est un nouveau capital, pas un gain de marché.
+           On l'inscrit donc dans la base et dans l'historique de contributions. */
+        if(!state.tax) state.tax={};
+        if(!state.basis) state.basis={};
+
+        state.pea=N(state.pea)+amount;
+        state.basis.pea=N(state.basis.pea)+amount;
+        state.tax.peaContributions=N(state.tax.peaContributions)+amount;
+
+        try{
+          const h=window.PerformanceDashboardV217?.history?.();
+          if(h?.assets?.pea){
+            h.assets.pea.contributions=N(h.assets.pea.contributions)+amount;
+          }
+        }catch(_){}
+      }
+    }
+
+    if(c.livingMonthly){
+      const d=N(c.livingMonthly());
+      state.living=Math.max(0,N(state.living)+d);
+    }
+
+    if(c.careerChance && Math.random()<N(c.careerChance)){
+      const old=N(state.salary);
+      const gain=Math.max(20,Math.round(old*.025));
+      state.salary=old+gain;
+      careerResult=` • salaire +${EUR(gain)}/mois`;
+    }
+
+    const gf=ensureState();
+    gf.resolved++;
+    gf.lastMonth=N(state.totalMonths);
+    gf.seen.push(evt.id);
+    gf.seen=gf.seen.slice(-12);
+    gf.nextMonth=N(state.totalMonths)+ri(4,7);
+
+    const cashText=cashDelta===0?'0 €':`${cashDelta>0?'+':''}${EUR(cashDelta)}`;
+    state.lastEvent=`${evt.icon} ${c.label} : ${cashText}, bonheur ${happinessDelta>=0?'+':''}${happinessDelta}${careerResult}.`;
+
+    try{if(typeof addHistory==='function') addHistory(state.lastEvent);}catch(_){}
+    recordChoice(evt,c,cashDelta,happinessDelta);
+
+    activeEvent=null;
+
+    try{if(typeof silentSave==='function') silentSave();}catch(_){}
+    try{if(typeof render==='function') render();}catch(_){}
+    try{window.ProgressionV240?.refresh?.();}catch(_){}
+    try{window.GameFeelV241?.check?.();}catch(_){}
+
+    showResult(evt,c,cashDelta,happinessDelta,careerResult);
+  }catch(err){
+    console.error('[ChoiceEvents V2.4.2.1] Erreur de résolution',err);
+
+    /* En cas d'erreur avant application complète, on restaure au minimum
+       les deux valeurs directement manipulées par tous les choix. */
+    state.cash=beforeCash;
+    state.wellbeing=beforeHappiness;
+    activeEvent=null;
+
+    showTechnicalFallback();
+  }finally{
+    resolvingChoice=false;
+  }
+}
+
+function showTechnicalFallback(){
+  let toast=document.getElementById('choiceV242Result');
+  if(!toast){
+    toast=document.createElement('div');
+    toast.id='choiceV242Result';
+    toast.className='choice-v242-result';
+    document.body.appendChild(toast);
+  }
+  toast.innerHTML=`<div><span>⚠️</span><strong>Décision interrompue</strong></div>
+    <p>La décision n’a pas été appliquée. Tu peux continuer la partie sans perte.</p>`;
+  toast.classList.add('show');
+  clearTimeout(showTechnicalFallback.t);
+  showTechnicalFallback.t=setTimeout(()=>toast.classList.remove('show'),4200);
 }
 
 function showResult(evt,c,cashDelta,happinessDelta,careerResult){
@@ -302,6 +358,20 @@ if(typeof nextMonth==='function'&&!nextMonth.__choiceV242){
 
 /* Les simulations multi-mois restent automatiques :
    aucun modal de décision ne bloque une simulation en cours. */
+
+/* Délégation de clic robuste : évite que les handlers individuels soient
+   perdus si le DOM est rafraîchi par les autres couches du jeu. */
+document.addEventListener('click',e=>{
+  const btn=e.target?.closest?.('#choiceEventV242Modal .choice-v242-option');
+  if(!btn || btn.disabled || !activeEvent) return;
+
+  e.preventDefault();
+  e.stopPropagation();
+
+  const index=Math.max(0,Math.round(N(btn.dataset.choiceIndex)));
+  const choice=activeEvent.choices?.[index];
+  if(choice) resolveChoice(activeEvent,choice,index);
+},true);
 
 ensureState();
 window.ChoiceEventsV242={
