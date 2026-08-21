@@ -2,7 +2,7 @@
 'use strict';
 if (window.matchMedia('(max-width: 720px)').matches) return;
 
-const VERSION='2.4.12';
+const VERSION='2.4.13';
 const EUR=v=>typeof fmtEUR==='function'
   ? fmtEUR(v)
   : new Intl.NumberFormat('fr-FR',{style:'currency',currency:'EUR',maximumFractionDigits:0}).format(Number(v)||0);
@@ -179,6 +179,16 @@ window.PcVisualV230={version:VERSION,refresh:apply};
   js.async=false;
   js.src='./legacy-events-v2412.js?v=2412pc';
   js.dataset.legacyEventsV2412='1';
+  document.head.appendChild(js);
+})();
+
+/* V2.4.13 — cohérence du récapitulatif mensuel. */
+(function loadMonthlyRecapV2413(){
+  if(document.querySelector('script[data-monthly-recap-v2413]')) return;
+  const js=document.createElement('script');
+  js.async=false;
+  js.src='./monthly-recap-v2413.js?v=2413pc';
+  js.dataset.monthlyRecapV2413='1';
   document.head.appendChild(js);
 })();
 })();
