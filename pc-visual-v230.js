@@ -2,7 +2,7 @@
 'use strict';
 if (window.matchMedia('(max-width: 720px)').matches) return;
 
-const VERSION='2.4.14';
+const VERSION='2.4.15';
 const EUR=v=>typeof fmtEUR==='function'
   ? fmtEUR(v)
   : new Intl.NumberFormat('fr-FR',{style:'currency',currency:'EUR',maximumFractionDigits:0}).format(Number(v)||0);
@@ -199,6 +199,16 @@ window.PcVisualV230={version:VERSION,refresh:apply};
   js.async=false;
   js.src='./debt-ratio-v2414.js?v=2414pc';
   js.dataset.debtRatioV2414='1';
+  document.head.appendChild(js);
+})();
+
+/* V2.4.15 — cash-flow locatif réellement net. */
+(function loadRentalNetV2415(){
+  if(document.querySelector('script[data-rental-net-v2415]')) return;
+  const js=document.createElement('script');
+  js.async=false;
+  js.src='./rental-net-v2415.js?v=2415pc';
+  js.dataset.rentalNetV2415='1';
   document.head.appendChild(js);
 })();
 })();
