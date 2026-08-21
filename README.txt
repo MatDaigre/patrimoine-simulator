@@ -1,45 +1,52 @@
-PATRIMOINE SIMULATOR — COHÉRENCE OBJECTIFS V2.4.9
+PATRIMOINE SIMULATOR — PATCH PC V2.4.10
+COHÉRENCE OBJECTIFS HISTORIQUES + AUDIT INFLATION
 
-SUR main, REMPLACER :
-- progression-v240.js
-- replayability-v243.js
-- gamefeel-v241.js
+SUR main :
+
+REMPLACER :
+- pc-visual-v230.js
+
+AJOUTER :
+- coherence-v2410.js
 
 AUCUNE LIGNE À SAISIR.
+NE PAS MODIFIER index.html.
+CONSERVER les fichiers V2.4.9 déjà présents.
 
-RÈGLES HARMONISÉES :
+CORRECTIONS OBJECTIFS :
+- ancien objectif 1 mois / 3 mois = trésorerie positive + Livret ;
+- PEA / CTO / crypto / assurance-vie exclus de l'épargne de sécurité ;
+- ancien jalon « premier capital » = placements long terme hors Livret ;
+- score de santé historique utilise la même définition de la sécurité ;
+- ancienne jauge 3 mois est harmonisée avec le nouveau guide.
 
-1. ÉPARGNE DE SÉCURITÉ
-Comptée uniquement avec :
-- trésorerie positive ;
-- Livret A / LEP (champ Livret du jeu).
+VERSEMENTS AUTOMATIQUES :
+- vérification : le moteur stocke bien les montants dans state.autoInvest ;
+- les versements exécutés modifient réellement Livret / PEA / AV / CTO / crypto ;
+- le guide V2.4.9 lit donc la bonne structure.
 
-Sont exclus :
-PEA, CTO, crypto, assurance-vie, immobilier, véhicule.
+INFLATION — CE QUI ÉTAIT DÉJÀ CORRECT :
+- mensualisation composée du taux annuel ;
+- priceIndex ;
+- logement, vie courante, transport, loisirs et charges locatives ;
+- gros imprévus et événements V2.4.
 
-2. VERSEMENTS AUTOMATIQUES
-L'objectif pédagogique « habitude d'investissement » regarde maintenant
-les versements automatiques réellement programmés vers :
-PEA, assurance-vie, CTO et crypto.
+INFLATION — CORRECTIONS V2.4.10 :
+- bilan annuel en rendement réel avec formule exacte :
+  (1 + rendement nominal) / (1 + inflation) - 1 ;
+- si patrimoine initial <= 0, aucun pourcentage trompeur n'est affiché ;
+- pouvoir d'achat de la trésorerie affiché en euros constants au lieu
+  de prétendre que tout le cash actuel était détenu depuis le début ;
+- suivi prospectif de l'érosion des liquidités nominales ;
+- prix futurs des voitures indexés sur le niveau général des prix ;
+- prix futurs des biens immobiliers indexés ;
+- apport locatif fixe indexé ;
+- loyer proposé au moment d'un achat locatif indexé ;
+- coût des formations indexé.
 
-Une fois un versement automatique programmé, l'objectif suivant porte sur
-la croissance du capital réellement investi.
+NOTE SAUVEGARDES EXISTANTES :
+Pour une partie déjà commencée, l'ancien total « inflation estimée » est repris
+comme historique approximatif, puis le calcul V2.4.10 devient plus précis
+pour les mois suivants.
 
-3. JALONS D'INVESTISSEMENT
-Les jalons 1 000 € et 10 000 € investis excluent désormais le Livret.
-Le Livret reste rattaché à la sécurité financière.
-
-4. DETTES COÛTEUSES
-Le crédit conso est considéré coûteux lorsque son taux est ≥ 6 %.
-Les prêts personnels utilisent la même logique.
-
-5. REVENUS PASSIFS
-Le moteur actuel ne verse pas de revenu mensuel financier pour le PEA/CTO.
-La route est donc renommée « Revenus locatifs nets » et mesure bien :
-loyers - charges - mensualité du crédit locatif.
-
-6. ROUTES SÉCURITÉ / ÉQUILIBRE
-Le texte indique explicitement que PEA, CTO et crypto ne comptent pas
-dans les mois de sécurité.
-
-Aucun calcul de marché, rendement, crédit, fiscalité ou inflation n'est modifié.
+Aucun rendement de marché, taux de crédit ni règle fiscale n'est modifié.

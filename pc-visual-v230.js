@@ -157,4 +157,13 @@ window.PcVisualV230={version:VERSION,refresh:apply};
   js.dataset.replayabilityV243='1';
   document.head.appendChild(js);
 })();
+
+/* V2.4.10 — cohérence objectifs historiques + inflation. */
+(function loadCoherenceV2410(){
+  if(document.querySelector('script[data-coherence-v2410]')) return;
+  const js=document.createElement('script');
+  js.src='./coherence-v2410.js?v=2410pc';
+  js.dataset.coherenceV2410='1';
+  document.head.appendChild(js);
+})();
 })();
