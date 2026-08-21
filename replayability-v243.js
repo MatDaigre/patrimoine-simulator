@@ -3,7 +3,7 @@
 if (window.matchMedia('(max-width: 720px)').matches) return;
 if (typeof state === 'undefined') return;
 
-const VERSION='2.4.3';
+const VERSION='2.4.3.1';
 const N=v=>Number.isFinite(Number(v))?Number(v):0;
 const clamp=(v,a=0,b=100)=>Math.max(a,Math.min(b,v));
 const EUR=v=>typeof fmtEUR==='function'
@@ -14,12 +14,29 @@ const safe=(fn,fallback=0)=>{try{return fn();}catch(_){return fallback;}};
 const SCENARIOS={
   balanced:{
     icon:'⚖️',name:'Équilibré',
-    desc:'Situation neutre. Idéal pour une première partie.',
+    short:'Aucun modificateur supplémentaire',
+    desc:'Tu démarres uniquement avec les paramètres de ta carrière et de la difficulté choisie. Salaire, trésorerie, dépenses et bonheur ne reçoivent aucun bonus ni malus supplémentaire.',
+    bullets:[
+      'Trésorerie : selon la difficulté choisie',
+      'Salaire : selon la carrière choisie',
+      'Dépenses : paramètres standards',
+      'Dette supplémentaire : aucune',
+      'Bonheur de départ : 75/100'
+    ],
     apply(){}
   },
   prudent:{
     icon:'🛡️',name:'Prudent',
-    desc:'Moins de dépenses courantes et une partie de la trésorerie déjà placée sur un livret.',
+    short:'1 000 € max placés + dépenses -80 €/mois',
+    desc:'Une partie de ta trésorerie est immédiatement placée sur le Livret et tes dépenses courantes sont légèrement réduites.',
+    bullets:[
+      'Livret : jusqu’à 1 000 € transférés depuis la trésorerie',
+      'Trésorerie : conserve au minimum 500 €',
+      'Dépenses courantes : -80 €/mois',
+      'Salaire : inchangé',
+      'Dette supplémentaire : aucune',
+      'Bonheur : inchangé'
+    ],
     apply(){
       const move=Math.min(1000,Math.max(0,N(state.cash)-500));
       state.cash=N(state.cash)-move;
@@ -31,7 +48,16 @@ const SCENARIOS={
   },
   busy:{
     icon:'👨‍👩‍👧',name:'Revenus élevés, vie chargée',
-    desc:'Salaire supérieur mais charges courantes et transport plus élevés.',
+    short:'Salaire +350 € • charges +350 €/mois',
+    desc:'Tu gagnes davantage, mais ton niveau de vie et tes déplacements coûtent aussi plus cher.',
+    bullets:[
+      'Salaire : +350 €/mois',
+      'Dépenses courantes : +250 €/mois',
+      'Transport : +100 €/mois',
+      'Surcoût total : +350 €/mois',
+      'Bonheur de départ : -3 points',
+      'Dette supplémentaire : aucune'
+    ],
     apply(){
       state.salary=N(state.salary)+350;
       state.living=N(state.living)+250;
@@ -41,7 +67,16 @@ const SCENARIOS={
   },
   rebuild:{
     icon:'🔧',name:'Reconstruction',
-    desc:'Tu démarres avec un crédit personnel à rembourser. Plus difficile, mais très formateur.',
+    short:'Dette 6 000 € à 8 % • +1 500 € de trésorerie',
+    desc:'Tu disposes d’un peu plus de liquidités, mais tu dois gérer un crédit personnel coûteux dès le début.',
+    bullets:[
+      'Trésorerie : +1 500 €',
+      'Crédit personnel : 6 000 €',
+      'Taux du crédit : 8 %/an',
+      'Durée : 36 mois',
+      'Mensualité : environ 188 €/mois',
+      'Bonheur de départ : -4 points'
+    ],
     apply(){
       const capital=6000, annual=.08, months=36, r=annual/12;
       const payment=Math.round(capital*r/(1-Math.pow(1+r,-months)));
@@ -62,7 +97,7 @@ const SCENARIOS={
 const GOALS={
   wealth:{
     icon:'🏆',name:'Bâtir 100 000 €',
-    desc:'Atteindre 100 000 € de patrimoine net.',
+    desc:'Victoire lorsque ton patrimoine net atteint 100 000 €.',
     value:()=>Math.max(0,safe(()=>N(netWorth()),0)),
     target:()=>100000,
     progress:()=>clamp(safe(()=>N(netWorth()),0)/100000*100),
@@ -93,14 +128,14 @@ const GOALS={
   },
   passive:{
     icon:'🌱',name:'Revenus passifs',
-    desc:'Construire 1 000 € de revenus passifs mensuels.',
+    desc:'Victoire lorsque tes revenus passifs atteignent 1 000 € par mois.',
     progress:()=>clamp(safe(()=>N(passiveIncome()),0)/1000*100),
     reached:()=>safe(()=>N(passiveIncome()),0)>=1000,
     detail:()=>`${EUR(safe(()=>N(passiveIncome()),0))} / mois`
   },
   balance:{
     icon:'❤️',name:'Équilibre durable',
-    desc:'Atteindre 80/100 au score financier, 75 de bonheur et 3 mois d’épargne de sécurité.',
+    desc:'Victoire avec un score financier ≥ 80/100, un bonheur ≥ 75/100 et au moins 3 mois de dépenses disponibles.',
     progress(){
       const sc=safe(()=>N(window.ProgressionV240?.score?.()?.total),0);
       const exp=Math.max(1,safe(()=>N(monthlyExpenses()),1));
@@ -150,9 +185,10 @@ function ensureStartOptions(){
     <div class="replay-v243-field">
       <label for="replayV243Scenario">Scénario de départ</label>
       <select id="replayV243Scenario">
-        ${Object.entries(SCENARIOS).map(([k,s])=>`<option value="${k}">${s.icon} ${s.name}</option>`).join('')}
+        ${Object.entries(SCENARIOS).map(([k,s])=>`<option value="${k}">${s.icon} ${s.name} — ${s.short}</option>`).join('')}
       </select>
       <small id="replayV243ScenarioDesc">${SCENARIOS.balanced.desc}</small>
+      <div id="replayV243ScenarioParams" class="replay-v243-params"></div>
     </div>
     <div class="replay-v243-field">
       <label for="replayV243Goal">Objectif principal de la partie</label>
@@ -160,21 +196,43 @@ function ensureStartOptions(){
         ${Object.entries(GOALS).map(([k,g])=>`<option value="${k}">${g.icon} ${g.name}</option>`).join('')}
       </select>
       <small id="replayV243GoalDesc">${GOALS.wealth.desc}</small>
+      <div id="replayV243GoalParams" class="replay-v243-goal-params"></div>
     </div>
-    <p class="replay-v243-help">Tu peux gagner de plusieurs façons. Le cap historique de 100 000 € reste toujours une victoire possible.</p>`;
+    <p class="replay-v243-help">Le scénario modifie les paramètres de départ en plus de ta carrière et de la difficulté. Les critères de victoire sont affichés avant de lancer la partie.</p>`;
 
   startOptions.insertAdjacentElement('afterend',box);
 
   const scenario=box.querySelector('#replayV243Scenario');
   const goal=box.querySelector('#replayV243Goal');
 
+  const renderScenarioParams=()=>{
+    const s=SCENARIOS[pendingScenario]||SCENARIOS.balanced;
+    box.querySelector('#replayV243ScenarioDesc').textContent=s.desc;
+    box.querySelector('#replayV243ScenarioParams').innerHTML=
+      `<strong>Paramètres appliqués :</strong><ul>${s.bullets.map(x=>`<li>${x}</li>`).join('')}</ul>`;
+  };
+  const renderGoalParams=()=>{
+    const g=GOALS[pendingGoal]||GOALS.wealth;
+    box.querySelector('#replayV243GoalDesc').textContent=g.desc;
+    let conditions=[];
+    if(pendingGoal==='wealth') conditions=['Patrimoine net ≥ 100 000 €'];
+    else if(pendingGoal==='safety') conditions=['6 mois de dépenses disponibles','Taux d’endettement ≤ 20 %','Bonheur ≥ 65/100'];
+    else if(pendingGoal==='passive') conditions=['Revenus passifs ≥ 1 000 €/mois'];
+    else if(pendingGoal==='balance') conditions=['Score financier ≥ 80/100','Bonheur ≥ 75/100','Épargne de sécurité ≥ 3 mois'];
+    box.querySelector('#replayV243GoalParams').innerHTML=
+      `<strong>Condition${conditions.length>1?'s':''} de victoire :</strong><ul>${conditions.map(x=>`<li>${x}</li>`).join('')}</ul>`;
+  };
+
+  renderScenarioParams();
+  renderGoalParams();
+
   scenario.addEventListener('change',()=>{
     pendingScenario=scenario.value;
-    box.querySelector('#replayV243ScenarioDesc').textContent=SCENARIOS[pendingScenario]?.desc||'';
+    renderScenarioParams();
   });
   goal.addEventListener('change',()=>{
     pendingGoal=goal.value;
-    box.querySelector('#replayV243GoalDesc').textContent=GOALS[pendingGoal]?.desc||'';
+    renderGoalParams();
   });
 }
 

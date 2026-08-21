@@ -39,3 +39,19 @@
     color:#8ea3b5;font-size:7.5px;font-weight:800
   }
 }
+@media(min-width:721px){
+  .replay-v243-params,.replay-v243-goal-params{
+    margin-top:3px;padding:7px 8px;border-radius:7px;
+    background:rgba(79,70,229,.045);
+    border:1px solid rgba(79,70,229,.10)
+  }
+  .replay-v243-params strong,.replay-v243-goal-params strong{
+    display:block;margin-bottom:4px;font-size:8px;color:#44536a
+  }
+  .replay-v243-params ul,.replay-v243-goal-params ul{
+    margin:0;padding-left:15px;display:grid;gap:2px
+  }
+  .replay-v243-params li,.replay-v243-goal-params li{
+    color:#65748a;font-size:7.5px;line-height:1.3
+  }
+}
