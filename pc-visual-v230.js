@@ -2,7 +2,7 @@
 'use strict';
 if (window.matchMedia('(max-width: 720px)').matches) return;
 
-const VERSION='2.4.11';
+const VERSION='2.4.12';
 const EUR=v=>typeof fmtEUR==='function'
   ? fmtEUR(v)
   : new Intl.NumberFormat('fr-FR',{style:'currency',currency:'EUR',maximumFractionDigits:0}).format(Number(v)||0);
@@ -169,6 +169,16 @@ window.PcVisualV230={version:VERSION,refresh:apply};
   js.async=false;
   js.src='./coherence-v2410.js?v=2410pc';
   js.dataset.coherenceV2410='1';
+  document.head.appendChild(js);
+})();
+
+/* V2.4.12 — cohérence comptable des événements historiques. */
+(function loadLegacyEventAccountingV2412(){
+  if(document.querySelector('script[data-legacy-events-v2412]')) return;
+  const js=document.createElement('script');
+  js.async=false;
+  js.src='./legacy-events-v2412.js?v=2412pc';
+  js.dataset.legacyEventsV2412='1';
   document.head.appendChild(js);
 })();
 })();
