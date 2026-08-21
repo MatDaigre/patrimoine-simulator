@@ -125,4 +125,20 @@ window.PcVisualV230={version:VERSION,refresh:apply};
   js.dataset.gamefeelV241='1';
   document.head.appendChild(js);
 })();
+
+/* V2.4.2 — événements à choix multiples. */
+(function loadChoiceEventsV242(){
+  if(document.querySelector('script[data-choiceevents-v242]')) return;
+
+  const css=document.createElement('link');
+  css.rel='stylesheet';
+  css.href='./choice-events-v242.css?v=242pc';
+  css.dataset.choiceEventsV242Css='1';
+  document.head.appendChild(css);
+
+  const js=document.createElement('script');
+  js.src='./choice-events-v242.js?v=242pc';
+  js.dataset.choiceEventsV242='1';
+  document.head.appendChild(js);
+})();
 })();

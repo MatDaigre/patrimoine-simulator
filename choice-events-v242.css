@@ -1,0 +1,54 @@
+/* Patrimoine Simulator — V2.4.2 événements à choix multiples */
+@media(min-width:721px){
+  .choice-v242-overlay{
+    position:fixed;inset:0;z-index:88;display:grid;place-items:center;padding:22px;
+    background:rgba(3,10,17,.76);backdrop-filter:blur(10px)
+  }
+  .choice-v242-overlay[hidden]{display:none}
+  .choice-v242-modal{
+    width:min(650px,100%);padding:20px;border-radius:15px;
+    background:
+      radial-gradient(circle at 92% 0%,rgba(139,92,246,.11),transparent 30%),
+      linear-gradient(155deg,#102438,#0b1c2b);
+    border:1px solid rgba(136,160,187,.20);
+    box-shadow:0 30px 90px rgba(0,0,0,.44)
+  }
+  .choice-v242-header{display:grid;grid-template-columns:48px 1fr;gap:11px;align-items:center}
+  .choice-v242-header>span{
+    display:grid;place-items:center;width:46px;height:46px;border-radius:12px;
+    background:rgba(139,92,246,.12);font-size:25px
+  }
+  .choice-v242-header h2{margin:3px 0 0;font-size:20px;color:#f7fbff;line-height:1.15}
+  .choice-v242-text{margin:12px 0;color:#a7b7c6;font-size:10px;line-height:1.5}
+  .choice-v242-choices{display:grid;gap:7px}
+  .choice-v242-option{
+    width:100%;text-align:left;padding:11px 12px;border-radius:9px;cursor:pointer;
+    background:#102437;border:1px solid rgba(136,160,187,.14);color:#eef5fb;
+    transition:.15s ease
+  }
+  .choice-v242-option:hover{
+    transform:translateY(-1px);border-color:rgba(46,229,157,.36);
+    background:#122a40
+  }
+  .choice-v242-option strong{display:block;font-size:11px}
+  .choice-v242-option small{display:block;margin-top:3px;color:#8fa5b8;font-size:8.5px}
+  .choice-v242-note{
+    margin-top:10px;padding:8px 9px;border-radius:8px;
+    background:rgba(41,198,246,.05);border:1px solid rgba(41,198,246,.10);
+    color:#91a7b9;font-size:8px;line-height:1.4
+  }
+  .choice-v242-result{
+    position:fixed;right:22px;bottom:22px;z-index:92;
+    width:min(360px,calc(100vw - 44px));padding:12px;border-radius:12px;
+    background:linear-gradient(145deg,#12283c,#0b1d2d);
+    border:1px solid rgba(41,198,246,.28);
+    box-shadow:0 20px 55px rgba(0,0,0,.34);
+    opacity:0;transform:translateY(18px);pointer-events:none;transition:.28s ease
+  }
+  .choice-v242-result.show{opacity:1;transform:translateY(0)}
+  .choice-v242-result>div{display:flex;align-items:center;gap:7px}
+  .choice-v242-result>div span{font-size:18px}
+  .choice-v242-result strong{font-size:11px;color:#fff}
+  .choice-v242-result p{margin:6px 0;color:#9eb0c0;font-size:8.5px;line-height:1.4}
+  .choice-v242-result small{color:#6fe1b5;font-size:8px;font-weight:800}
+}
