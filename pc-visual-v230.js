@@ -110,4 +110,19 @@ window.PcVisualV230={version:VERSION,refresh:apply};
   js.dataset.progressionV240='1';
   document.head.appendChild(js);
 })();
+
+/* V2.4.1 — jalons, récompenses et bilan de fin de partie. */
+(function loadGameFeelV241(){
+  if(document.querySelector('script[data-gamefeel-v241]')) return;
+  const css=document.createElement('link');
+  css.rel='stylesheet';
+  css.href='./gamefeel-v241.css?v=241pc';
+  css.dataset.gamefeelV241Css='1';
+  document.head.appendChild(css);
+
+  const js=document.createElement('script');
+  js.src='./gamefeel-v241.js?v=241pc';
+  js.dataset.gamefeelV241='1';
+  document.head.appendChild(js);
+})();
 })();
