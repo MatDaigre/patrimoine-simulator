@@ -3,7 +3,7 @@
 if (window.matchMedia('(max-width: 720px)').matches) return;
 if (typeof state === 'undefined') return;
 
-const VERSION='2.4.2.1';
+const VERSION='2.4.5';
 const N=v=>Number.isFinite(Number(v))?Number(v):0;
 const EUR=v=>typeof fmtEUR==='function'
   ? fmtEUR(v)
@@ -22,7 +22,8 @@ function ensureState(){
         : Math.max(3,N(state.totalMonths)+ri(3,6)),
       seen:Array.isArray(old.seen)?old.seen:[],
       resolved:Math.max(0,N(old.resolved)),
-      lastMonth:Number.isFinite(Number(old.lastMonth))?N(old.lastMonth):-999
+      lastMonth:Number.isFinite(Number(old.lastMonth))?N(old.lastMonth):-999,
+      livingAdjustmentBase:Number.isFinite(Number(old.livingAdjustmentBase))?N(old.livingAdjustmentBase):0
     };
   }
   return state.choiceEventsV242;
@@ -219,6 +220,7 @@ function resolveChoice(evt,c,index){
   let cashDelta=0;
   let happinessDelta=0;
   let careerResult='';
+  let directInvestmentAmount=0;
 
   try{
     cashDelta=typeof c.cash==='function'?N(c.cash()):N(c.cash);
@@ -229,6 +231,7 @@ function resolveChoice(evt,c,index){
 
     if(c.pea){
       const amount=Math.max(0,N(c.pea()));
+      directInvestmentAmount=amount;
       if(amount>0){
         /* La prime est un nouveau capital, pas un gain de marché.
            On l'inscrit donc dans la base et dans l'historique de contributions. */
@@ -250,6 +253,9 @@ function resolveChoice(evt,c,index){
 
     if(c.livingMonthly){
       const d=N(c.livingMonthly());
+      const gf=ensureState();
+      const idx=Math.max(.01,N(state.priceIndex)||1);
+      gf.livingAdjustmentBase=N(gf.livingAdjustmentBase)+(d/idx);
       state.living=Math.max(0,N(state.living)+d);
     }
 
@@ -271,7 +277,29 @@ function resolveChoice(evt,c,index){
     state.lastEvent=`${evt.icon} ${c.label} : ${cashText}, bonheur ${happinessDelta>=0?'+':''}${happinessDelta}${careerResult}.`;
 
     try{if(typeof addHistory==='function') addHistory(state.lastEvent);}catch(_){}
-    recordChoice(evt,c,cashDelta,happinessDelta);
+    if(directInvestmentAmount>0){
+      try{
+        const rec=window.PatrimoineReportingV219?.record;
+        const label=`${evt.icon} ${evt.title} — ${c.label}`;
+        if(typeof rec==='function'){
+          rec('event_income',label,directInvestmentAmount,{
+            cashImpact:0,
+            detail:`Prime investie directement sur le PEA • bonheur ${happinessDelta>=0?'+':''}${happinessDelta}`
+          });
+          rec('investment',`${label} • PEA`,directInvestmentAmount,{
+            cashImpact:0,
+            detail:'Versement issu d’une prime exceptionnelle'
+          });
+        }
+      }catch(_){}
+
+      if(state.yearStats && typeof state.yearStats==='object'){
+        state.yearStats.income=N(state.yearStats.income)+directInvestmentAmount;
+        state.yearStats.investments=N(state.yearStats.investments)+directInvestmentAmount;
+      }
+    }else{
+      recordChoice(evt,c,cashDelta,happinessDelta);
+    }
 
     activeEvent=null;
 
@@ -280,7 +308,13 @@ function resolveChoice(evt,c,index){
     try{window.ProgressionV240?.refresh?.();}catch(_){}
     try{window.GameFeelV241?.check?.();}catch(_){}
 
-    showResult(evt,c,cashDelta,happinessDelta,careerResult);
+    showResult(
+      evt,c,
+      directInvestmentAmount>0?directInvestmentAmount:cashDelta,
+      happinessDelta,
+      careerResult,
+      directInvestmentAmount>0
+    );
   }catch(err){
     console.error('[ChoiceEvents V2.4.2.1] Erreur de résolution',err);
 
@@ -311,7 +345,7 @@ function showTechnicalFallback(){
   showTechnicalFallback.t=setTimeout(()=>toast.classList.remove('show'),4200);
 }
 
-function showResult(evt,c,cashDelta,happinessDelta,careerResult){
+function showResult(evt,c,cashDelta,happinessDelta,careerResult,isDirectInvestment=false){
   let toast=document.getElementById('choiceV242Result');
   if(!toast){
     toast=document.createElement('div');
@@ -319,7 +353,9 @@ function showResult(evt,c,cashDelta,happinessDelta,careerResult){
     toast.className='choice-v242-result';
     document.body.appendChild(toast);
   }
-  const money=cashDelta===0?'0 €':`${cashDelta>0?'+':''}${EUR(cashDelta)}`;
+  const money=isDirectInvestment
+    ? `${EUR(cashDelta)} investis`
+    : (cashDelta===0?'0 €':`${cashDelta>0?'+':''}${EUR(cashDelta)}`);
   toast.innerHTML=`
     <div><span>${evt.icon}</span><strong>${c.label}</strong></div>
     <p>${c.lesson}</p>
@@ -358,6 +394,23 @@ if(typeof nextMonth==='function'&&!nextMonth.__choiceV242){
 
 /* Les simulations multi-mois restent automatiques :
    aucun modal de décision ne bloque une simulation en cours. */
+
+if(typeof applyLifestyle==='function'&&!applyLifestyle.__choiceV245){
+  const coreApplyLifestyle=applyLifestyle;
+  applyLifestyle=function(...args){
+    const out=coreApplyLifestyle(...args);
+    try{
+      const gf=ensureState();
+      const idx=Math.max(.01,N(state.priceIndex)||1);
+      const adjustment=N(gf.livingAdjustmentBase)*idx;
+      state.living=Math.max(0,N(state.living)+adjustment);
+      try{if(typeof silentSave==='function')silentSave();}catch(_){}
+      try{if(typeof render==='function')render();}catch(_){}
+    }catch(_){}
+    return out;
+  };
+  applyLifestyle.__choiceV245=true;
+}
 
 /* Délégation de clic robuste : évite que les handlers individuels soient
    perdus si le DOM est rafraîchi par les autres couches du jeu. */
