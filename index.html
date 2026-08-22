@@ -86,7 +86,7 @@
         <p class="brand-note">Budget • carrière • placements • crédits • imprévus du quotidien</p>
       </div>
       <div class="top-actions">
-        <span class="version-chip">V1.7.1 • bêta</span>
+        <span class="version-chip">V2.4.19 • stable</span>
         <button id="saveBtn" class="btn ghost">Sauvegarder</button>
         <button id="exportBtn" class="btn ghost">Exporter</button>
         <button id="importBtn" class="btn ghost">Importer</button>
@@ -383,7 +383,7 @@ function save(){silentSave();showSaveNote('Sauvegarde effectuée')}
 function showSaveNote(msg){let n=el('saveNote');if(!n)return;n.textContent=msg;n.classList.add('show');clearTimeout(window.__saveNoteTimer);window.__saveNoteTimer=setTimeout(()=>n.classList.remove('show'),1800)}
 function exportSave(){
   silentSave();
-  let payload={app:'Patrimoine Simulator',version:'1.7.1',exportedAt:new Date().toISOString(),state};
+  let payload={app:'Patrimoine Simulator',version:'2.4.19',exportedAt:new Date().toISOString(),state};
   let blob=new Blob([JSON.stringify(payload,null,2)],{type:'application/json'});
   let url=URL.createObjectURL(blob),a=document.createElement('a');
   a.href=url;a.download=`patrimoine-sauvegarde-${state.year}-${String(state.month).padStart(2,'0')}.json`;
