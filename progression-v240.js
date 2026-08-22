@@ -272,11 +272,16 @@ function refresh(){
 
 function boot(){
   refresh();
+  const config={childList:true,subtree:true,characterData:true};
   const obs=new MutationObserver(()=>{
     clearTimeout(boot.t);
-    boot.t=setTimeout(refresh,60);
+    boot.t=setTimeout(()=>{
+      obs.disconnect();
+      try{refresh();}
+      finally{obs.observe(document.body,config);}
+    },60);
   });
-  obs.observe(document.body,{childList:true,subtree:true,characterData:true});
+  obs.observe(document.body,config);
 }
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',boot,{once:true});
 else boot();

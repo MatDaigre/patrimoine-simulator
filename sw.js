@@ -1,4 +1,4 @@
-const CACHE='patrimoine-simulator-v215-pc-clean';
+const CACHE='patrimoine-simulator-v2418-pc';
 const ASSETS=[
   './','./index.html',
   './tax-ui.css','./tax-engine.js',
@@ -13,7 +13,7 @@ const ASSETS=[
 self.addEventListener('install',event=>{
   self.skipWaiting();
   event.waitUntil(
-    caches.open(CACHE).then(cache=>cache.addAll(ASSETS).catch(()=>{}))
+    caches.open(CACHE).then(cache=>cache.addAll(ASSETS))
   );
 });
 
@@ -22,11 +22,6 @@ self.addEventListener('activate',event=>{
     const keys=await caches.keys();
     await Promise.all(keys.filter(key=>key!==CACHE).map(key=>caches.delete(key)));
     await self.clients.claim();
-
-    // Force une seule recharge après activation afin de sortir définitivement
-    // des anciens service workers V2.1.3/V2.1.4 qui injectaient des scripts.
-    const clients=await self.clients.matchAll({type:'window',includeUncontrolled:true});
-    await Promise.all(clients.map(client=>client.navigate(client.url).catch(()=>null)));
   })());
 });
 
