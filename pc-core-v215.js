@@ -2,11 +2,11 @@
 'use strict';
 
 if (typeof state === 'undefined' || typeof render !== 'function') {
-  console.error('[Patrimoine V2.1.5] moteur principal indisponible');
+  console.error('[Patrimoine V2.4.19] moteur principal indisponible');
   return;
 }
 
-const VERSION = '2.1.5.3';
+const VERSION = '2.4.19';
 const LOSS_HAPPINESS = 50;
 const MAX_LEVEL = 6;
 const N = v => Number.isFinite(Number(v)) ? Number(v) : 0;
@@ -595,8 +595,9 @@ function renderNegativeCashflow() {
 function setVersion() {
   const chip = document.querySelector('.version-chip');
   if (chip) {
-    if (chip.textContent !== 'V2.1.5.3 • stable') {
-      chip.textContent = 'V2.1.5.3 • stable';
+    const label = `V${VERSION} • stable`;
+    if (chip.textContent !== label) {
+      chip.textContent = label;
     }
     chip.dataset.runtimeVersion = VERSION;
   }
