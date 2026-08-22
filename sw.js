@@ -1,4 +1,4 @@
-const CACHE='patrimoine-simulator-v2418-pc';
+const CACHE='patrimoine-simulator-v2419-pc';
 const ASSETS=[
   './','./index.html',
   './tax-ui.css','./tax-engine.js',

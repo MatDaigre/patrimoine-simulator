@@ -146,6 +146,11 @@ input:not([type=range]),select,textarea{background:#102438!important;border-colo
  .layout{grid-template-columns:minmax(0,2.3fr) minmax(270px,.9fr)!important}
 }
 
+@media(min-width:721px) and (max-width:1050px){
+ .layout{grid-template-columns:minmax(0,1fr)!important}
+ .side-column{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+}
+
 /* V2.3.1 — immobilier locatif dans le dashboard de performance */
 @media(min-width:721px){
   .performance-v217-rental{margin-top:7px}

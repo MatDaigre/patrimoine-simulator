@@ -490,6 +490,22 @@ function renderLoans() {
 
   const list = loans();
   const debt = typeof debtRatio === 'function' ? debtRatio() : 0;
+  const legacyBalance = Math.max(0,N(state.consumerDebt));
+  const legacyPayment = Math.max(0,N(state.consumerPayment));
+  const extraBalance = list.reduce((sum,loan) => sum + Math.max(0,N(loan.balance)),0);
+  const extraPayment = list.reduce((sum,loan) => sum + Math.max(0,N(loan.payment)),0);
+  const displayedBalance = legacyBalance + extraBalance;
+  const displayedPayment = legacyPayment + extraPayment;
+  const loanCount = list.length + (legacyBalance > 0 ? 1 : 0);
+
+  const debtDisplay = document.getElementById('consumerDebtDisplay');
+  const debtInfo = document.getElementById('consumerDebtInfo');
+  if (debtDisplay) debtDisplay.textContent = EUR(displayedBalance);
+  if (debtInfo) {
+    debtInfo.textContent = displayedBalance > 0
+      ? `${loanCount} prêt${loanCount > 1 ? 's' : ''} • ${EUR(displayedPayment)}/mois`
+      : '—';
+  }
 
   root.innerHTML =
     `<div class="v215-credit-warning">` +
