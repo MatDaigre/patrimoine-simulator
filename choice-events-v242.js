@@ -423,10 +423,18 @@ function shouldTrigger(){
   return true;
 }
 
+function hasBlockingModal(){
+  return !!document.querySelector(
+    '.modal:not(.hidden), .tax-overlay:not(.tax-hidden), [role="dialog"]:not([hidden]):not(.choice-v242-overlay)'
+  );
+}
+
 function maybeTrigger(){
-  if(!shouldTrigger())return;
+  if(!shouldTrigger()||hasBlockingModal())return;
   const evt=pickEvent();
-  if(evt) setTimeout(()=>openEvent(evt),180);
+  if(evt) setTimeout(()=>{
+    if(shouldTrigger()&&!hasBlockingModal())openEvent(evt);
+  },180);
 }
 
 if(typeof nextMonth==='function'&&!nextMonth.__choiceV242){

@@ -85,11 +85,16 @@ function apply(){
 
 function boot(){
   apply();
+  const config={childList:true,subtree:true};
   const observer=new MutationObserver(()=>{
     clearTimeout(boot.t);
-    boot.t=setTimeout(apply,40);
+    boot.t=setTimeout(()=>{
+      observer.disconnect();
+      try{apply();}
+      finally{observer.observe(document.body,config);}
+    },40);
   });
-  observer.observe(document.body,{childList:true,subtree:true});
+  observer.observe(document.body,config);
 }
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',boot,{once:true});
 else boot();

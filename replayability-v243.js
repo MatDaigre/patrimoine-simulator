@@ -467,11 +467,16 @@ function boot(){
     ensureState();
     renderGoalCard();
   }
+  const config={childList:true,subtree:true};
   const obs=new MutationObserver(()=>{
     clearTimeout(boot.t);
-    boot.t=setTimeout(refresh,80);
+    boot.t=setTimeout(()=>{
+      obs.disconnect();
+      try{refresh();}
+      finally{obs.observe(document.body,config);}
+    },80);
   });
-  obs.observe(document.body,{childList:true,subtree:true});
+  obs.observe(document.body,config);
 }
 
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',boot,{once:true});

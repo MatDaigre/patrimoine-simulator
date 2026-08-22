@@ -274,11 +274,16 @@ function boot(){
   else checkMilestones({silent:false});
   renderMilestoneStrip();
 
+  const config={childList:true,subtree:true,characterData:true};
   const observer=new MutationObserver(()=>{
     clearTimeout(boot.t);
-    boot.t=setTimeout(refresh,90);
+    boot.t=setTimeout(()=>{
+      observer.disconnect();
+      try{refresh();}
+      finally{observer.observe(document.body,config);}
+    },90);
   });
-  observer.observe(document.body,{childList:true,subtree:true,characterData:true});
+  observer.observe(document.body,config);
 }
 
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',boot,{once:true});
