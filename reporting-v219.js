@@ -756,7 +756,7 @@ if(typeof showAnnualReport==='function' && !showAnnualReport.__reportingV219){
   showAnnualReport.__reportingV219=true;
 }
 
-function renderSimulationJournal(rows){
+function renderSimulationJournal(rows,context=simulationContext){
   const modal=document.getElementById('simulationModal');
   if(!modal)return;
   let box=document.getElementById('reportingSimulationV219');
@@ -767,8 +767,14 @@ function renderSimulationJournal(rows){
     const host=modal.querySelector('.modal-card')||modal;
     host.appendChild(box);
   }
-  const entries=simulationContext?entriesSince(simulationContext.seqStart):[];
-  const perfStart=simulationContext?.perfStart??currentPerf();
+  const rowEntryIds=new Set(
+    (Array.isArray(rows)?rows:[])
+      .flatMap(row=>Array.isArray(row?.reportingV219)?row.reportingV219:[])
+  );
+  const entries=rowEntryIds.size
+    ? ensureJournal().entries.filter(entry=>rowEntryIds.has(entry.id))
+    : context?entriesSince(context.seqStart):[];
+  const perfStart=context?.perfStart??currentPerf();
   const perfEnd=currentPerf();
   const perfDelta=perfEnd-perfStart;
   box.innerHTML=`
@@ -780,6 +786,7 @@ function renderSimulationJournal(rows){
 if(typeof showSimulationReport==='function' && !showSimulationReport.__reportingV219){
   const coreSimReport=showSimulationReport;
   showSimulationReport=function(startLabel,rows,startWorth,totals,...rest){
+    const context=simulationContext?{...simulationContext}:null;
     const r=coreSimReport(startLabel,rows,startWorth,totals,...rest);
 
     /* Recalage strict du total Dépenses sur les lignes réellement exécutées.
@@ -793,7 +800,7 @@ if(typeof showSimulationReport==='function' && !showSimulationReport.__reporting
       if(elIncome) elIncome.textContent=EUR(totals.income);
     }
 
-    setTimeout(()=>renderSimulationJournal(rows),0);
+    setTimeout(()=>renderSimulationJournal(rows,context),0);
     return r;
   };
   showSimulationReport.__reportingV219=true;
